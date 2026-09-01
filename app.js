@@ -108,11 +108,10 @@ try {
 const clock = new THREE.Clock();
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
-const loader = new GLTFLoader();
 const stage = new THREE.Group();
 if (scene) scene.add(stage);
 
-const DESK_TOP_HEIGHT = 0.85; // Tabletop height in world units
+const DESK_TOP_HEIGHT = 0.80; // Ergonomic tabletop height in world units
 
 const world = {
   desk: null,
@@ -127,8 +126,8 @@ const world = {
   clickable: [],
   leds: {},
   overview: {
-    position: new THREE.Vector3(0, DESK_TOP_HEIGHT + 1.05, 2.75),
-    target: new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.34, 0)
+    position: new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.65, 2.35),
+    target: new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.18, 0.05)
   }
 };
 
@@ -230,108 +229,167 @@ function createLuxuryDesk() {
   if (!stage) return;
   const deskGroup = new THREE.Group();
 
+  // 1. Solid Matte Graphite Tabletop (2.8m x 1.3m x 0.04m)
   const topMat = new THREE.MeshStandardMaterial({
-    color: '#0d0f12',
-    roughness: 0.72,
-    metalness: 0.18,
+    color: '#0e1115',
+    roughness: 0.65,
+    metalness: 0.22,
     name: 'desk_matte_linoleum'
   });
   world.deskMat = topMat;
 
-  const topGeo = new THREE.BoxGeometry(2.6, 0.045, 1.4);
+  const topGeo = new THREE.BoxGeometry(2.8, 0.04, 1.3);
   const topMesh = new THREE.Mesh(topGeo, topMat);
-  topMesh.position.y = DESK_TOP_HEIGHT - 0.0225;
+  topMesh.position.y = DESK_TOP_HEIGHT - 0.02; // surface is at y = 0.80
   topMesh.receiveShadow = true;
   topMesh.castShadow = true;
   deskGroup.add(topMesh);
 
+  // Beveled Steel Edge Trim around table perimeter
+  const edgeMat = new THREE.MeshStandardMaterial({
+    color: '#2a3340',
+    roughness: 0.32,
+    metalness: 0.88,
+    name: 'desk_steel_trim'
+  });
+  const edgeGeo = new THREE.BoxGeometry(2.82, 0.015, 1.32);
+  const edgeMesh = new THREE.Mesh(edgeGeo, edgeMat);
+  edgeMesh.position.y = DESK_TOP_HEIGHT - 0.02;
+  deskGroup.add(edgeMesh);
+
+  // 2. Center Felt Desk Mat (1.5m x 0.75m x 0.005m)
   const padMat = new THREE.MeshStandardMaterial({
-    color: '#15191e',
-    roughness: 0.92,
-    metalness: 0.05,
+    color: '#15191f',
+    roughness: 0.94,
+    metalness: 0.04,
     name: 'felt_desk_pad'
   });
-  const padGeo = new THREE.BoxGeometry(1.6, 0.005, 0.75);
+  const padGeo = new THREE.BoxGeometry(1.5, 0.006, 0.75);
   const padMesh = new THREE.Mesh(padGeo, padMat);
-  padMesh.position.set(0, DESK_TOP_HEIGHT + 0.0025, 0.05);
+  padMesh.position.set(0, DESK_TOP_HEIGHT + 0.003, 0.05);
   padMesh.receiveShadow = true;
   deskGroup.add(padMesh);
 
+  // 3. Sturdy Grounded Steel Legs reaching y = 0
   const legMat = new THREE.MeshStandardMaterial({
-    color: '#1a1e24',
-    roughness: 0.38,
+    color: '#1c222a',
+    roughness: 0.35,
     metalness: 0.85,
     name: 'steel_legs'
   });
+  const footMat = new THREE.MeshStandardMaterial({
+    color: '#080a0c',
+    roughness: 0.88,
+    metalness: 0.12,
+    name: 'rubber_feet'
+  });
 
+  const legHeight = DESK_TOP_HEIGHT - 0.04; // 0.76m
   const legPositions = [
-    [-1.2, (DESK_TOP_HEIGHT - 0.045) / 2, -0.6],
-    [1.2, (DESK_TOP_HEIGHT - 0.045) / 2, -0.6],
-    [-1.2, (DESK_TOP_HEIGHT - 0.045) / 2, 0.6],
-    [1.2, (DESK_TOP_HEIGHT - 0.045) / 2, 0.6]
+    [-1.22, legHeight / 2, -0.52],
+    [1.22, legHeight / 2, -0.52],
+    [-1.22, legHeight / 2, 0.52],
+    [1.22, legHeight / 2, 0.52]
   ];
 
   legPositions.forEach(([x, y, z]) => {
-    const legGeo = new THREE.CylinderGeometry(0.028, 0.028, DESK_TOP_HEIGHT - 0.045, 16);
+    // Steel Leg Post
+    const legGeo = new THREE.CylinderGeometry(0.032, 0.032, legHeight, 18);
     const leg = new THREE.Mesh(legGeo, legMat);
     leg.position.set(x, y, z);
     leg.castShadow = true;
     leg.receiveShadow = true;
     deskGroup.add(leg);
+
+    // Rubber Foot Disc resting on floor
+    const footGeo = new THREE.CylinderGeometry(0.045, 0.048, 0.016, 18);
+    const foot = new THREE.Mesh(footGeo, footMat);
+    foot.position.set(x, 0.008, z);
+    foot.castShadow = true;
+    foot.receiveShadow = true;
+    deskGroup.add(foot);
   });
 
+  // Cross Support Beam underneath tabletop
+  const beamMat = new THREE.MeshStandardMaterial({ color: '#161a20', roughness: 0.4, metalness: 0.8 });
+  const beamGeo = new THREE.BoxGeometry(2.44, 0.04, 0.04);
+  const beam = new THREE.Mesh(beamGeo, beamMat);
+  beam.position.set(0, DESK_TOP_HEIGHT - 0.06, 0);
+  deskGroup.add(beam);
+
+  // 4. Studio Floor (y = 0) with subtle engineering grid
   const floorMat = new THREE.MeshStandardMaterial({
-    color: '#080a0c',
-    roughness: 0.85,
-    metalness: 0.1
+    color: '#07090b',
+    roughness: 0.75,
+    metalness: 0.25
   });
-  const floorGeo = new THREE.PlaneGeometry(16, 16);
+  const floorGeo = new THREE.PlaneGeometry(24, 24);
   const floor = new THREE.Mesh(floorGeo, floorMat);
   floor.rotation.x = -Math.PI / 2;
   floor.position.y = 0;
   floor.receiveShadow = true;
   deskGroup.add(floor);
 
+  // Floor Grid Overlay
+  const gridHelper = new THREE.GridHelper(16, 32, 0x1f2937, 0x111827);
+  gridHelper.position.y = 0.001;
+  deskGroup.add(gridHelper);
+
+  // Studio Curved Backdrop Wall
+  const wallMat = new THREE.MeshStandardMaterial({
+    color: '#090c10',
+    roughness: 0.95,
+    metalness: 0.05
+  });
+  const wallGeo = new THREE.PlaneGeometry(24, 12);
+  const wall = new THREE.Mesh(wallGeo, wallMat);
+  wall.position.set(0, 6, -3.2);
+  wall.receiveShadow = true;
+  deskGroup.add(wall);
+
   stage.add(deskGroup);
   world.desk = deskGroup;
 }
 
-function createMouse() {
+async function createMouse() {
   if (!stage) return;
-  const mouseGroup = new THREE.Group();
+  try {
+    const gltf = await modelManager.loadGlb('assets/ice_claw_mouse.glb');
+    const mouseRoot = gltf.scene;
 
-  const mouseBodyMat = new THREE.MeshStandardMaterial({
-    color: '#1a1d22',
-    roughness: 0.35,
-    metalness: 0.65,
-    name: 'mouse_body'
-  });
+    mouseRoot.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+        if (child.material) {
+          child.material = child.material.clone();
+          child.material.roughness = 0.35;
+          child.material.metalness = 0.65;
+          if (child.material.map) child.material.map.colorSpace = THREE.SRGBColorSpace;
+        }
+      }
+    });
 
-  const mouseBodyGeo = new THREE.BoxGeometry(0.065, 0.025, 0.115);
-  const mouseBody = new THREE.Mesh(mouseBodyGeo, mouseBodyMat);
-  mouseBody.position.y = 0.0125;
-  mouseBody.castShadow = true;
-  mouseBody.receiveShadow = true;
-  mouseGroup.add(mouseBody);
+    mouseRoot.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(mouseRoot);
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const targetScale = 0.12 / maxDim;
 
-  const wheelMat = new THREE.MeshStandardMaterial({
-    color: '#38bdf8',
-    roughness: 0.2,
-    metalness: 0.8,
-    emissive: '#0284c7',
-    emissiveIntensity: 0.4
-  });
-  const wheelGeo = new THREE.CylinderGeometry(0.006, 0.006, 0.012, 12);
-  const wheel = new THREE.Mesh(wheelGeo, wheelMat);
-  wheel.rotation.z = Math.PI / 2;
-  wheel.position.set(0, 0.025, -0.025);
-  mouseGroup.add(wheel);
+    mouseRoot.scale.set(targetScale, targetScale, targetScale);
+    mouseRoot.rotation.y = -0.12;
+    mouseRoot.updateMatrixWorld(true);
 
-  mouseGroup.position.set(0.48, DESK_TOP_HEIGHT + 0.005, 0.12);
-  mouseGroup.rotation.y = -0.12;
+    const boxScaled = new THREE.Box3().setFromObject(mouseRoot);
+    const yOffset = -boxScaled.min.y;
 
-  stage.add(mouseGroup);
-  world.mouse = mouseGroup;
+    mouseRoot.position.set(0.44, DESK_TOP_HEIGHT + yOffset + 0.003, 0.14);
+
+    stage.add(mouseRoot);
+    world.mouse = mouseRoot;
+  } catch (err) {
+    console.warn('Fallback procedural mouse:', err);
+  }
 }
 
 function createScreenCanvas() {
@@ -412,7 +470,7 @@ function drawLaptopScreen() {
 async function loadLaptopModel() {
   createScreenCanvas();
   try {
-    const gltf = await modelManager.loadGlb('assets/gaming_laptop.glb');
+    const gltf = await modelManager.loadGlb('assets/hp_omen_laptop.glb');
     const laptopRoot = gltf.scene;
 
     laptopRoot.traverse((child) => {
@@ -420,7 +478,7 @@ async function loadLaptopModel() {
         child.castShadow = true;
         child.receiveShadow = true;
 
-        if (/screen|display|monitor|lcd|glass/i.test(child.name)) {
+        if (child.material?.name === 'screen' || /screen|display|monitor|lcd|glass/i.test(child.name)) {
           child.material = new THREE.MeshBasicMaterial({
             map: world.screenTexture,
             toneMapped: false
@@ -439,7 +497,7 @@ async function loadLaptopModel() {
     const box = new THREE.Box3().setFromObject(laptopRoot);
     const size = box.getSize(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
-    const targetScale = 0.54 / maxDim;
+    const targetScale = 0.52 / maxDim;
 
     laptopRoot.scale.set(targetScale, targetScale, targetScale);
     laptopRoot.updateMatrixWorld(true);
@@ -447,13 +505,13 @@ async function loadLaptopModel() {
     const boxScaled = new THREE.Box3().setFromObject(laptopRoot);
     const yOffset = -boxScaled.min.y;
 
-    laptopRoot.position.set(0, DESK_TOP_HEIGHT + yOffset + 0.002, 0.05);
+    laptopRoot.position.set(0, DESK_TOP_HEIGHT + yOffset + 0.003, 0.05);
 
     stage.add(laptopRoot);
     world.laptop = laptopRoot;
     world.clickable.push(laptopRoot);
   } catch (err) {
-    console.error('Failed to load laptop GLB:', err);
+    console.error('Failed to load HP Omen laptop GLB:', err);
   }
 }
 
@@ -464,7 +522,7 @@ async function buildWorld() {
 
   setLoading(30, 'CONSTRUCTING LUXURY WORKBENCH');
   createLuxuryDesk();
-  createMouse();
+  await createMouse();
 
   setLoading(45, 'INITIALIZING OMEN WORKSTATION PORTAL');
   await loadLaptopModel();
@@ -534,9 +592,9 @@ function focusLaptop(targetApp = null) {
     ease: 'power2.inOut'
   });
 
-  const screenTarget = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.38, 0.05);
-  const approachPos = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.38, 0.95);
-  const deepFillPos = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.38, 0.36);
+  const screenTarget = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.32, 0.05);
+  const approachPos = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.32, 0.92);
+  const deepFillPos = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.32, 0.36);
 
   easeCamera(approachPos, screenTarget, 0.75, () => {
     easeCamera(deepFillPos, screenTarget, 0.65, () => {

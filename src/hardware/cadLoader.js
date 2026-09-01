@@ -124,12 +124,6 @@ class ModelManager {
           }
         });
 
-        // Flip cat model upright so paws sit correctly on tabletop
-        if (key === 'cat') {
-          root.rotation.x = Math.PI;
-          root.updateMatrixWorld(true);
-        }
-
         // Center inner geometry around local origin
         root.updateMatrixWorld(true);
         const boxBefore = new THREE.Box3().setFromObject(root);
@@ -145,6 +139,10 @@ class ModelManager {
 
         const targetScale = def.scale / maxDim;
         wrapper.scale.set(targetScale, targetScale, targetScale);
+
+        if (def.benchRotation) {
+          wrapper.rotation.copy(def.benchRotation);
+        }
         wrapper.updateMatrixWorld(true);
 
         const boxAfter = new THREE.Box3().setFromObject(wrapper);
@@ -153,13 +151,9 @@ class ModelManager {
 
         wrapper.position.set(
           def.benchPosition.x,
-          groundLevel + yOffset + 0.002,
+          groundLevel + yOffset + 0.001,
           def.benchPosition.z
         );
-
-        if (def.benchRotation) {
-          wrapper.rotation.copy(def.benchRotation);
-        }
 
         if (def.isInteractive !== false) {
           wrapper.userData.hardwareKey = key;

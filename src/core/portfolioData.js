@@ -433,10 +433,10 @@ export const HARDWARE_DEFINITIONS = {
       ['EDGE COMPUTE', 'Raspberry Pi 4 Model B (Vision Coordinator)'],
       ['SOURCE', 'SolidWorks CAD Assembly (TV_ensemble / M4)']
     ],
-    scale: 0.88,
+    scale: 0.44,
     isGroundedOnFloor: false,
-    benchPosition: { x: -1.38, y: 0.85, z: 0.05 },
-    benchRotation: { x: 0, y: 0.32, z: 0 },
+    benchPosition: { x: -0.68, y: 0.80, z: 0.08 },
+    benchRotation: { x: 0, y: 0.35, z: 0 },
     projectId: 'berrybot'
   },
 
@@ -454,10 +454,10 @@ export const HARDWARE_DEFINITIONS = {
       ['GPIO', 'Standard 40-Pin Header (I2C, SPI, UART, PWM)'],
       ['ROLE', 'Edge Vision & High-Level Autonomy Coordinator']
     ],
-    scale: 0.36,
+    scale: 0.14,
     isGroundedOnFloor: false,
-    benchPosition: { x: 0.92, y: 0.85, z: 0.22 },
-    benchRotation: { x: 0, y: -0.22, z: 0 }
+    benchPosition: { x: 0.48, y: 0.80, z: -0.06 },
+    benchRotation: { x: 0, y: -0.25, z: 0 }
   },
 
   esp32: {
@@ -474,10 +474,10 @@ export const HARDWARE_DEFINITIONS = {
       ['CONNECTIVITY', '2.4 GHz Wi-Fi & Bluetooth v4.2 BR/EDR/BLE'],
       ['ROLE', 'Low-Level Real-Time Motor & Sensor Controller']
     ],
-    scale: 0.16,
+    scale: 0.12,
     isGroundedOnFloor: false,
-    benchPosition: { x: 1.22, y: 0.85, z: 0.22 },
-    benchRotation: { x: 0, y: -0.32, z: 0 }
+    benchPosition: { x: 0.76, y: 0.80, z: 0.06 },
+    benchRotation: { x: 0, y: 0.15, z: 0 }
   },
 
   camera: {
@@ -493,9 +493,9 @@ export const HARDWARE_DEFINITIONS = {
       ['SHUTTER', 'Focal-Plane Electronic Shutter'],
       ['RESEARCH LINK', 'Spectral Color-Space & Data Generation']
     ],
-    scale: 0.42,
+    scale: 0.18,
     isGroundedOnFloor: false,
-    benchPosition: { x: -0.82, y: 0.85, z: 0.22 },
+    benchPosition: { x: -0.28, y: 0.80, z: 0.26 },
     benchRotation: { x: 0, y: 0.45, z: 0 }
   },
 
@@ -512,10 +512,10 @@ export const HARDWARE_DEFINITIONS = {
       ['SIGNIFICANCE', 'Personal curiosity in space, astrophysics & rocket systems'],
       ['TYPE', 'Personality Prop (Not a formal portfolio project)']
     ],
-    scale: 1.85,
+    scale: 1.55,
     isGroundedOnFloor: true,
-    benchPosition: { x: 2.08, y: 0, z: 0.38 },
-    benchRotation: { x: 0, y: -0.65, z: 0 }
+    benchPosition: { x: 1.25, y: 0, z: 0.35 },
+    benchRotation: { x: 0, y: -0.55, z: 0 }
   },
 
   dog: {
@@ -530,10 +530,10 @@ export const HARDWARE_DEFINITIONS = {
       ['NAME', 'Berry'],
       ['STATUS', 'Chief Morale Officer & Lab Companion']
     ],
-    scale: 0.92,
+    scale: 0.85,
     isGroundedOnFloor: true,
-    benchPosition: { x: -1.62, y: 0, z: 1.05 },
-    benchRotation: { x: 0, y: 0.45, z: 0 }
+    benchPosition: { x: -1.15, y: 0, z: 0.45 },
+    benchRotation: { x: 0, y: 0.55, z: 0 }
   },
 
   cat: {
@@ -548,9 +548,9 @@ export const HARDWARE_DEFINITIONS = {
       ['NAME', 'Crispy'],
       ['STATUS', 'Workbench Supervisor & Nap Specialist']
     ],
-    scale: 0.72,
+    scale: 0.30,
     isGroundedOnFloor: false,
-    benchPosition: { x: 1.42, y: 0.85, z: -0.32 },
+    benchPosition: { x: 0.95, y: 0.80, z: 0.15 },
     benchRotation: { x: 0, y: -0.65, z: 0 }
   }
 };
