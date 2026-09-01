@@ -846,23 +846,23 @@ Topics:
 
   renderContactApp(body) {
     body.innerHTML = `
-      <div class="win-contact-form" style="padding: 24px; color: #fff; font-family: var(--font-sans);">
-        <h3 style="margin-top: 0; color: var(--accent);">Direct Contact &amp; Dispatch</h3>
-        <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 20px;">Send a direct communication to Jaijitesh Suryaprakash.</p>
+      <div class="win-contact-form" style="padding: 24px; color: #ffffff; font-family: 'Segoe UI', sans-serif; background: #181818; height: 100%;">
+        <h3 style="margin-top: 0; color: #ffffff; font-size: 15px;">Direct Contact &amp; Dispatch</h3>
+        <p style="color: #888888; font-size: 11.5px; margin-bottom: 16px;">Send a direct communication to Jaijitesh Suryaprakash (jaijitesh.2025@vitstudent.ac.in).</p>
         <div style="display: grid; gap: 12px; max-width: 480px;">
           <div>
-            <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Name</label>
-            <input type="text" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 4px;" placeholder="Your Name" />
+            <label style="display: block; font-size: 11px; color: #aaaaaa; margin-bottom: 4px;">Name</label>
+            <input type="text" style="width: 100%; padding: 6px 10px; background: #242424; border: 1px solid #383838; color: #ffffff; font-size: 12px;" placeholder="Your Name" />
           </div>
           <div>
-            <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Email</label>
-            <input type="email" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 4px;" placeholder="your.email@domain.com" />
+            <label style="display: block; font-size: 11px; color: #aaaaaa; margin-bottom: 4px;">Email</label>
+            <input type="email" style="width: 100%; padding: 6px 10px; background: #242424; border: 1px solid #383838; color: #ffffff; font-size: 12px;" placeholder="your.email@domain.com" />
           </div>
           <div>
-            <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Message</label>
-            <textarea rows="4" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 4px;" placeholder="Enter your message..."></textarea>
+            <label style="display: block; font-size: 11px; color: #aaaaaa; margin-bottom: 4px;">Message</label>
+            <textarea rows="4" style="width: 100%; padding: 6px 10px; background: #242424; border: 1px solid #383838; color: #ffffff; font-size: 12px; font-family: inherit;" placeholder="Enter your message..."></textarea>
           </div>
-          <button type="button" style="padding: 10px; background: var(--accent); color: #07090b; border: 0; font-weight: bold; border-radius: 4px;" onclick="alert('Message queued for Jaijitesh (jaijitesh.2025@vitstudent.ac.in)');">SEND MESSAGE</button>
+          <button type="button" style="padding: 8px 16px; background: #0078d7; color: #ffffff; border: 0; font-weight: 600; font-size: 12px; cursor: pointer; justify-self: start;" onclick="alert('Message queued for Jaijitesh (jaijitesh.2025@vitstudent.ac.in)');">Send Message</button>
         </div>
       </div>
     `;
