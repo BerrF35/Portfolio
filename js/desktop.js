@@ -16,19 +16,69 @@ export class DesktopManager {
     this.activeWindowId = null;
     this.highestZ = 100;
     this.instances = new Map();
+    this.isStartOpen = false;
+    this.currentExplorerPath = 'Projects';
 
-    this.apps = [
-      { id: 'projects', icon: '▤', title: 'PROJECTS', detail: 'GITHUB ARCHIVE', category: 'DEV' },
-      { id: 'windsim', icon: '≋', title: 'WINDSIM', detail: 'AERODYNAMICS CFD', category: 'SIM' },
-      { id: 'berry', icon: '☍', title: 'BERRY AI', detail: 'DESKTOP ASSISTANT', category: 'AI' },
-      { id: 'berrybot', icon: '◈', title: 'BERRYBOT', detail: 'TRACKED ROBOTICS', category: 'ROBOT' },
-      { id: 'hardware', icon: '＋', title: 'HARDWARE 3D', detail: 'PI / ESP32 / CHASSIS', category: 'ENG' },
-      { id: 'research', icon: '↗', title: 'RESEARCH', detail: '3 PAPERS IN PREP', category: 'SCI' },
-      { id: 'about', icon: '◆', title: 'ABOUT', detail: 'PERSONNEL DOSSIER', category: 'BIO' },
-      { id: 'terminal', icon: '_', title: 'TERMINAL', detail: 'COMMAND SHELL', category: 'SYS' },
-      { id: 'timeline', icon: '▦', title: 'PIXEL WORLD', detail: 'PLAYABLE TIMELINE', category: 'GAME' },
-      { id: 'contact', icon: '@', title: 'CONTACT', detail: 'DISPATCH CLIENT', category: 'NET' },
+    // Windows Desktop Items Definition
+    this.desktopItems = [
+      { id: 'projects', name: 'Projects', type: 'folder', target: 'Projects', iconType: 'folder' },
+      { id: 'research', name: 'Research', type: 'folder', target: 'Research', iconType: 'folder' },
+      { id: 'hardware', name: 'Hardware 3D', type: 'folder', target: 'Hardware', iconType: 'folder' },
+      { id: 'about', name: 'About_Dossier.txt', type: 'file', target: 'about', iconType: 'txt' },
+      { id: 'windsim', name: 'WindSim.exe', type: 'app', target: 'windsim', iconType: 'wind' },
+      { id: 'berry', name: 'BerryAI.exe', type: 'app', target: 'berry', iconType: 'ai' },
+      { id: 'berrybot', name: 'BerryBot.exe', type: 'app', target: 'berrybot', iconType: 'robot' },
+      { id: 'terminal', name: 'Command_Prompt.cmd', type: 'app', target: 'terminal', iconType: 'cmd' },
+      { id: 'timeline', name: 'PixelWorld.exe', type: 'app', target: 'timeline', iconType: 'game' },
+      { id: 'contact', name: 'Contact_Dispatch.exe', type: 'app', target: 'contact', iconType: 'mail' },
+      { id: 'recycle', name: 'Recycle Bin', type: 'folder', target: 'RecycleBin', iconType: 'trash' },
     ];
+
+    // Virtual File System for Windows File Explorer
+    this.fileSystem = {
+      'Projects': {
+        title: 'Projects',
+        path: 'C:\\Users\\Jaijitesh\\Desktop\\Projects',
+        items: [
+          { id: 'windsim', name: 'WindSim_CFD.exe', type: 'app', target: 'windsim', iconType: 'wind', desc: 'Browser Aerodynamics Platform (LBM CFD - Best Work)', size: '4.2 MB' },
+          { id: 'berry', name: 'Berry_AI_Assistant.exe', type: 'app', target: 'berry', iconType: 'ai', desc: 'Local Desktop Agent (Python AGPL-3.0)', size: '12.8 MB' },
+          { id: 'berrybot', name: 'BerryBot_Robotics.exe', type: 'app', target: 'berrybot', iconType: 'robot', desc: 'Tracked Autonomous Robotics Controller', size: '6.1 MB' },
+          { id: 'impactx', name: 'ImpactX_3.0_Winner.txt', type: 'doc', target: 'impactx', iconType: 'txt', desc: 'Hackathon 3rd Place Overall (Lead Developer)', size: '2 KB' },
+          { id: 'farmassist', name: 'FarmAssist_AI.txt', type: 'doc', target: 'farmassist', iconType: 'txt', desc: 'Yantra 26 Central Hack - Lead Dev', size: '3 KB' },
+          { id: 'vinhack', name: 'VinHack_25_Exchange.txt', type: 'doc', target: 'vinhack', iconType: 'txt', desc: 'P2P Book Exchange - Lead Coder', size: '2 KB' },
+        ]
+      },
+      'Research': {
+        title: 'Research',
+        path: 'C:\\Users\\Jaijitesh\\Desktop\\Research',
+        items: [
+          { id: 'res_synth', name: 'Synthetic_Data_Generator.pdf', type: 'doc', target: 'res_synth', iconType: 'pdf', desc: 'Pipeline for robust synthetic training data (with faculty)', size: '1.4 MB' },
+          { id: 'res_color', name: 'Spectral_Color_Splitter.pdf', type: 'doc', target: 'res_color', iconType: 'pdf', desc: 'Spectral color-space image analysis algorithms', size: '920 KB' },
+          { id: 'res_vision', name: 'Edge_Vision_Systems.pdf', type: 'doc', target: 'res_vision', iconType: 'pdf', desc: 'Edge computer vision robotics integration', size: '2.1 MB' },
+        ]
+      },
+      'Hardware': {
+        title: 'Hardware 3D',
+        path: 'C:\\Users\\Jaijitesh\\Desktop\\Hardware 3D',
+        items: [
+          { id: 'cad_chassis', name: 'BerryBot_Chassis.step', type: 'cad', target: 'chassis', iconType: 'cad', desc: 'SolidWorks M4 High-Speed Tractor Chassis', size: '3.8 MB' },
+          { id: 'cad_rpi', name: 'Raspberry_Pi_4_Model_B.step', type: 'cad', target: 'raspberry', iconType: 'cad', desc: 'BCM2711 4-Core Quad 64-bit Compute Board', size: '5.9 MB' },
+          { id: 'cad_esp', name: 'ESP32_WROOM_38Pin.step', type: 'cad', target: 'esp32', iconType: 'cad', desc: 'Dual-Core Controller with 20kHz Motor PWM', size: '6.2 MB' },
+          { id: 'cad_camera', name: 'Canon_AT1_Retro.cad', type: 'cad', target: 'camera', iconType: 'cad', desc: 'Canon AT-1 35mm Vintage SLR & Optics', size: '19.5 MB' },
+          { id: 'cad_telescope', name: 'Refractor_Telescope.cad', type: 'cad', target: 'telescope', iconType: 'cad', desc: 'Scientific Observation Tube & Glass', size: '6.6 MB' },
+          { id: 'cad_dog', name: 'Berry_Belgian_Malinois.3d', type: 'cad', target: 'dog', iconType: 'cad', desc: '12yo Companion Malinois Dog', size: '2.8 MB' },
+          { id: 'cad_cat', name: 'Crispy_Companion_Cat.3d', type: 'cad', target: 'cat', iconType: 'cad', desc: '10yo Companion Supervisor Cat', size: '7.5 MB' },
+        ]
+      },
+      'RecycleBin': {
+        title: 'Recycle Bin',
+        path: 'Recycle Bin',
+        items: [
+          { id: 'junk_logs', name: 'previous_build_logs.log', type: 'doc', target: 'junk_logs', iconType: 'trash', desc: '14 KB (Deleted)', size: '14 KB' },
+          { id: 'junk_temp', name: 'temp_debug_dump.tmp', type: 'doc', target: 'junk_temp', iconType: 'trash', desc: '28 KB (Deleted)', size: '28 KB' }
+        ]
+      }
+    };
 
     this.init();
   }
@@ -38,248 +88,165 @@ export class DesktopManager {
     this.startClock();
   }
 
+  getIconHtml(type) {
+    switch (type) {
+      case 'folder':
+        return `<div class="win-icon-folder"><span class="win-icon-folder__tab"></span><span class="win-icon-folder__body"></span></div>`;
+      case 'txt':
+        return `<div class="win-icon-doc win-icon-doc--txt"><span class="win-icon-doc__corner"></span><span class="win-icon-doc__lines"></span></div>`;
+      case 'pdf':
+        return `<div class="win-icon-doc win-icon-doc--pdf"><span class="win-icon-doc__corner"></span><span class="win-icon-doc__badge">PDF</span></div>`;
+      case 'cad':
+        return `<div class="win-icon-app win-icon-app--cad"><span>CAD</span></div>`;
+      case 'wind':
+        return `<div class="win-icon-app win-icon-app--wind"><span>CFD</span></div>`;
+      case 'ai':
+        return `<div class="win-icon-app win-icon-app--ai"><span>AI</span></div>`;
+      case 'robot':
+        return `<div class="win-icon-app win-icon-app--robot"><span>BOT</span></div>`;
+      case 'cmd':
+        return `<div class="win-icon-app win-icon-app--cmd"><span>&gt;_</span></div>`;
+      case 'game':
+        return `<div class="win-icon-app win-icon-app--game"><span>8b</span></div>`;
+      case 'mail':
+        return `<div class="win-icon-app win-icon-app--mail"><span>@</span></div>`;
+      case 'trash':
+        return `<div class="win-icon-trash"><span class="win-icon-trash__lid"></span><span class="win-icon-trash__can"></span></div>`;
+      default:
+        return `<div class="win-icon-doc"><span class="win-icon-doc__corner"></span></div>`;
+    }
+  }
+
   renderDesktop() {
     this.container.innerHTML = `
-      <div class="os-workspace">
-        <header class="os-topbar">
-          <div class="os-topbar__left">
-            <button class="os-logo" id="osStartBtn" type="button" title="Open Command Shell">
-              <span class="os-logo__mark">⬡</span>
-              <b>JAIJITESH.OS</b>
-              <span class="os-logo__ver">v2.6.4</span>
-            </button>
-            <div class="os-topbar__divider"></div>
-            <nav class="os-topbar__nav">
-              <button class="os-nav-link" data-app="projects" type="button">Projects</button>
-              <button class="os-nav-link" data-app="windsim" type="button">WindSim</button>
-              <button class="os-nav-link" data-app="berrybot" type="button">Robotics</button>
-              <button class="os-nav-link" data-app="berry" type="button">Berry AI</button>
-              <button class="os-nav-link" data-app="terminal" type="button">Terminal</button>
-            </nav>
+      <div class="win-desktop-environment">
+        <!-- Windows Desktop Surface -->
+        <main class="win-desktop-surface" id="winDesktopSurface">
+          
+          <!-- Desktop Grid of Icons -->
+          <div class="win-icons-grid" id="winIconsGrid">
+            ${this.desktopItems.map(item => `
+              <button class="win-desktop-icon" data-id="${item.id}" data-type="${item.type}" data-target="${item.target}" type="button">
+                <div class="win-desktop-icon__graphic">
+                  ${this.getIconHtml(item.iconType)}
+                </div>
+                <span class="win-desktop-icon__name">${item.name}</span>
+              </button>
+            `).join('')}
           </div>
 
-          <div class="os-topbar__center">
-            <div class="os-status-pill">
-              <span class="os-status-pill__dot"></span>
-              <span>HOST: WORKSTATION 16 // 7 HARDWARE NODES ONLINE</span>
+          <!-- Windows Start Menu Popup -->
+          <div class="win-start-menu" id="winStartMenu">
+            <div class="win-start-menu__header">
+              <div class="win-start-avatar">JS</div>
+              <div class="win-start-user">
+                <b>Jaijitesh Suryaprakash</b>
+                <small>B.Tech IT • VIT Vellore</small>
+              </div>
+            </div>
+
+            <div class="win-start-search">
+              <span class="win-search-glyph">🔍</span>
+              <input type="text" id="winStartSearchInput" placeholder="Type here to search..." autocomplete="off" />
+            </div>
+
+            <div class="win-start-section-title">Pinned Applications</div>
+            <div class="win-start-apps-grid">
+              <button class="win-start-app-item" data-action="app" data-target="windsim" type="button">
+                ${this.getIconHtml('wind')}
+                <span>WindSim CFD</span>
+              </button>
+              <button class="win-start-app-item" data-action="app" data-target="berrybot" type="button">
+                ${this.getIconHtml('robot')}
+                <span>BerryBot</span>
+              </button>
+              <button class="win-start-app-item" data-action="app" data-target="berry" type="button">
+                ${this.getIconHtml('ai')}
+                <span>Berry AI</span>
+              </button>
+              <button class="win-start-app-item" data-action="app" data-target="terminal" type="button">
+                ${this.getIconHtml('cmd')}
+                <span>Command Prompt</span>
+              </button>
+              <button class="win-start-app-item" data-action="app" data-target="timeline" type="button">
+                ${this.getIconHtml('game')}
+                <span>Pixel World</span>
+              </button>
+              <button class="win-start-app-item" data-action="folder" data-target="Projects" type="button">
+                ${this.getIconHtml('folder')}
+                <span>Projects</span>
+              </button>
+            </div>
+
+            <div class="win-start-section-title">Recommended / Recent</div>
+            <div class="win-start-recent-list">
+              <button class="win-start-recent-item" data-action="folder" data-target="Research" type="button">
+                ${this.getIconHtml('folder')}
+                <div>
+                  <b>Research Papers Folder</b>
+                  <small>Synthetic Data &amp; Spectral Analysis</small>
+                </div>
+              </button>
+              <button class="win-start-recent-item" data-action="folder" data-target="Hardware" type="button">
+                ${this.getIconHtml('cad')}
+                <div>
+                  <b>Hardware 3D CAD Models</b>
+                  <small>Chassis, Pi4, ESP32, Camera, Telescope</small>
+                </div>
+              </button>
+              <button class="win-start-recent-item" data-action="file" data-target="about" type="button">
+                ${this.getIconHtml('txt')}
+                <div>
+                  <b>About_Dossier.txt</b>
+                  <small>Academic Background &amp; Bio</small>
+                </div>
+              </button>
+            </div>
+
+            <div class="win-start-menu__footer">
+              <button class="win-start-power-btn" id="winPowerExitBtn" type="button" title="Return to 3D Bench (ESC)">
+                <span class="win-power-glyph">⏻</span>
+                <span>Exit to 3D Bench</span>
+              </button>
             </div>
           </div>
 
-          <div class="os-topbar__right">
-            <button class="os-topbar__pill-btn" id="audioToggleBtn" type="button" title="Toggle Sound Synth">
-              <span id="audioIcon">🔊 SOUND: ON</span>
-            </button>
-            <button class="os-topbar__pill-btn" id="themeToggleBtn" type="button" title="Toggle Color Theme">
-              <span>◐ THEME</span>
-            </button>
-            <button class="os-topbar__exit-btn" id="osExitBtn" type="button" title="Return to 3D Workbench (ESC)">
-              <span>EXIT TO BENCH</span>
-              <i>&nearr;</i>
-            </button>
-          </div>
-        </header>
-
-        <main class="os-desktop-canvas" id="osDesktopGrid">
-          <div class="os-dashboard-layout">
-            
-            <!-- Left Column: Engineer Profile & Node Stream -->
-            <aside class="os-dash-sidebar">
-              <div class="os-profile-card">
-                <div class="os-profile-card__head">
-                  <div class="os-avatar">JS</div>
-                  <div>
-                    <h3>Jaijitesh Suryaprakash</h3>
-                    <p>B.Tech IT • VIT Vellore (2025–2029)</p>
-                  </div>
-                </div>
-                <div class="os-profile-tags">
-                  <span>CFD &amp; Aerodynamics</span>
-                  <span>Autonomous Robotics</span>
-                  <span>Local AI Agents</span>
-                </div>
-              </div>
-
-              <div class="os-telemetry-widget">
-                <div class="os-widget-head">
-                  <span class="os-widget-title">HARDWARE TELEMETRY BUS</span>
-                  <span class="os-widget-badge">LIVE</span>
-                </div>
-                <ul class="os-node-list">
-                  <li data-app="hardware">
-                    <span class="node-indicator node-ok"></span>
-                    <span class="node-name">BerryBot Tracked Chassis</span>
-                    <span class="node-meta">SolidWorks M4</span>
-                  </li>
-                  <li data-app="hardware">
-                    <span class="node-indicator node-ok"></span>
-                    <span class="node-name">Raspberry Pi 4 Model B</span>
-                    <span class="node-meta">BCM2711 4GB</span>
-                  </li>
-                  <li data-app="hardware">
-                    <span class="node-indicator node-ok"></span>
-                    <span class="node-name">ESP32-WROOM Dual-Core</span>
-                    <span class="node-meta">20kHz Motor PWM</span>
-                  </li>
-                  <li data-app="hardware">
-                    <span class="node-indicator node-ok"></span>
-                    <span class="node-name">Canon AT-1 Retro 35mm</span>
-                    <span class="node-meta">Vision &amp; Optics</span>
-                  </li>
-                  <li data-app="hardware">
-                    <span class="node-indicator node-ok"></span>
-                    <span class="node-name">Refractor Telescope</span>
-                    <span class="node-meta">Scientific Optics</span>
-                  </li>
-                  <li data-app="hardware">
-                    <span class="node-indicator node-ok"></span>
-                    <span class="node-name">Berry • Belgian Malinois</span>
-                    <span class="node-meta">12yo Companion</span>
-                  </li>
-                  <li data-app="hardware">
-                    <span class="node-indicator node-ok"></span>
-                    <span class="node-name">Crispy • Companion Cat</span>
-                    <span class="node-meta">10yo Supervisor</span>
-                  </li>
-                </ul>
-              </div>
-            </aside>
-
-            <!-- Center Column: Application Bento Launchpad -->
-            <section class="os-dash-main">
-              <div class="os-section-header">
-                <h2>Interactive Engineering Applications</h2>
-                <span>10 RUNTIME MODULES READY</span>
-              </div>
-
-              <div class="os-app-bento">
-                <!-- Featured App 1: WindSim -->
-                <button class="os-bento-card os-bento-card--featured" data-app="windsim" type="button">
-                  <div class="os-bento-card__badge">FEATURED // #1 BEST WORK</div>
-                  <div class="os-bento-card__icon">≋</div>
-                  <div class="os-bento-card__content">
-                    <h4>WindSim &mdash; Aerodynamics CFD Lab</h4>
-                    <p>Real-time Lattice Boltzmann Method aerodynamic wind sandbox with streamline generation and velocity field visualization.</p>
-                  </div>
-                  <span class="os-bento-card__launch">LAUNCH SIMULATOR &rarr;</span>
-                </button>
-
-                <!-- Featured App 2: Berry AI -->
-                <button class="os-bento-card os-bento-card--featured" data-app="berry" type="button">
-                  <div class="os-bento-card__badge">LOCAL AI AGENT</div>
-                  <div class="os-bento-card__icon">☍</div>
-                  <div class="os-bento-card__content">
-                    <h4>Berry AI &mdash; Desktop Assistant</h4>
-                    <p>Local-first autonomous desktop agent built in Python featuring CUA automation, Browser Relay, and Skill Codex.</p>
-                  </div>
-                  <span class="os-bento-card__launch">VIEW ARCHITECTURE &rarr;</span>
-                </button>
-
-                <!-- Regular Apps -->
-                <button class="os-bento-card" data-app="berrybot" type="button">
-                  <div class="os-bento-card__tag">ROBOTICS</div>
-                  <div class="os-bento-card__icon">◈</div>
-                  <h4>BerryBot Robotics</h4>
-                  <p>Tracked kinematics, optical encoder telemetry, and S-curve motion profiling.</p>
-                </button>
-
-                <button class="os-bento-card" data-app="projects" type="button">
-                  <div class="os-bento-card__tag">PORTFOLIO</div>
-                  <div class="os-bento-card__icon">▤</div>
-                  <h4>Projects Archive</h4>
-                  <p>ImpactX 3.0 (3rd Place), FarmAssist AI, VinHack, and open-source systems.</p>
-                </button>
-
-                <button class="os-bento-card" data-app="terminal" type="button">
-                  <div class="os-bento-card__tag">UNIX SHELL</div>
-                  <div class="os-bento-card__icon">_</div>
-                  <h4>Command Terminal</h4>
-                  <p>Full interactive CLI with system commands, filesystem inspection, and logs.</p>
-                </button>
-
-                <button class="os-bento-card" data-app="timeline" type="button">
-                  <div class="os-bento-card__tag">INTERACTIVE</div>
-                  <div class="os-bento-card__icon">▦</div>
-                  <h4>Pixel World</h4>
-                  <p>High-DPI playable memory timeline featuring Berry &amp; Crispy pixel sprites.</p>
-                </button>
-
-                <button class="os-bento-card" data-app="research" type="button">
-                  <div class="os-bento-card__tag">ACADEMIC</div>
-                  <div class="os-bento-card__icon">↗</div>
-                  <h4>Research Papers</h4>
-                  <p>Synthetic data generation and spectral color-space analysis with faculty group.</p>
-                </button>
-
-                <button class="os-bento-card" data-app="hardware" type="button">
-                  <div class="os-bento-card__tag">PHYSICAL 3D</div>
-                  <div class="os-bento-card__icon">＋</div>
-                  <h4>Hardware 3D CAD</h4>
-                  <p>Inspect CAD nodes, single-board compute, and sensors directly in 3D.</p>
-                </button>
-
-                <button class="os-bento-card" data-app="about" type="button">
-                  <div class="os-bento-card__tag">BIO</div>
-                  <div class="os-bento-card__icon">◆</div>
-                  <h4>About Dossier</h4>
-                  <p>Academic record, background, companion history, and philosophy.</p>
-                </button>
-
-                <button class="os-bento-card" data-app="contact" type="button">
-                  <div class="os-bento-card__tag">NETWORK</div>
-                  <div class="os-bento-card__icon">@</div>
-                  <h4>Contact Dispatch</h4>
-                  <p>Direct communication channels, email dispatch, and social profiles.</p>
-                </button>
-              </div>
-            </section>
-
-            <!-- Right Column: System Status & Quick Shortcuts -->
-            <aside class="os-dash-status">
-              <div class="os-stat-card">
-                <div class="os-stat-card__label">SYSTEM STATUS</div>
-                <div class="os-stat-card__val">OPTIMAL</div>
-                <div class="os-stat-card__sub">WebGL2 Hardware Accelerated</div>
-              </div>
-
-              <div class="os-stat-card">
-                <div class="os-stat-card__label">ACADEMIC PROFILE</div>
-                <div class="os-stat-card__val">VIT VELLORE</div>
-                <div class="os-stat-card__sub">B.Tech IT • 2025–2029</div>
-              </div>
-
-              <div class="os-shortcuts-widget">
-                <div class="os-widget-head">
-                  <span class="os-widget-title">KEYBOARD SHORTCUTS</span>
-                </div>
-                <div class="os-shortcut-row"><kbd>ESC</kbd> <span>Return to 3D Bench</span></div>
-                <div class="os-shortcut-row"><kbd>T</kbd> <span>Command Shell</span></div>
-                <div class="os-shortcut-row"><kbd>W</kbd> <span>WindSim CFD Lab</span></div>
-                <div class="os-shortcut-row"><kbd>B</kbd> <span>BerryBot Simulator</span></div>
-              </div>
-
-              <div class="os-bench-return-card">
-                <button class="os-bench-return-btn" id="osSideBenchBtn" type="button">
-                  <span>&larr; RETURN TO 3D BENCH</span>
-                </button>
-              </div>
-            </aside>
-
-          </div>
+          <!-- Windows Layer for open windows -->
+          <div class="win-windows-layer" id="winWindowsLayer"></div>
         </main>
 
-        <div class="os-windows-layer" id="osWindowsLayer"></div>
+        <!-- Windows Taskbar -->
+        <footer class="win-taskbar">
+          <div class="win-taskbar__start-group">
+            <button class="win-start-btn" id="winStartBtn" type="button" title="Start Menu">
+              <span class="win-logo-quadrant">
+                <i></i><i></i><i></i><i></i>
+              </span>
+              <span>Start</span>
+            </button>
+            <div class="win-taskbar-search">
+              <span>🔍</span>
+              <input type="text" id="winTaskbarSearchInput" placeholder="Type here to search" autocomplete="off" />
+            </div>
+          </div>
 
-        <footer class="os-taskbar">
-          <div class="os-taskbar__left-controls">
-            <button class="os-taskbar__back" id="osTaskbarBackBtn" type="button">
+          <div class="win-taskbar__tasks" id="winTaskbarItems"></div>
+
+          <div class="win-taskbar__tray">
+            <button class="win-tray-btn" id="winAudioToggle" type="button" title="Toggle Sound">
+              <span id="winAudioIcon">🔊</span>
+            </button>
+            <button class="win-tray-btn" id="winThemeToggle" type="button" title="Toggle Theme">
+              <span>◐</span>
+            </button>
+            <div class="win-tray-clock" id="winTrayClock">
+              <span class="win-clock-time" id="winClockTime">12:00:00</span>
+              <span class="win-clock-date" id="winClockDate">01-09-2026</span>
+            </div>
+            <button class="win-bench-exit-tray" id="winBenchExitTray" type="button" title="Return to 3D Bench">
               &larr; 3D BENCH
             </button>
-            <div class="os-taskbar__tasks" id="osTaskbarItems"></div>
-          </div>
-          <div class="os-taskbar__tray">
-            <span class="taskbar-badge">VIT VELLORE</span>
-            <span id="osClock">00:00:00</span>
-            <span class="taskbar-zone">IST (+05:30)</span>
+            <div class="win-show-desktop-bar" id="winShowDesktop" title="Show Desktop"></div>
           </div>
         </footer>
       </div>
@@ -289,53 +256,266 @@ export class DesktopManager {
   }
 
   bindDesktopEvents() {
-    this.container.querySelectorAll('[data-app]').forEach(btn => {
+    // Desktop Icons Single/Double Click
+    this.container.querySelectorAll('.win-desktop-icon').forEach(icon => {
+      icon.addEventListener('click', (e) => {
+        this.container.querySelectorAll('.win-desktop-icon').forEach(i => i.classList.remove('is-selected'));
+        icon.classList.add('is-selected');
+        sound.click(650, 0.02);
+
+        const type = icon.dataset.type;
+        const target = icon.dataset.target;
+        this.handleLaunch(type, target);
+      });
+    });
+
+    // Start Button Toggle
+    const startBtn = this.container.querySelector('#winStartBtn');
+    const startMenu = this.container.querySelector('#winStartMenu');
+
+    startBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.isStartOpen = !this.isStartOpen;
+      startMenu?.classList.toggle('is-open', this.isStartOpen);
+      startBtn?.classList.toggle('is-active', this.isStartOpen);
+      sound.click(800, 0.02);
+    });
+
+    // Close Start menu on clicking outside
+    this.container.querySelector('#winDesktopSurface')?.addEventListener('click', (e) => {
+      if (this.isStartOpen && !e.target.closest('#winStartMenu') && !e.target.closest('#winStartBtn')) {
+        this.isStartOpen = false;
+        startMenu?.classList.remove('is-open');
+        startBtn?.classList.remove('is-active');
+      }
+    });
+
+    // Start Menu Items Launch
+    this.container.querySelectorAll('#winStartMenu button[data-action]').forEach(btn => {
       btn.addEventListener('click', () => {
-        const appId = btn.dataset.app;
-        this.openApp(appId);
+        const action = btn.dataset.action;
+        const target = btn.dataset.target;
+        this.isStartOpen = false;
+        startMenu?.classList.remove('is-open');
+        startBtn?.classList.remove('is-active');
+        this.handleLaunch(action, target);
         sound.click(720, 0.02);
       });
     });
 
-    this.container.querySelector('#audioToggleBtn')?.addEventListener('click', () => {
+    // Exit to Bench
+    const handleExit = () => {
+      sound.click(380, 0.03);
+      this.onExit?.();
+    };
+
+    this.container.querySelector('#winPowerExitBtn')?.addEventListener('click', handleExit);
+    this.container.querySelector('#winBenchExitTray')?.addEventListener('click', handleExit);
+
+    // Audio & Theme Toggles
+    this.container.querySelector('#winAudioToggle')?.addEventListener('click', () => {
       const isMuted = sound.toggleMute();
-      const icon = this.container.querySelector('#audioIcon');
-      if (icon) icon.textContent = isMuted ? '🔇 SOUND: MUTED' : '🔊 SOUND: ON';
+      const icon = this.container.querySelector('#winAudioIcon');
+      if (icon) icon.textContent = isMuted ? '🔇' : '🔊';
       sound.click(880, 0.02);
     });
 
-    this.container.querySelector('#themeToggleBtn')?.addEventListener('click', () => {
+    this.container.querySelector('#winThemeToggle')?.addEventListener('click', () => {
       const current = document.documentElement.dataset.theme || 'dark';
       const next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.dataset.theme = next;
       sound.tick(1100);
     });
 
-    const handleExit = () => {
-      sound.click(380, 0.03);
-      this.onExit?.();
-    };
+    // Show Desktop peek
+    this.container.querySelector('#winShowDesktop')?.addEventListener('click', () => {
+      this.windows.forEach(win => win.classList.add('is-minimized'));
+      this.updateTaskbar();
+      sound.click(500, 0.02);
+    });
 
-    this.container.querySelector('#osTopBackBtn')?.addEventListener('click', handleExit);
-    this.container.querySelector('#osTaskbarBackBtn')?.addEventListener('click', handleExit);
-    this.container.querySelector('#osExitBtn')?.addEventListener('click', handleExit);
-    this.container.querySelector('#osSideBenchBtn')?.addEventListener('click', handleExit);
+    // Search bar functionality
+    const searchInputs = [
+      this.container.querySelector('#winTaskbarSearchInput'),
+      this.container.querySelector('#winStartSearchInput')
+    ];
 
-    this.container.querySelector('#osStartBtn')?.addEventListener('click', () => {
-      this.openApp('terminal');
+    searchInputs.forEach(input => {
+      input?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const q = input.value.trim().toLowerCase();
+          if (!q) return;
+          if (q.includes('wind') || q.includes('cfd')) this.openApp('windsim');
+          else if (q.includes('bot') || q.includes('robot')) this.openApp('berrybot');
+          else if (q.includes('berry') || q.includes('ai') || q.includes('agent')) this.openApp('berry');
+          else if (q.includes('term') || q.includes('cmd') || q.includes('shell')) this.openApp('terminal');
+          else if (q.includes('pixel') || q.includes('game')) this.openApp('timeline');
+          else if (q.includes('res') || q.includes('paper')) this.openExplorer('Research');
+          else if (q.includes('cad') || q.includes('hard')) this.openExplorer('Hardware');
+          else if (q.includes('proj')) this.openExplorer('Projects');
+          else if (q.includes('about') || q.includes('bio')) this.openFile('about');
+          else this.openApp('terminal');
+          input.value = '';
+          if (this.isStartOpen) {
+            this.isStartOpen = false;
+            startMenu?.classList.remove('is-open');
+            startBtn?.classList.remove('is-active');
+          }
+        }
+      });
     });
   }
 
+  handleLaunch(type, target) {
+    if (type === 'folder') {
+      this.openExplorer(target);
+    } else if (type === 'app') {
+      this.openApp(target);
+    } else if (type === 'file' || type === 'doc') {
+      this.openFile(target);
+    } else if (type === 'cad') {
+      this.onHardwareInspect?.(target);
+    }
+  }
+
   startClock() {
-    const clockEl = this.container.querySelector('#osClock');
+    const timeEl = this.container.querySelector('#winClockTime');
+    const dateEl = this.container.querySelector('#winClockDate');
+
     const update = () => {
-      if (clockEl) {
-        const now = new Date();
-        clockEl.textContent = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+      const now = new Date();
+      if (timeEl) {
+        timeEl.textContent = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+      }
+      if (dateEl) {
+        dateEl.textContent = now.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
       }
     };
     update();
     setInterval(update, 1000);
+  }
+
+  openExplorer(folderKey) {
+    const folderDef = this.fileSystem[folderKey] || this.fileSystem['Projects'];
+    const windowId = `explorer_${folderKey}`;
+
+    if (this.windows.has(windowId)) {
+      const winEl = this.windows.get(windowId);
+      winEl.classList.remove('is-minimized');
+      this.focusWindow(windowId);
+      return;
+    }
+
+    this.highestZ++;
+    const win = document.createElement('div');
+    win.className = 'win-window';
+    win.id = `win_${windowId}`;
+    win.style.zIndex = this.highestZ;
+    win.style.top = '50px';
+    win.style.left = '80px';
+    win.style.width = '740px';
+    win.style.height = '480px';
+
+    win.innerHTML = `
+      <div class="win-titlebar">
+        <div class="win-title">
+          <div class="win-icon-folder" style="width: 14px; height: 12px; margin-right: 6px;"><span class="win-icon-folder__tab"></span><span class="win-icon-folder__body"></span></div>
+          <span>${folderDef.title} - File Explorer</span>
+        </div>
+        <div class="win-controls">
+          <button class="win-ctrl-btn win-ctrl-min" data-action="min" type="button" title="Minimize">—</button>
+          <button class="win-ctrl-btn win-ctrl-max" data-action="max" type="button" title="Maximize">□</button>
+          <button class="win-ctrl-btn win-ctrl-close" data-action="close" type="button" title="Close">&times;</button>
+        </div>
+      </div>
+
+      <!-- File Explorer Toolbar & Address Bar -->
+      <div class="win-explorer-toolbar">
+        <div class="win-nav-buttons">
+          <button class="win-tool-btn" data-action="back" type="button" title="Back">&larr;</button>
+          <button class="win-tool-btn" data-action="forward" type="button" title="Forward">&rarr;</button>
+          <button class="win-tool-btn" data-action="up" type="button" title="Up">&uarr;</button>
+        </div>
+        <div class="win-address-bar">
+          <span class="win-address-icon">📁</span>
+          <span class="win-address-path">${folderDef.path}</span>
+        </div>
+        <div class="win-explorer-search">
+          <span>🔍</span>
+          <input type="text" placeholder="Search ${folderDef.title}" />
+        </div>
+      </div>
+
+      <!-- File Explorer Body: Sidebar + File Grid -->
+      <div class="win-explorer-body">
+        <aside class="win-explorer-sidebar">
+          <div class="win-side-section">Quick Access</div>
+          <button class="win-side-item ${folderKey === 'Projects' ? 'is-active' : ''}" data-folder="Projects" type="button">
+            📁 Projects
+          </button>
+          <button class="win-side-item ${folderKey === 'Research' ? 'is-active' : ''}" data-folder="Research" type="button">
+            📁 Research
+          </button>
+          <button class="win-side-item ${folderKey === 'Hardware' ? 'is-active' : ''}" data-folder="Hardware" type="button">
+            📁 Hardware 3D
+          </button>
+          <button class="win-side-item ${folderKey === 'RecycleBin' ? 'is-active' : ''}" data-folder="RecycleBin" type="button">
+            🗑️ Recycle Bin
+          </button>
+          
+          <div class="win-side-section" style="margin-top: 12px;">This PC</div>
+          <div class="win-side-drive">💻 Windows (C:) &mdash; 482 GB free</div>
+        </aside>
+
+        <div class="win-explorer-files" id="explorerFiles_${windowId}">
+          ${folderDef.items.map(item => `
+            <button class="win-file-item" data-item-id="${item.id}" data-item-type="${item.type}" data-item-target="${item.target}" type="button">
+              <div class="win-file-graphic">
+                ${this.getIconHtml(item.iconType)}
+              </div>
+              <div class="win-file-info">
+                <span class="win-file-name">${item.name}</span>
+                <span class="win-file-desc">${item.desc || ''}</span>
+              </div>
+              <span class="win-file-size">${item.size || ''}</span>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="win-explorer-statusbar">
+        <span>${folderDef.items.length} items</span>
+        <span>Ready</span>
+      </div>
+    `;
+
+    const layer = this.container.querySelector('#winWindowsLayer');
+    layer.appendChild(win);
+    this.windows.set(windowId, win);
+    this.focusWindow(windowId);
+    this.updateTaskbar();
+
+    this.setupWindowInteractions(win, windowId);
+
+    // Sidebar navigation inside Explorer
+    win.querySelectorAll('.win-side-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const nextFolder = btn.dataset.folder;
+        this.closeWindow(windowId);
+        this.openExplorer(nextFolder);
+        sound.click(600, 0.02);
+      });
+    });
+
+    // File double-click/click inside Explorer
+    win.querySelectorAll('.win-file-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.dataset.itemType;
+        const target = btn.dataset.itemTarget;
+        sound.click(720, 0.02);
+        this.handleLaunch(type, target);
+      });
+    });
   }
 
   openApp(id) {
@@ -346,32 +526,39 @@ export class DesktopManager {
       return;
     }
 
-    const appDef = this.apps.find(a => a.id === id);
-    if (!appDef) return;
+    const appTitles = {
+      'windsim': { title: 'WindSim CFD Aerodynamics Lab', icon: 'wind' },
+      'berry': { title: 'Berry AI - Desktop Assistant', icon: 'ai' },
+      'berrybot': { title: 'BerryBot Robotics Simulator', icon: 'robot' },
+      'terminal': { title: 'Command Prompt (Administrator: C:\\Windows\\System32\\cmd.exe)', icon: 'cmd' },
+      'timeline': { title: 'Pixel World Timeline (8-Bit Playable)', icon: 'game' },
+      'contact': { title: 'Contact & Dispatch Client', icon: 'mail' },
+    };
+
+    const info = appTitles[id] || { title: id.toUpperCase(), icon: 'app' };
 
     this.highestZ++;
     const win = document.createElement('div');
-    win.className = 'os-window is-maximized'; // Maximize inside the screen frame by default for seamless desktop interaction
+    win.className = 'win-window is-maximized';
     win.id = `win_${id}`;
     win.style.zIndex = this.highestZ;
 
     win.innerHTML = `
-      <div class="os-win-titlebar">
-        <div class="os-win-title">
-          <span class="win-icon">${appDef.icon}</span>
-          <b>${appDef.title}</b>
-          <small>// ${appDef.detail}</small>
+      <div class="win-titlebar">
+        <div class="win-title">
+          <div style="margin-right: 6px;">${this.getIconHtml(info.icon)}</div>
+          <span>${info.title}</span>
         </div>
-        <div class="os-win-controls">
-          <button class="win-btn win-min" data-win-action="min" type="button" title="Minimize">—</button>
-          <button class="win-btn win-max" data-win-action="max" type="button" title="Toggle Fullscreen">□</button>
-          <button class="win-btn win-close" data-win-action="close" type="button" title="Close">&times;</button>
+        <div class="win-controls">
+          <button class="win-ctrl-btn win-ctrl-min" data-action="min" type="button" title="Minimize">—</button>
+          <button class="win-ctrl-btn win-ctrl-max" data-action="max" type="button" title="Maximize">□</button>
+          <button class="win-ctrl-btn win-ctrl-close" data-action="close" type="button" title="Close">&times;</button>
         </div>
       </div>
-      <div class="os-win-body" id="body_${id}"></div>
+      <div class="win-app-body" id="body_${id}"></div>
     `;
 
-    const layer = this.container.querySelector('#osWindowsLayer');
+    const layer = this.container.querySelector('#winWindowsLayer');
     layer.appendChild(win);
     this.windows.set(id, win);
     this.focusWindow(id);
@@ -381,8 +568,131 @@ export class DesktopManager {
     this.mountAppContent(id, win.querySelector(`#body_${id}`));
   }
 
+  openFile(fileId) {
+    const windowId = `doc_${fileId}`;
+    if (this.windows.has(windowId)) {
+      const winEl = this.windows.get(windowId);
+      winEl.classList.remove('is-minimized');
+      this.focusWindow(windowId);
+      return;
+    }
+
+    let title = 'Document Viewer';
+    let content = '';
+
+    if (fileId === 'about') {
+      title = 'About_Dossier.txt - Notepad';
+      content = `
+================================================================================
+                      JAIJITESH SURYAPRAKASH — PERSONNEL DOSSIER
+================================================================================
+
+[ IDENTITY & ACADEMIC PROFILE ]
+Name: Jaijitesh Suryaprakash
+University: VIT Vellore (Vellore Institute of Technology)
+Degree: B.Tech Information Technology (2025–2029, 1st Year)
+Academic Standing: Current CGPA 5.89
+Schooling: SCTS School (10th: 93.4% | 12th: 76.4%)
+
+[ CONTACT & DISPATCH ]
+Email: jaijitesh.2025@vitstudent.ac.in
+Phone: +91 9940970749
+GitHub: https://github.com/BerrF35
+LinkedIn: https://linkedin.com/in/jaijitesh-suryaprakash-j
+
+[ COMPANIONS & SPIRIT ]
+1. BERRY (12-year-old Belgian Malinois): Namesake and spirit behind Berry AI Agent
+   and BerryBot Tracked Robotics.
+2. CRISPY (10-year-old Companion Cat): Supervises late-night hardware/firmware sessions.
+
+[ CORE TECHNICAL PILLARS ]
+1. Scientific Simulation: Real-time Lattice Boltzmann Method (LBM) CFD aerodynamics.
+2. Local-First AI Agents: Desktop CUA automation, persistent memory, and browser relay.
+3. Autonomous Robotics: Tracked chassis kinematics, optical encoder feedback, S-curve PID.
+4. Academic Research: 3 papers in preparation with faculty group.
+
+================================================================================
+      `;
+    } else if (fileId === 'impactx') {
+      title = 'ImpactX_3.0_Winner.txt - Notepad';
+      content = `
+[ IMPACTX 3.0 HACKATHON — 3RD PLACE OVERALL ]
+Role: Hackathon Lead & Primary Developer / Coder
+Project: Hyperlocal Dispatch & Real-Time Logistics Platform
+Key Highlights: Real-time geospatial route optimization and high-concurrency order engine.
+      `;
+    } else if (fileId === 'farmassist') {
+      title = 'FarmAssist_AI.txt - Notepad';
+      content = `
+[ FARMASSIST AI — YANTRA 26 CENTRAL HACK ]
+Role: Lead & Primary Developer
+Domain: Edge Computer Vision & Agricultural Disease Diagnostics
+Stack: PyTorch, OpenCV, Raspberry Pi edge vision deployment.
+      `;
+    } else if (fileId === 'vinhack') {
+      title = 'VinHack_25_Exchange.txt - Notepad';
+      content = `
+[ VINHACK 25 — P2P BOOK EXCHANGE ]
+Role: Lead Developer
+Domain: Peer-to-Peer Distributed Resource Exchange
+      `;
+    } else if (fileId === 'res_synth' || fileId === 'res_color' || fileId === 'res_vision') {
+      title = `${fileId}.pdf - Document Viewer`;
+      content = `
+[ RESEARCH PAPER IN PREPARATION ]
+Group: 5-Person Academic Research Group with Professor
+Status: Active experimentation, mathematical validation, and manuscript preparation.
+Topics:
+- Synthetic data generation pipelines for robust edge classification.
+- Spectral color-space image decomposition and optical filtering.
+- Embedded vision integration on low-power ARM microcontrollers.
+      `;
+    } else {
+      title = `${fileId} - Notepad`;
+      content = `Contents of ${fileId}...`;
+    }
+
+    this.highestZ++;
+    const win = document.createElement('div');
+    win.className = 'win-window';
+    win.id = `win_${windowId}`;
+    win.style.zIndex = this.highestZ;
+    win.style.top = '80px';
+    win.style.left = '120px';
+    win.style.width = '680px';
+    win.style.height = '440px';
+
+    win.innerHTML = `
+      <div class="win-titlebar">
+        <div class="win-title">
+          <div class="win-icon-doc win-icon-doc--txt" style="width: 12px; height: 14px; margin-right: 6px;"><span class="win-icon-doc__corner"></span></div>
+          <span>${title}</span>
+        </div>
+        <div class="win-controls">
+          <button class="win-ctrl-btn win-ctrl-min" data-action="min" type="button" title="Minimize">—</button>
+          <button class="win-ctrl-btn win-ctrl-max" data-action="max" type="button" title="Maximize">□</button>
+          <button class="win-ctrl-btn win-ctrl-close" data-action="close" type="button" title="Close">&times;</button>
+        </div>
+      </div>
+      <div class="win-notepad-menu">
+        <span>File</span><span>Edit</span><span>Format</span><span>View</span><span>Help</span>
+      </div>
+      <div class="win-notepad-body">
+        <pre>${content.trim()}</pre>
+      </div>
+    `;
+
+    const layer = this.container.querySelector('#winWindowsLayer');
+    layer.appendChild(win);
+    this.windows.set(windowId, win);
+    this.focusWindow(windowId);
+    this.updateTaskbar();
+
+    this.setupWindowInteractions(win, windowId);
+  }
+
   setupWindowInteractions(win, id) {
-    const titlebar = win.querySelector('.os-win-titlebar');
+    const titlebar = win.querySelector('.win-titlebar');
 
     win.addEventListener('mousedown', () => this.focusWindow(id));
 
@@ -390,7 +700,7 @@ export class DesktopManager {
     let startX, startY, origLeft, origTop;
 
     titlebar.addEventListener('mousedown', (e) => {
-      if (e.target.closest('.os-win-controls') || win.classList.contains('is-maximized')) return;
+      if (e.target.closest('.win-controls') || win.classList.contains('is-maximized')) return;
       isDragging = true;
       startX = e.clientX;
       startY = e.clientY;
@@ -407,7 +717,7 @@ export class DesktopManager {
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
       win.style.left = `${Math.max(0, origLeft + dx)}px`;
-      win.style.top = `${Math.max(34, origTop + dy)}px`;
+      win.style.top = `${Math.max(0, origTop + dy)}px`;
       win.style.transform = 'none';
     });
 
@@ -415,9 +725,9 @@ export class DesktopManager {
       if (isDragging) isDragging = false;
     });
 
-    win.querySelector('.win-close').addEventListener('click', () => this.closeWindow(id));
-    win.querySelector('.win-min').addEventListener('click', () => this.minimizeWindow(id));
-    win.querySelector('.win-max').addEventListener('click', () => this.toggleMaximize(win));
+    win.querySelector('.win-ctrl-close').addEventListener('click', () => this.closeWindow(id));
+    win.querySelector('.win-ctrl-min').addEventListener('click', () => this.minimizeWindow(id));
+    win.querySelector('.win-ctrl-max').addEventListener('click', () => this.toggleMaximize(win));
   }
 
   focusWindow(id) {
@@ -426,7 +736,7 @@ export class DesktopManager {
     const win = this.windows.get(id);
     if (win) {
       win.style.zIndex = this.highestZ;
-      this.container.querySelectorAll('.os-window').forEach(w => w.classList.remove('is-focused'));
+      this.container.querySelectorAll('.win-window').forEach(w => w.classList.remove('is-focused'));
       win.classList.add('is-focused');
     }
     this.updateTaskbar();
@@ -447,7 +757,7 @@ export class DesktopManager {
       win.style.top = '40px';
       win.style.left = '40px';
       win.style.width = 'calc(100% - 80px)';
-      win.style.height = 'calc(100% - 80px)';
+      win.style.height = 'calc(100% - 90px)';
     } else {
       win.style.top = '0';
       win.style.left = '0';
@@ -472,17 +782,22 @@ export class DesktopManager {
   }
 
   updateTaskbar() {
-    const taskbar = this.container.querySelector('#osTaskbarItems');
+    const taskbar = this.container.querySelector('#winTaskbarItems');
     if (!taskbar) return;
 
     taskbar.innerHTML = Array.from(this.windows.keys()).map(id => {
-      const app = this.apps.find(a => a.id === id);
       const isFocused = this.activeWindowId === id;
       const isMin = this.windows.get(id)?.classList.contains('is-minimized');
+      let title = id.replace('explorer_', '📁 ').replace('doc_', '📄 ');
+      if (id === 'windsim') title = 'CFD WindSim';
+      if (id === 'berry') title = 'Berry AI';
+      if (id === 'berrybot') title = 'BerryBot';
+      if (id === 'terminal') title = 'Command Prompt';
+      if (id === 'timeline') title = 'Pixel World';
+
       return `
-        <button class="taskbar-item ${isFocused && !isMin ? 'is-active' : ''}" data-task-id="${id}" type="button">
-          <span>${app.icon}</span>
-          <b>${app.title}</b>
+        <button class="win-taskbar-tab ${isFocused && !isMin ? 'is-active' : ''} ${isMin ? 'is-min' : ''}" data-task-id="${id}" type="button">
+          <span>${title}</span>
         </button>
       `;
     }).join('');
@@ -491,6 +806,7 @@ export class DesktopManager {
       btn.addEventListener('click', () => {
         const id = btn.dataset.taskId;
         const win = this.windows.get(id);
+        if (!win) return;
         if (win.classList.contains('is-minimized')) {
           win.classList.remove('is-minimized');
           this.focusWindow(id);
@@ -524,390 +840,30 @@ export class DesktopManager {
         (simId) => this.openApp(simId)
       );
       this.instances.set(id, term);
-    } else if (id === 'projects') {
-      this.renderProjectsApp(body);
-    } else if (id === 'hardware') {
-      this.renderHardwareApp(body);
-    } else if (id === 'about') {
-      this.renderAboutApp(body);
-    } else if (id === 'research') {
-      this.renderResearchApp(body);
     } else if (id === 'contact') {
       this.renderContactApp(body);
     }
   }
 
-  renderProjectsApp(body) {
-    const list = [
-      {
-        id: 'windsim',
-        num: '01',
-        title: 'WINDSIM (BEST WORK)',
-        detail: 'BROWSER-BASED AERODYNAMICS & CFD PLATFORM',
-        meta: 'Reduced-order wind sandbox & deterministic CFD lab with LBM simulation, streamlines, slices, and surface visualization.',
-        link: 'https://berrf35.github.io/Windsim/',
-        repo: 'BerrF35/Windsim (JavaScript, MIT)',
-        type: 'sim'
-      },
-      {
-        id: 'berry',
-        num: '02',
-        title: 'BERRY (DESKTOP AI ASSISTANT)',
-        detail: 'LOCAL-FIRST DESKTOP AGENT BRIDGING LLMS WITH OS',
-        meta: 'Core Engine, Berry CUA (Computer Use Agent sidecar), Browser Relay (Chromium bridge), Skill Codex, and Berry Vault persistent memory.',
-        repo: 'BerrF35/Berry (Python, AGPL-3.0)',
-        type: 'sim'
-      },
-      {
-        id: 'berrybot',
-        num: '03',
-        title: 'BERRYBOT',
-        detail: 'TRACKED AUTONOMOUS ROBOTICS PLATFORM',
-        meta: 'Built entirely around Waveshare ESP32 controller. Encoder-based motion control, S-curve trajectories, path tracking, return-to-home.',
-        repo: 'BerrF35/BerryBot (SolidWorks CAD + ESP32 C++)',
-        type: 'sim'
-      },
-      {
-        id: 'farmassist',
-        num: '04',
-        title: 'FARMASSIST AI',
-        detail: 'AI-ASSISTED AGRICULTURE & EDGE COMPUTER VISION',
-        meta: 'Yantra 26 Central Hack. Lead & Primary Developer. Edge computer vision crop diagnostics.',
-        repo: 'BerrF35/FarmAssist',
-        type: 'info'
-      },
-      {
-        id: 'research',
-        num: '05',
-        title: 'RESEARCH (3 PAPERS IN PREPARATION)',
-        detail: '5-PERSON RESEARCH GROUP WITH PROFESSOR',
-        meta: 'Synthetic data generation pipelines (synthetic-data-generator), spectral color-space image analysis (color-splitter), vision systems.',
-        repo: 'BerrF35/synthetic-data-generator & color-splitter',
-        type: 'page'
-      },
-      {
-        id: 'impactx',
-        num: '06',
-        title: 'IMPACTX 3.0 (3RD PLACE OVERALL)',
-        detail: 'HYPERLOCAL SERVICE MARKETPLACE',
-        meta: 'Hackathon Lead & Primary Coder. Architected core dispatch and real-time backend.',
-        type: 'info'
-      },
-      {
-        id: 'other_repos',
-        num: '07',
-        title: 'OTHER GITHUB REPOSITORIES',
-        detail: 'BROAD TECHNICAL EXPERIMENTS & SOFTWARE',
-        meta: 'gesturecontrolpc, speaksafe, imagegen, Agrichain, AI property damage detection & cost estimation, Performance Monitor.',
-        repo: 'github.com/BerrF35',
-        type: 'info'
-      }
-    ];
-
-    body.innerHTML = `
-      <div class="projects-app">
-        <aside class="projects-sidebar">
-          <div class="sidebar-head">JAIJITESH // GITHUB ARCHIVE</div>
-          <div class="sidebar-tree">
-            <div>&boxur;&boxh; 01_WINDSIM (CFD Lab)</div>
-            <div>&boxur;&boxh; 02_BERRY (Desktop AI)</div>
-            <div>&boxur;&boxh; 03_BERRYBOT (Tracked Robot)</div>
-            <div>&boxur;&boxh; 04_FARMASSIST (AI Ag)</div>
-            <div>&boxur;&boxh; 05_RESEARCH (3 Papers)</div>
-            <div>&boxur;&boxh; 06_IMPACTX (3rd Place)</div>
-            <div>&boxur;&boxh; 07_OTHER_REPOS</div>
-          </div>
-          <div class="sidebar-note">
-            Each entry opens an interactive simulation, 3D model, or repository inspector.
-          </div>
-        </aside>
-
-        <div class="projects-content">
-          <div class="projects-head">
-            <span>REPOSITORY DIRECTORY (GITHUB.COM/BERRF35)</span>
-            <span>07 ARCHIVES</span>
-          </div>
-
-          <div class="projects-list">
-            ${list.map(p => `
-              <button class="project-entry" data-p-id="${p.id}" data-p-type="${p.type}" type="button">
-                <span class="entry-num">${p.num}</span>
-                <div class="entry-info">
-                  <b>${p.title}</b>
-                  <p>${p.detail}</p>
-                  <small>${p.meta}</small>
-                  ${p.repo ? `<div class="entry-repo-tag">${p.repo}</div>` : ''}
-                </div>
-                <span class="entry-launch">${p.link ? 'OPEN LIVE ↗' : 'LAUNCH ↗'}</span>
-              </button>
-            `).join('')}
-          </div>
-        </div>
-      </div>
-    `;
-
-    body.querySelectorAll('.project-entry').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const pid = btn.dataset.pId;
-        const ptype = btn.dataset.pType;
-
-        if (pid === 'windsim') {
-          this.openApp('windsim');
-        } else if (pid === 'berry') {
-          this.openApp('berry');
-        } else if (pid === 'berrybot') {
-          this.openApp('berrybot');
-        } else if (pid === 'research') {
-          this.openApp('research');
-        } else if (pid === 'farmassist' || pid === 'impactx' || pid === 'other_repos') {
-          this.openApp('about');
-        }
-        sound.click(800, 0.02);
-      });
-    });
-  }
-
-  renderHardwareApp(body) {
-    body.innerHTML = `
-      <div class="lab-app">
-        <div class="lab-app__intro">
-          <div class="lab-badge">PHYSICAL COMPUTING, SENSING &amp; LAB COMPANIONS</div>
-          <h2>Hardware Systems, Optics &amp; Companions</h2>
-          <p>Explore the physical systems and companions in the 3D studio. Click any card to fly the camera directly to the 3D model and inspect its telemetry.</p>
-        </div>
-
-        <div class="lab-app__grid">
-          <button class="lab-card" data-hw="robot" type="button">
-            <span class="lab-card__num">01</span>
-            <div class="lab-card__info">
-              <b>BERRYBOT // TRACKED ROBOTICS PLATFORM</b>
-              <p>Differential drive tracked chassis built around Waveshare ESP32 controller, dual DC motors, and optical encoders.</p>
-            </div>
-            <span class="lab-card__action">INSPECT 3D ON BENCH ↗</span>
-          </button>
-
-          <button class="lab-card" data-hw="raspberry" type="button">
-            <span class="lab-card__num">02</span>
-            <div class="lab-card__info">
-              <b>RASPBERRY PI 4 // MODEL B</b>
-              <p>Broadcom BCM2711 quad-core SoC, USB 3.0, Gigabit Ethernet, and 40-Pin GPIO edge processing node.</p>
-            </div>
-            <span class="lab-card__action">INSPECT 3D ON BENCH ↗</span>
-          </button>
-
-          <button class="lab-card" data-hw="esp32" type="button">
-            <span class="lab-card__num">03</span>
-            <div class="lab-card__info">
-              <b>ESP32-WROOM // DUAL-CORE MCU</b>
-              <p>240MHz Xtensa dual-core processor driving motor PWM generation, optical encoder counts, and sensor telemetry.</p>
-            </div>
-            <span class="lab-card__action">INSPECT 3D ON BENCH ↗</span>
-          </button>
-
-          <button class="lab-card" data-hw="dog" type="button">
-            <span class="lab-card__num">04</span>
-            <div class="lab-card__info">
-              <b>BERRY // 12-YEAR-OLD BELGIAN MALINOIS</b>
-              <p>Loyal companion dog and namesake/inspiration behind both the Berry AI Agent and BerryBot Tracked Robotics.</p>
-            </div>
-            <span class="lab-card__action">INSPECT 3D IN ROOM ↗</span>
-          </button>
-
-          <button class="lab-card" data-hw="cat" type="button">
-            <span class="lab-card__num">05</span>
-            <div class="lab-card__info">
-              <b>CRISPY // 10-YEAR-OLD COMPANION CAT</b>
-              <p>Faithful companion cat resting on the workbench, supervising firmware updates and research experiments.</p>
-            </div>
-            <span class="lab-card__action">INSPECT 3D ON BENCH ↗</span>
-          </button>
-
-          <button class="lab-card" data-hw="camera" type="button">
-            <span class="lab-card__num">06</span>
-            <div class="lab-card__info">
-              <b>CANON AT-1 // 35MM RETRO OPTICS</b>
-              <p>Classic SLR camera body representing computer vision, photogrammetry data pipelines, and spectral image analysis.</p>
-            </div>
-            <span class="lab-card__action">INSPECT 3D ON BENCH ↗</span>
-          </button>
-
-          <button class="lab-card" data-hw="telescope" type="button">
-            <span class="lab-card__num">07</span>
-            <div class="lab-card__info">
-              <b>REFRACTOR TELESCOPE // SCIENTIFIC OPTICS</b>
-              <p>Precision astronomical refractor telescope standing in the studio corner, representing mathematical modeling and observation.</p>
-            </div>
-            <span class="lab-card__action">INSPECT 3D IN ROOM ↗</span>
-          </button>
-        </div>
-      </div>
-    `;
-
-    body.querySelectorAll('[data-hw]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const hwKey = btn.dataset.hw;
-        this.onHardwareInspect?.(hwKey);
-        sound.click(850, 0.02);
-      });
-    });
-  }
-
-  renderAboutApp(body) {
-    body.innerHTML = `
-      <div class="about-app">
-        <header class="about-head">
-          <div class="about-dossier-badge">PERSONNEL DOSSIER // JAIJITESH SURYAPRAKASH</div>
-          <h1>Jaijitesh<br/><em>Suryaprakash</em></h1>
-          <p class="about-sub">B.Tech Information Technology &bull; Vellore Institute of Technology (VIT), Vellore (2025–2029)</p>
-        </header>
-
-        <div class="about-columns">
-          <div class="about-col">
-            <h3>PROFILE &amp; BACKGROUND</h3>
-            <p>Information Technology undergraduate at VIT Vellore (current 1st year). Schooling at SCTS (10th: 93.4%, 12th: 76.4%), current CGPA: 5.89.</p>
-            <p>Hands-on builder and technical lead working across software development, AI agents, scientific computing, computer vision, data synthesis, and physical autonomous robotics.</p>
-            
-            <h3 style="margin-top: 18px;">HACKATHON LEADERSHIP</h3>
-            <p>&bull; <b>ImpactX 3.0:</b> 3rd Place Overall (Hyperlocal service marketplace) &mdash; Lead &amp; Primary Coder.</p>
-            <p>&bull; <b>Yantra '26 Central Hack:</b> FarmAssist AI (AI-assisted agriculture) &mdash; Lead &amp; Primary Developer.</p>
-            <p>&bull; <b>Vinhack 25:</b> P2P book exchange platform &mdash; Lead &amp; Primary Coder.</p>
-          </div>
-
-          <div class="about-col">
-            <h3>VERIFIED TECHNICAL SKILLS</h3>
-            <div class="skill-group-title">LANGUAGES</div>
-            <div class="skill-tags">
-              <span class="tag">Python</span>
-              <span class="tag">Java</span>
-              <span class="tag">C</span>
-              <span class="tag">C++</span>
-              <span class="tag">JavaScript</span>
-              <span class="tag">HTML</span>
-              <span class="tag">CSS</span>
-              <span class="tag">SQL</span>
-            </div>
-
-            <div class="skill-group-title">FRAMEWORKS &amp; TOOLS</div>
-            <div class="skill-tags">
-              <span class="tag">React</span>
-              <span class="tag">Node.js</span>
-              <span class="tag">Flask</span>
-              <span class="tag">FastAPI</span>
-              <span class="tag">REST APIs</span>
-              <span class="tag">Three.js</span>
-              <span class="tag">GSAP</span>
-              <span class="tag">SolidWorks CAD</span>
-            </div>
-
-            <div class="skill-group-title">HARDWARE &amp; ROBOTICS</div>
-            <div class="skill-tags">
-              <span class="tag">Arduino</span>
-              <span class="tag">Raspberry Pi</span>
-              <span class="tag">ESP32 (Waveshare)</span>
-              <span class="tag">Motor Control</span>
-              <span class="tag">Optical Encoders</span>
-              <span class="tag">S-Curve Motion</span>
-              <span class="tag">Path Tracking</span>
-              <span class="tag">Return-to-Home</span>
-            </div>
-
-            <div class="skill-group-title">AI &amp; COMPUTATION</div>
-            <div class="skill-tags">
-              <span class="tag">LLMs</span>
-              <span class="tag">AI Agents</span>
-              <span class="tag">Computer Vision</span>
-              <span class="tag">Image Processing</span>
-              <span class="tag">Data Synthesis</span>
-              <span class="tag">CFD / LBM</span>
-              <span class="tag">Browser Automation</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="about-metrics-row">
-          <div class="about-metric"><span>EDUCATION</span><b>VIT Vellore (2025–2029)</b></div>
-          <div class="about-metric"><span>SCHOOL (SCTS)</span><b>10th: 93.4% &bull; 12th: 76.4%</b></div>
-          <div class="about-metric"><span>PHONE</span><b>+91 9940970749</b></div>
-          <div class="about-metric"><span>GITHUB</span><b>@BerrF35</b></div>
-        </div>
-      </div>
-    `;
-  }
-
-  renderResearchApp(body) {
-    body.innerHTML = `
-      <div class="research-app">
-        <header class="research-head">
-          <div class="research-badge">ACTIVE RESEARCH // 5-PERSON GROUP &amp; PROFESSOR</div>
-          <h2>3 Research Papers in Preparation</h2>
-          <p>Current active investigations exploring data synthesis pipelines, spectral color-space image analysis, and autonomous machine vision.</p>
-        </header>
-
-        <div class="research-papers">
-          <article class="paper-card">
-            <div class="paper-num">PAPER 01 // IN PREPARATION</div>
-            <h3>Synthetic Data Generation Pipelines</h3>
-            <p>Associated repository: <b>BerrF35/synthetic-data-generator</b>. Investigating procedural data synthesis and domain randomization for training robust perception networks.</p>
-            <div class="paper-tags"><span>DATA SYNTHESIS</span><span>GENERATIVE PIPELINES</span><span>ML ROBUSTNESS</span></div>
-          </article>
-
-          <article class="paper-card">
-            <div class="paper-num">PAPER 02 // IN PREPARATION</div>
-            <h3>Spectral Color-Space Image Processing &amp; Analysis</h3>
-            <p>Associated repository: <b>BerrF35/color-splitter</b>. Formulating mathematical chromaticity transformations and color-based image analysis algorithms.</p>
-            <div class="paper-tags"><span>COLOR MANIFOLDS</span><span>IMAGE PROCESSING</span><span>SPECTRAL ANALYSIS</span></div>
-          </article>
-
-          <article class="paper-card">
-            <div class="paper-num">PAPER 03 // IN PREPARATION</div>
-            <h3>Autonomous Vision &amp; Spatial Robotics Systems</h3>
-            <p>Collaborative research with university professor and 5-person group focusing on edge sensor integration and real-time control.</p>
-            <div class="paper-tags"><span>ROBOTICS</span><span>EDGE VISION</span><span>CONTROL SYSTEMS</span></div>
-          </article>
-        </div>
-      </div>
-    `;
-  }
-
   renderContactApp(body) {
     body.innerHTML = `
-      <div class="contact-app">
-        <div class="contact-head">
-          <div class="contact-badge">DIRECT TELEMETRY &amp; CONTACT</div>
-          <h2>Jaijitesh Suryaprakash</h2>
-          <p>Open for engineering roles, technical architecture collaborations, autonomous systems development, and research discussions.</p>
-        </div>
-
-        <div class="contact-grid">
-          <a class="contact-card" href="mailto:jaijitesh.2025@vitstudent.ac.in">
-            <span class="contact-label">EMAIL ADDRESS</span>
-            <b>jaijitesh.2025@vitstudent.ac.in</b>
-            <span class="contact-action">SEND DISPATCH ↗</span>
-          </a>
-
-          <a class="contact-card" href="tel:+919940970749">
-            <span class="contact-label">PHONE / DIRECT LINE</span>
-            <b>+91 9940970749</b>
-            <span class="contact-action">CALL TELEMETRY ↗</span>
-          </a>
-
-          <a class="contact-card" href="https://www.linkedin.com/in/jaijitesh-suryaprakash-j" target="_blank" rel="noreferrer">
-            <span class="contact-label">LINKEDIN PROFILE</span>
-            <b>linkedin.com/in/jaijitesh-suryaprakash-j</b>
-            <span class="contact-action">CONNECT ↗</span>
-          </a>
-
-          <a class="contact-card" href="https://github.com/BerrF35" target="_blank" rel="noreferrer">
-            <span class="contact-label">GITHUB CODE ARCHIVE</span>
-            <b>github.com/BerrF35</b>
-            <span class="contact-action">INSPECT REPOSITORIES ↗</span>
-          </a>
-
-          <a class="contact-card" href="https://berrf35.github.io/Windsim/" target="_blank" rel="noreferrer" style="grid-column: 1 / -1;">
-            <span class="contact-label">WINDSIM LIVE DEPLOYMENT</span>
-            <b>https://berrf35.github.io/Windsim/</b>
-            <span class="contact-action">LAUNCH AERODYNAMICS PLATFORM ↗</span>
-          </a>
+      <div class="win-contact-form" style="padding: 24px; color: #fff; font-family: var(--font-sans);">
+        <h3 style="margin-top: 0; color: var(--accent);">Direct Contact &amp; Dispatch</h3>
+        <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 20px;">Send a direct communication to Jaijitesh Suryaprakash.</p>
+        <div style="display: grid; gap: 12px; max-width: 480px;">
+          <div>
+            <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Name</label>
+            <input type="text" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 4px;" placeholder="Your Name" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Email</label>
+            <input type="email" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 4px;" placeholder="your.email@domain.com" />
+          </div>
+          <div>
+            <label style="display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">Message</label>
+            <textarea rows="4" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); color: #fff; border-radius: 4px;" placeholder="Enter your message..."></textarea>
+          </div>
+          <button type="button" style="padding: 10px; background: var(--accent); color: #07090b; border: 0; font-weight: bold; border-radius: 4px;" onclick="alert('Message queued for Jaijitesh (jaijitesh.2025@vitstudent.ac.in)');">SEND MESSAGE</button>
         </div>
       </div>
     `;
