@@ -435,7 +435,7 @@ export const HARDWARE_DEFINITIONS = {
     ],
     scale: 0.44,
     isGroundedOnFloor: false,
-    benchPosition: { x: -0.68, y: 0.80, z: 0.08 },
+    benchPosition: { x: -0.82, y: 0.80, z: 0.05 },
     benchRotation: { x: 0, y: 0.35, z: 0 },
     projectId: 'berrybot'
   },
@@ -456,7 +456,7 @@ export const HARDWARE_DEFINITIONS = {
     ],
     scale: 0.14,
     isGroundedOnFloor: false,
-    benchPosition: { x: 0.48, y: 0.80, z: -0.06 },
+    benchPosition: { x: 0.44, y: 0.80, z: -0.18 },
     benchRotation: { x: 0, y: -0.25, z: 0 }
   },
 
@@ -476,7 +476,7 @@ export const HARDWARE_DEFINITIONS = {
     ],
     scale: 0.12,
     isGroundedOnFloor: false,
-    benchPosition: { x: 0.76, y: 0.80, z: 0.06 },
+    benchPosition: { x: 0.76, y: 0.80, z: -0.15 },
     benchRotation: { x: 0, y: 0.15, z: 0 }
   },
 
@@ -493,9 +493,9 @@ export const HARDWARE_DEFINITIONS = {
       ['SHUTTER', 'Focal-Plane Electronic Shutter'],
       ['RESEARCH LINK', 'Spectral Color-Space & Data Generation']
     ],
-    scale: 0.18,
+    scale: 0.16,
     isGroundedOnFloor: false,
-    benchPosition: { x: -0.28, y: 0.80, z: 0.26 },
+    benchPosition: { x: -0.46, y: 0.80, z: 0.28 },
     benchRotation: { x: 0, y: 0.45, z: 0 }
   },
 
@@ -514,7 +514,7 @@ export const HARDWARE_DEFINITIONS = {
     ],
     scale: 1.55,
     isGroundedOnFloor: true,
-    benchPosition: { x: 1.25, y: 0, z: 0.35 },
+    benchPosition: { x: 1.48, y: 0, z: 0.55 },
     benchRotation: { x: 0, y: -0.55, z: 0 }
   },
 
@@ -532,7 +532,7 @@ export const HARDWARE_DEFINITIONS = {
     ],
     scale: 0.85,
     isGroundedOnFloor: true,
-    benchPosition: { x: -1.15, y: 0, z: 0.45 },
+    benchPosition: { x: -1.48, y: 0, z: 0.70 },
     benchRotation: { x: 0, y: 0.55, z: 0 }
   },
 
@@ -548,9 +548,9 @@ export const HARDWARE_DEFINITIONS = {
       ['NAME', 'Crispy'],
       ['STATUS', 'Workbench Supervisor & Nap Specialist']
     ],
-    scale: 0.30,
+    scale: 0.26,
     isGroundedOnFloor: false,
-    benchPosition: { x: 0.95, y: 0.80, z: 0.15 },
+    benchPosition: { x: 0.92, y: 0.80, z: 0.12 },
     benchRotation: { x: 0, y: -0.65, z: 0 }
   }
 };

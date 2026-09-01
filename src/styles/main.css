@@ -2829,4 +2829,20 @@ button, a, [role="button"], select, input, textarea {
   }
 }
 
+/* Context Menu & Window Resizer */
+.win-context-menu {
+  font-family: var(--font-ui);
+  border-radius: 0;
+}
+
+.win-ctx-item:hover {
+  background: #0078d7 !important;
+  color: #ffffff !important;
+}
+
+.win-resizer {
+  background: radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.3) 1px, transparent 2px);
+  background-size: 4px 4px;
+}
+
 

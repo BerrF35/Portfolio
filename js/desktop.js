@@ -197,6 +197,19 @@ export class DesktopManager {
             <div class="win-lightbox__caption" id="winLightboxCaption"></div>
           </div>
         </div>
+
+        <!-- Desktop Context Menu -->
+        <div class="win-context-menu" id="winContextMenu" style="display: none; position: fixed; z-index: 99999; background: #181d24; border: 1px solid #384252; box-shadow: 0 10px 30px rgba(0,0,0,0.85); min-width: 190px; padding: 4px 0;">
+          <button class="win-ctx-item" data-ctx="explorer" type="button" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 14px; background: none; border: 0; color: #fff; font-size: 11.5px; text-align: left; cursor: pointer;">📁 Open File Explorer</button>
+          <button class="win-ctx-item" data-ctx="terminal" type="button" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 14px; background: none; border: 0; color: #fff; font-size: 11.5px; text-align: left; cursor: pointer;">🖥️ Open Command Prompt</button>
+          <button class="win-ctx-item" data-ctx="timeline" type="button" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 14px; background: none; border: 0; color: #fff; font-size: 11.5px; text-align: left; cursor: pointer;">📊 Open Projects Timeline</button>
+          <button class="win-ctx-item" data-ctx="about" type="button" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 14px; background: none; border: 0; color: #fff; font-size: 11.5px; text-align: left; cursor: pointer;">📄 View About Dossier</button>
+          <div style="border-top: 1px solid #283342; margin: 4px 0;"></div>
+          <button class="win-ctx-item" data-ctx="theme" type="button" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 14px; background: none; border: 0; color: #fff; font-size: 11.5px; text-align: left; cursor: pointer;">◐ Toggle Display Theme</button>
+          <button class="win-ctx-item" data-ctx="sound" type="button" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 14px; background: none; border: 0; color: #fff; font-size: 11.5px; text-align: left; cursor: pointer;">🔊 Toggle Audio Mute</button>
+          <div style="border-top: 1px solid #283342; margin: 4px 0;"></div>
+          <button class="win-ctx-item" data-ctx="exit" type="button" style="display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 14px; background: none; border: 0; color: #38bdf8; font-size: 11.5px; text-align: left; cursor: pointer;">⏻ Exit to 3D Bench</button>
+        </div>
       </div>
     `;
 
@@ -229,6 +242,66 @@ export class DesktopManager {
     const lightbox = this.container.querySelector('#winLightbox');
     const lightboxClose = this.container.querySelector('#winLightboxClose');
     const lightboxBackdrop = this.container.querySelector('#winLightboxBackdrop');
+
+    const surface = this.container.querySelector('#winDesktopSurface');
+    const ctxMenu = this.container.querySelector('#winContextMenu');
+
+    // Desktop Right-Click Context Menu
+    surface?.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      if (!ctxMenu) return;
+      ctxMenu.style.display = 'block';
+      ctxMenu.style.left = `${Math.min(window.innerWidth - 210, e.clientX)}px`;
+      ctxMenu.style.top = `${Math.min(window.innerHeight - 250, e.clientY)}px`;
+      sound.tick(1100);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (ctxMenu && !ctxMenu.contains(e.target)) {
+        ctxMenu.style.display = 'none';
+      }
+    });
+
+    ctxMenu?.querySelectorAll('.win-ctx-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const action = item.dataset.ctx;
+        ctxMenu.style.display = 'none';
+        if (action === 'explorer') this.openExplorer('Projects');
+        else if (action === 'terminal') this.openApp('terminal');
+        else if (action === 'timeline') this.openApp('timeline');
+        else if (action === 'about') this.openDocument('about');
+        else if (action === 'theme') {
+          const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+          const nxt = cur === 'dark' ? 'matrix' : (cur === 'matrix' ? 'light' : 'dark');
+          document.documentElement.setAttribute('data-theme', nxt);
+          window.set3DTheme?.(nxt);
+        } else if (action === 'sound') {
+          sound.toggleMute();
+        } else if (action === 'exit') {
+          this.onExit?.();
+        }
+        sound.click(600, 0.02);
+      });
+    });
+
+    // Window Cycle via Tab
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab' && (e.altKey || document.activeElement === document.body)) {
+        const keys = Array.from(this.windows.keys());
+        if (keys.length > 1) {
+          e.preventDefault();
+          const curIdx = keys.indexOf(this.activeWindowId);
+          const nextIdx = (curIdx + 1) % keys.length;
+          const nextId = keys[nextIdx];
+          const nextWin = this.windows.get(nextId);
+          if (nextWin) {
+            nextWin.classList.remove('is-minimized');
+            this.focusWindow(nextId);
+            sound.tick(1300);
+          }
+        }
+      }
+    });
 
     // Desktop icons click and double click
     grid.querySelectorAll('.win-desktop-icon').forEach(icon => {
@@ -786,6 +859,37 @@ export class DesktopManager {
 
     window.addEventListener('mouseup', () => {
       if (isDragging) isDragging = false;
+    });
+
+    // Window Resize Grip
+    const resizer = document.createElement('div');
+    resizer.className = 'win-resizer';
+    resizer.style.cssText = 'position: absolute; right: 0; bottom: 0; width: 16px; height: 16px; cursor: se-resize; z-index: 20;';
+    win.appendChild(resizer);
+
+    let isResizing = false;
+    let rStartX, rStartY, rStartW, rStartH;
+
+    resizer.addEventListener('mousedown', (e) => {
+      e.stopPropagation();
+      isResizing = true;
+      rStartX = e.clientX;
+      rStartY = e.clientY;
+      rStartW = win.offsetWidth;
+      rStartH = win.offsetHeight;
+      this.focusWindow(id);
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isResizing) return;
+      const dw = e.clientX - rStartX;
+      const dh = e.clientY - rStartY;
+      win.style.width = `${Math.max(480, rStartW + dw)}px`;
+      win.style.height = `${Math.max(300, rStartH + dh)}px`;
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (isResizing) isResizing = false;
     });
 
     win.querySelector('.win-ctrl-close').addEventListener('click', () => this.closeWindow(id));

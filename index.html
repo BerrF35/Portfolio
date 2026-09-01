@@ -76,10 +76,16 @@
         <div class="intro__centre">
           <p>ENGINEERING / AI / SYSTEMS / EXPERIMENTS</p>
           <h1>JAIJITESH<br />SURYAPRAKASH</h1>
+          <div class="intro__diagnostics" aria-hidden="true" style="margin-top: 20px; display: grid; gap: 4px; font-family: var(--font-mono); font-size: 10px; color: #64748b; text-align: left; max-width: 320px;">
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #1c222b; padding-bottom: 2px;"><span>SYSTEM STATUS</span><b style="color: #38ef7d;">READY</b></div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #1c222b; padding-bottom: 2px;"><span>GRAPHICS ENGINE</span><b style="color: #38bdf8;">WEBGL2</b></div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #1c222b; padding-bottom: 2px;"><span>INTERACTION BUS</span><b style="color: #e2e8f0;">ENABLED</b></div>
+            <div style="display: flex; justify-content: space-between;"><span>HARDWARE NODES</span><b style="color: #e2e8f0;">CONNECTED</b></div>
+          </div>
         </div>
 
         <button class="enter" id="enter" type="button" aria-label="Enter Operating Environment" onclick="window.enterLab ? window.enterLab() : (document.getElementById('intro').style.transform='translateY(-100%)', document.getElementById('intro').style.opacity='0', document.getElementById('worldUi').classList.add('is-visible'))">
-          <span>ENTER</span>
+          <span>ENTER SYSTEM</span>
           <i>&rarr;</i>
         </button>
 
