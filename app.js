@@ -650,8 +650,8 @@ async function buildWorld() {
 
   world.clickable.push(world.laptop);
 
-  setLoading(60, 'LOADING 3D HARDWARE, COMPANIONS & OPTICS');
-  // Load real GLB models (Pi, ESP32, BerryBot, Berry Dog, Crispy Cat, Camera, Telescope, Books, Studio)
+  setLoading(60, 'LOADING 3D HARDWARE & CAD MODELS');
+  // Load real GLB models (Pi, ESP32, BerryBot, Berry Dog, Crispy Cat, Camera, Telescope)
   const hardwareClickables = await modelManager.loadAllHardware(stage, DESK_TOP_HEIGHT, (p, msg) => {
     setLoading(p, msg);
   });
