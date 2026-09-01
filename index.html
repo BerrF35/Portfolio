@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0c0a" />
+    <meta name="description" content="Jaijitesh Suryaprakash - Personal Operating Environment disguised as a minimalist engineering portfolio." />
+    <title>JAIJITESH / SYSTEMS — JAIJITESH.OS</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" href="style.css" />
+    
+    <!-- GSAP for choreographed camera transitions and UI motion -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+    <!-- occt-import-js WebAssembly for direct in-browser STEP CAD tessellation -->
+    <script src="https://cdn.jsdelivr.net/npm/occt-import-js@0.0.23/dist/occt-import-js.js" defer></script>
+    
+    <!-- Three.js ES Modules -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main id="app">
+      <!-- 3D WebGL Canvas for the Engineering Lab Bench -->
+      <canvas id="scene" aria-label="Interactive 3D Engineering Workspace"></canvas>
+      
+      <!-- Subtle tactile film grain overlay -->
+      <div class="grain" aria-hidden="true"></div>
+      
+      <!-- Tactical HUD High-Precision Cursor System -->
+      <div class="hud-cursor" id="hudCursor" aria-hidden="true">
+        <div class="hud-cursor__dot" id="cursorDot"></div>
+        <div class="hud-cursor__ring" id="cursorRing">
+          <span class="hud-cursor__bracket hud-cursor__bracket--tl"></span>
+          <span class="hud-cursor__bracket hud-cursor__bracket--tr"></span>
+          <span class="hud-cursor__bracket hud-cursor__bracket--bl"></span>
+          <span class="hud-cursor__bracket hud-cursor__bracket--br"></span>
+        </div>
+        <div class="hud-cursor__tag" id="cursorTag">
+          <span class="hud-cursor__mode" id="cursorMode">SYS</span>
+          <span class="hud-cursor__label" id="cursorLabel">READY</span>
+        </div>
+      </div>
+
+      <!-- Layer 1: Ultra-Minimalist Surface Entry -->
+      <section class="intro" id="intro" aria-label="Welcome">
+        <div class="intro__top">
+          <span>JAIJITESH SURYAPRAKASH</span>
+          <span>PORTFOLIO / 2026</span>
+        </div>
+
+        <div class="intro__centre">
+          <p>ENGINEERING / AI / SYSTEMS / EXPERIMENTS</p>
+          <h1>JAIJITESH<br />SURYAPRAKASH</h1>
+        </div>
+
+        <button class="enter" id="enter" type="button" aria-label="Enter Operating Environment" onclick="window.enterLab ? window.enterLab() : (document.getElementById('intro').style.transform='translateY(-100%)', document.getElementById('intro').style.opacity='0', document.getElementById('worldUi').classList.add('is-visible'))">
+          <span>ENTER</span>
+          <i>&rarr;</i>
+        </button>
+
+        <div class="intro__bottom">
+          <span>MINIMAL SURFACE</span>
+          <span>MAXIMAL INTERACTION</span>
+        </div>
+      </section>
+
+      <!-- Loading HUD Indicator -->
+      <section class="loading" id="loading" aria-live="polite">
+        <div class="loading__mark">J/S</div>
+        <div class="loading__copy">
+          <span id="loadingText">CALIBRATING LAB BENCH</span>
+          <b><i id="loadingBar"></i></b>
+          <small id="loadingDetail">0%</small>
+        </div>
+      </section>
+
+      <!-- Layer 2: 3D Engineering Lab Bench HUD Controls -->
+      <section class="world-ui" id="worldUi" aria-label="Lab bench HUD controls">
+        <header class="world-ui__header">
+          <button class="wordmark" id="homeBtn" type="button">
+            JAIJITESH<span>SYS_01 // WORKBENCH</span>
+          </button>
+          <div class="world-ui__status">
+            <i class="status-indicator"></i>
+            <span>SYSTEM READY</span>
+          </div>
+        </header>
+
+        <div class="world-ui__instruction" id="worldInstruction">
+          <span>01</span>
+          <p>Click the workstation or physical hardware objects on the bench to inspect.</p>
+          <i>&#8600;</i>
+        </div>
+
+        <nav class="world-ui__actions" aria-label="Camera shortcuts">
+          <button data-action="focus-laptop" type="button">
+            <span>OPEN WORKSTATION</span><i>&#8599;</i>
+          </button>
+          <button data-action="overview" type="button">
+            <span>BENCH OVERVIEW</span>
+          </button>
+        </nav>
+
+        <div class="world-ui__footer">
+          <span>VIT VELLORE / TAMIL NADU (+05:30 IST)</span>
+          <span>DRAG TO ORBIT BENCH // CLICK OBJECTS TO ENTER</span>
+        </div>
+      </section>
+
+      <!-- Layer 3: JAIJITESH.OS Interface on the Omen Screen -->
+      <section class="screen-ui" id="screenUi" aria-label="JAIJITESH.OS Workstation">
+        <div class="screen-ui__frame" id="screenFrame">
+          <div class="screen-ui__body" id="screenBody"></div>
+        </div>
+      </section>
+
+      <!-- 3D Hardware Telemetry Inspector Overlay -->
+      <aside class="inspect" id="inspect" aria-live="polite">
+        <button class="inspect__close" id="inspectClose" type="button" aria-label="Close Inspector">&times;</button>
+        <p class="inspect__eyebrow" id="inspectEyebrow">PHYSICAL 3D MODEL</p>
+        <h2 id="inspectTitle">—</h2>
+        <p class="inspect__desc" id="inspectCopy">—</p>
+        <div class="inspect__section-title">HARDWARE TELEMETRY &amp; SPECIFICATIONS</div>
+        <dl id="inspectData"></dl>
+        
+        <div class="inspect__actions">
+          <button class="inspect__btn inspect__btn--primary" id="inspectBack" type="button">
+            &larr; RETURN TO BENCH OVERVIEW
+          </button>
+        </div>
+      </aside>
+
+      <!-- Toast Feedback Message -->
+      <div class="toast" id="toast" role="status"></div>
+      
+      <!-- Performance / CAD Loading Note -->
+      <div class="performance-note" id="performanceNote" hidden>
+        <span class="pulse-dot"></span>
+        <span id="performanceNoteText">Tessellating CAD geometry locally...</span>
+      </div>
+    </main>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
