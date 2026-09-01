@@ -9,6 +9,9 @@ import { DesktopManager } from './js/desktop.js';
 const $ = (selector, parent = document) => parent.querySelector(selector);
 const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
 
+// Prefers-reduced-motion check
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 // Fallback GSAP motion
 const fallbackMotion = {
   to(target, options) {
@@ -19,8 +22,14 @@ const fallbackMotion = {
     return { kill() {} };
   }
 };
+
 const motion = {
-  to(...args) { return (window.gsap || fallbackMotion).to(...args); },
+  to(...args) {
+    if (prefersReducedMotion && args[1]) {
+      args[1].duration = 0.001;
+    }
+    return (window.gsap || fallbackMotion).to(...args);
+  },
   killTweensOf(...args) { return window.gsap?.killTweensOf?.(...args); }
 };
 
@@ -37,8 +46,8 @@ const screenUi = $('#screenUi');
 const screenBody = $('#screenBody');
 const inspect = $('#inspect');
 const toast = $('#toast');
-const cursor = $('#cursor');
-const cursorGlyph = $('#cursorGlyph');
+const webglFallback = $('#webglFallback');
+const webglFallbackBtn = $('#webglFallbackBtn');
 
 // Application State
 const state = {
@@ -49,50 +58,61 @@ const state = {
   screenState: 'sleep', // 'sleep' | 'boot' | 'desktop'
   is3DOffloaded: false,
   busy: false,
+  currentTheme: 'dark'
 };
 
-// Three.js Scene Setup
-const renderer = new THREE.WebGLRenderer({
-  canvas,
-  antialias: true,
-  alpha: false,
-  powerPreference: 'high-performance'
-});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.18;
+// Three.js Scene Setup with WebGL Safety Check
+let renderer, scene, camera, controls;
+let isWebGLAvailable = true;
 
-const scene = new THREE.Scene();
-scene.background = new THREE.Color('#07090b');
-scene.fog = new THREE.Fog('#07090b', 8, 22);
+try {
+  renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: true,
+    alpha: false,
+    powerPreference: 'high-performance'
+  });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.18;
 
-const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.01, 100);
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color('#07090b');
+  scene.fog = new THREE.Fog('#07090b', 8, 22);
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.06;
-controls.enablePan = false;
+  camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.01, 100);
 
-// Strict Orbit Constraints to prevent seeing behind the scenes or under floor
-controls.minAzimuthAngle = -Math.PI * 0.36; // -65 degrees
-controls.maxAzimuthAngle = Math.PI * 0.36;  // +65 degrees
-controls.minPolarAngle = Math.PI * 0.22;    // Prevents looking straight from above
-controls.maxPolarAngle = Math.PI * 0.46;    // Prevents going below desk/floor level
-controls.minDistance = 1.15;
-controls.maxDistance = 4.2;                 // Prevents zooming past room perimeter
+  controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.06;
+  controls.enablePan = false;
+  controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
+
+  // Strict Orbit Constraints
+  controls.minAzimuthAngle = -Math.PI * 0.36; // -65 degrees
+  controls.maxAzimuthAngle = Math.PI * 0.36;  // +65 degrees
+  controls.minPolarAngle = Math.PI * 0.22;    // Prevents looking straight from above
+  controls.maxPolarAngle = Math.PI * 0.46;    // Prevents going below desk level
+  controls.minDistance = 1.15;
+  controls.maxDistance = 4.2;
+} catch (e) {
+  console.warn('WebGL Initialization failed. Activating graceful 2D fallback.', e);
+  isWebGLAvailable = false;
+  if (webglFallback) webglFallback.hidden = false;
+}
 
 const clock = new THREE.Clock();
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const loader = new GLTFLoader();
 const stage = new THREE.Group();
-scene.add(stage);
+if (scene) scene.add(stage);
 
-const DESK_TOP_HEIGHT = 0.85; // Fixed physical tabletop height in world units
+const DESK_TOP_HEIGHT = 0.85; // Tabletop height in world units
 
 const world = {
   desk: null,
@@ -101,295 +121,158 @@ const world = {
   laptop: null,
   screenMesh: null,
   screenCanvas: null,
+  screenCtx: null,
   screenTexture: null,
-  deskTop: DESK_TOP_HEIGHT,
-  laptopCenter: new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.25, 0.05),
-  screenCenter: new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.42, 0.05),
-  clickable: [],
-  leds: {
-    piGreen: null,
-    espBlue: null,
-  },
-  overview: {
-    position: new THREE.Vector3(0.06, DESK_TOP_HEIGHT + 1.25, 2.75),
-    target: new THREE.Vector3(-0.15, DESK_TOP_HEIGHT + 0.12, 0.08)
-  },
   desktopManager: null,
+  clickable: [],
+  leds: {},
+  overview: {
+    position: new THREE.Vector3(0, DESK_TOP_HEIGHT + 1.05, 2.75),
+    target: new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.34, 0)
+  }
 };
 
-camera.position.copy(world.overview.position);
-controls.target.copy(world.overview.target);
+export function set3DTheme(themeName) {
+  state.currentTheme = themeName;
+  if (!scene) return;
 
-function showToast(message, duration = 2600) {
-  toast.textContent = message;
-  toast.classList.add('is-visible');
-  clearTimeout(showToast.timer);
-  showToast.timer = setTimeout(() => toast.classList.remove('is-visible'), duration);
+  if (themeName === 'light') {
+    scene.background.set('#d8e1e8');
+    scene.fog.color.set('#d8e1e8');
+    if (renderer) renderer.toneMappingExposure = 1.05;
+  } else if (themeName === 'matrix') {
+    scene.background.set('#030706');
+    scene.fog.color.set('#030706');
+    if (renderer) renderer.toneMappingExposure = 1.25;
+  } else {
+    scene.background.set('#07090b');
+    scene.fog.color.set('#07090b');
+    if (renderer) renderer.toneMappingExposure = 1.18;
+  }
 }
+window.set3DTheme = set3DTheme;
 
 function setLoading(percent, text) {
-  loading.classList.add('is-visible');
-  loadingText.textContent = text;
-  loadingDetail.textContent = `${Math.round(percent)}%`;
-  loadingBar.style.width = `${percent}%`;
+  if (loadingBar) loadingBar.style.width = `${percent}%`;
+  if (loadingText) loadingText.textContent = text;
+  if (loadingDetail) loadingDetail.textContent = `${percent}%`;
 }
 
-function easeCamera(position, target, duration = 1.2, onComplete) {
-  motion.killTweensOf(camera.position);
-  motion.killTweensOf(controls.target);
-  motion.to(camera.position, {
-    x: position.x,
-    y: position.y,
-    z: position.z,
-    duration,
-    ease: 'power3.inOut'
-  });
-  motion.to(controls.target, {
-    x: target.x,
-    y: target.y,
-    z: target.z,
+function showToast(msg) {
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.classList.add('is-visible');
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => toast.classList.remove('is-visible'), 2800);
+}
+
+function easeCamera(toPos, toTarget, duration = 0.95, onComplete) {
+  if (prefersReducedMotion) duration = 0.001;
+  const t = {
+    px: camera.position.x, py: camera.position.y, pz: camera.position.z,
+    tx: controls.target.x, ty: controls.target.y, tz: controls.target.z
+  };
+
+  motion.killTweensOf(t);
+  motion.to(t, {
+    px: toPos.x, py: toPos.y, pz: toPos.z,
+    tx: toTarget.x, ty: toTarget.y, tz: toTarget.z,
     duration,
     ease: 'power3.inOut',
-    onComplete
-  });
-}
-
-// Generate black & white topographic contour elevation desk mat texture
-function createTopographicTexture() {
-  const c = document.createElement('canvas');
-  c.width = 2048;
-  c.height = 1024;
-  const ctx = c.getContext('2d');
-
-  // Deep matte black surface
-  ctx.fillStyle = '#0a0d10';
-  ctx.fillRect(0, 0, c.width, c.height);
-
-  // Subtle coordinate grid dots
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-  for (let x = 64; x < c.width; x += 64) {
-    for (let y = 64; y < c.height; y += 64) {
-      ctx.fillRect(x - 1, y - 1, 2, 2);
-    }
-  }
-
-  // Draw smooth topographic elevation contour curves
-  const centers = [
-    { x: 500, y: 350, rMax: 480 },
-    { x: 1450, y: 650, rMax: 540 },
-    { x: 1024, y: 480, rMax: 420 },
-    { x: 300, y: 750, rMax: 360 }
-  ];
-
-  ctx.lineWidth = 1.8;
-  centers.forEach((ctr, cIdx) => {
-    const steps = 18;
-    for (let i = 2; i <= steps; i++) {
-      const radius = (i / steps) * ctr.rMax;
-      const isIndexLine = i % 5 === 0;
-
-      ctx.strokeStyle = isIndexLine ? 'rgba(255, 255, 255, 0.65)' : 'rgba(255, 255, 255, 0.28)';
-      ctx.lineWidth = isIndexLine ? 2.2 : 1.4;
-
-      ctx.beginPath();
-      const points = 72;
-      for (let p = 0; p <= points; p++) {
-        const angle = (p / points) * Math.PI * 2;
-        const noise = Math.sin(angle * 3 + cIdx) * 22 + Math.cos(angle * 5 + i) * 16 + Math.sin(angle * 7) * 8;
-        const r = radius + noise;
-        const px = ctr.x + Math.cos(angle) * r * 1.35;
-        const py = ctr.y + Math.sin(angle) * r;
-        if (p === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
-      }
-      ctx.closePath();
-      ctx.stroke();
-
-      // Elevation labels along index contours
-      if (isIndexLine) {
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
-        ctx.font = '11px monospace';
-        ctx.fillText(`+${i * 40}m`, ctr.x + radius * 1.15, ctr.y - 12);
-      }
+    onUpdate: () => {
+      camera.position.set(t.px, t.py, t.pz);
+      controls.target.set(t.tx, t.ty, t.tz);
+      controls.update();
+    },
+    onComplete: () => {
+      camera.position.copy(toPos);
+      controls.target.copy(toTarget);
+      controls.update();
+      onComplete?.();
     }
   });
-
-  // Perimeter Stitched Border
-  ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-  ctx.lineWidth = 3;
-  ctx.strokeRect(18, 18, c.width - 36, c.height - 36);
-
-  // Technical crosshairs in corners
-  const crosshairs = [[48, 48], [c.width - 48, 48], [48, c.height - 48], [c.width - 48, c.height - 48]];
-  crosshairs.forEach(([cx, cy]) => {
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(cx - 12, cy); ctx.lineTo(cx + 12, cy);
-    ctx.moveTo(cx, cy - 12); ctx.lineTo(cx, cy + 12);
-    ctx.stroke();
-  });
-
-  // Technical Mat Label
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
-  ctx.font = '14px "Space Mono", monospace';
-  ctx.fillText('TOPOGRAPHIC ELEVATION SPEC // 01-SYS', 54, c.height - 44);
-
-  const texture = new THREE.CanvasTexture(c);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-  return texture;
 }
 
-function makeBenchRoom() {
-  // Atmospheric Floor
-  const floorGeo = new THREE.PlaneGeometry(32, 32);
-  const floorMat = new THREE.MeshStandardMaterial({
-    color: '#090b0d',
-    roughness: 0.85,
-    metalness: 0.12
-  });
-  const floor = new THREE.Mesh(floorGeo, floorMat);
-  floor.rotation.x = -Math.PI / 2;
-  floor.receiveShadow = true;
-  scene.add(floor);
+function createStudioLighting() {
+  if (!scene) return;
+  const ambient = new THREE.AmbientLight('#c8d3df', 0.85);
+  scene.add(ambient);
 
-  // Continuous Seamless Architectural Slat Walls across Back, Left, and Right
-  const wallGroup = new THREE.Group();
-  const slatMat = new THREE.MeshStandardMaterial({
-    color: '#13171c',
-    roughness: 0.75,
-    metalness: 0.28
-  });
-  const wallBackMat = new THREE.MeshStandardMaterial({
-    color: '#080a0c',
-    roughness: 0.95
-  });
+  const overheadKey = new THREE.DirectionalLight('#ffffff', 2.8);
+  overheadKey.position.set(2.5, 5.5, 3.2);
+  overheadKey.castShadow = true;
+  overheadKey.shadow.mapSize.width = 2048;
+  overheadKey.shadow.mapSize.height = 2048;
+  overheadKey.shadow.bias = -0.00008;
+  overheadKey.shadow.camera.near = 0.5;
+  overheadKey.shadow.camera.far = 12;
+  overheadKey.shadow.camera.left = -2.8;
+  overheadKey.shadow.camera.right = 2.8;
+  overheadKey.shadow.camera.top = 2.8;
+  overheadKey.shadow.camera.bottom = -2.8;
+  overheadKey.shadow.radius = 1.8;
+  scene.add(overheadKey);
 
-  // 1. Back Wall
-  const backWall = new THREE.Mesh(new THREE.PlaneGeometry(28, 14), wallBackMat);
-  backWall.position.set(0, 5.0, -4.5);
-  backWall.receiveShadow = true;
-  wallGroup.add(backWall);
+  const rimLight = new THREE.DirectionalLight('#38bdf8', 1.6);
+  rimLight.position.set(-3.5, 2.5, -2.5);
+  scene.add(rimLight);
 
-  for (let x = -10.0; x <= 10.0; x += 0.42) {
-    const slat = new THREE.Mesh(new THREE.BoxGeometry(0.038, 9.0, 0.07), slatMat);
-    slat.position.set(x, 4.5, -4.45);
-    slat.castShadow = true;
-    slat.receiveShadow = true;
-    wallGroup.add(slat);
-  }
+  const fillWarm = new THREE.DirectionalLight('#ffd8a8', 0.9);
+  fillWarm.position.set(0, 1.8, 4.0);
+  scene.add(fillWarm);
 
-  // 2. Left Wall
-  const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(28, 14), wallBackMat);
-  leftWall.position.set(-8.5, 5.0, 0);
-  leftWall.rotation.y = Math.PI / 2;
-  leftWall.receiveShadow = true;
-  wallGroup.add(leftWall);
-
-  for (let z = -6.0; z <= 8.0; z += 0.42) {
-    const slat = new THREE.Mesh(new THREE.BoxGeometry(0.07, 9.0, 0.038), slatMat);
-    slat.position.set(-8.45, 4.5, z);
-    slat.castShadow = true;
-    slat.receiveShadow = true;
-    wallGroup.add(slat);
-  }
-
-  // 3. Right Wall
-  const rightWall = new THREE.Mesh(new THREE.PlaneGeometry(28, 14), wallBackMat);
-  rightWall.position.set(8.5, 5.0, 0);
-  rightWall.rotation.y = -Math.PI / 2;
-  rightWall.receiveShadow = true;
-  wallGroup.add(rightWall);
-
-  for (let z = -6.0; z <= 8.0; z += 0.42) {
-    const slat = new THREE.Mesh(new THREE.BoxGeometry(0.07, 9.0, 0.038), slatMat);
-    slat.position.set(8.45, 4.5, z);
-    slat.castShadow = true;
-    slat.receiveShadow = true;
-    wallGroup.add(slat);
-  }
-
-  scene.add(wallGroup);
-
-  // Crisp Studio Key Directional Light
-  const keyDirLight = new THREE.DirectionalLight('#ffffff', 2.8);
-  keyDirLight.position.set(2.5, 6.0, 3.5);
-  keyDirLight.castShadow = true;
-  keyDirLight.shadow.mapSize.set(2048, 2048);
-  keyDirLight.shadow.bias = -0.0001;
-  keyDirLight.shadow.camera.near = 0.5;
-  keyDirLight.shadow.camera.far = 18;
-  keyDirLight.shadow.camera.left = -4;
-  keyDirLight.shadow.camera.right = 4;
-  keyDirLight.shadow.camera.top = 4;
-  keyDirLight.shadow.camera.bottom = -4;
-  scene.add(keyDirLight);
-
-  // High-Ceiling Studio Point Light
-  const keyLight = new THREE.PointLight('#f8fafc', 45, 14, 1.6);
-  keyLight.position.set(0, 3.8, 1.2);
-  scene.add(keyLight);
-
-  // Subtle Warm Amber Studio Rim Light (Left)
-  const rimLightLeft = new THREE.PointLight('#f3ba4b', 14, 10, 1.8);
-  rimLightLeft.position.set(-3.8, 2.6, -1.5);
-  scene.add(rimLightLeft);
-
-  // Subtle Electric Ice Blue Studio Rim Light (Right)
-  const rimLightRight = new THREE.PointLight('#38bdf8', 12, 10, 1.8);
-  rimLightRight.position.set(3.8, 2.6, -1.5);
-  scene.add(rimLightRight);
-
-  // Soft Front Fill
-  const fillLight = new THREE.DirectionalLight('#64748b', 1.2);
-  fillLight.position.set(-1.5, 4.0, 4.0);
-  scene.add(fillLight);
-
-  // Ambient & Hemisphere Fill
-  scene.add(new THREE.HemisphereLight('#f1f5f9', '#0b0e12', 2.4));
-  scene.add(new THREE.AmbientLight('#18202a', 1.4));
-
-  // Floor Grid
-  const grid = new THREE.GridHelper(16, 32, '#1a2027', '#0e1216');
-  grid.position.y = 0.005;
-  grid.material.opacity = 0.3;
-  grid.material.transparent = true;
-  scene.add(grid);
+  const screenBounce = new THREE.PointLight('#38bdf8', 0.65, 2.2);
+  screenBounce.position.set(0, DESK_TOP_HEIGHT + 0.45, 0.4);
+  scene.add(screenBounce);
 }
 
-function buildLuxuryDesk() {
+function createLuxuryDesk() {
+  if (!stage) return;
   const deskGroup = new THREE.Group();
 
-  // Chamfered Tabletop Slab
-  const topGeo = new THREE.BoxGeometry(3.6, 0.06, 1.8);
   const topMat = new THREE.MeshStandardMaterial({
-    color: '#14171a',
-    roughness: 0.7,
-    metalness: 0.15
+    color: '#0d0f12',
+    roughness: 0.72,
+    metalness: 0.18,
+    name: 'desk_matte_linoleum'
   });
-  const tabletop = new THREE.Mesh(topGeo, topMat);
-  tabletop.position.y = DESK_TOP_HEIGHT - 0.03;
-  tabletop.castShadow = true;
-  tabletop.receiveShadow = true;
-  deskGroup.add(tabletop);
+  world.deskMat = topMat;
 
-  // 4 Brushed Titanium Steel Legs
-  const legGeo = new THREE.CylinderGeometry(0.042, 0.042, DESK_TOP_HEIGHT - 0.06, 16);
+  const topGeo = new THREE.BoxGeometry(2.6, 0.045, 1.4);
+  const topMesh = new THREE.Mesh(topGeo, topMat);
+  topMesh.position.y = DESK_TOP_HEIGHT - 0.0225;
+  topMesh.receiveShadow = true;
+  topMesh.castShadow = true;
+  deskGroup.add(topMesh);
+
+  const padMat = new THREE.MeshStandardMaterial({
+    color: '#15191e',
+    roughness: 0.92,
+    metalness: 0.05,
+    name: 'felt_desk_pad'
+  });
+  const padGeo = new THREE.BoxGeometry(1.6, 0.005, 0.75);
+  const padMesh = new THREE.Mesh(padGeo, padMat);
+  padMesh.position.set(0, DESK_TOP_HEIGHT + 0.0025, 0.05);
+  padMesh.receiveShadow = true;
+  deskGroup.add(padMesh);
+
   const legMat = new THREE.MeshStandardMaterial({
-    color: '#2a2f35',
-    roughness: 0.4,
-    metalness: 0.85
+    color: '#1a1e24',
+    roughness: 0.38,
+    metalness: 0.85,
+    name: 'steel_legs'
   });
 
   const legPositions = [
-    [-1.68, (DESK_TOP_HEIGHT - 0.06) / 2, -0.78],
-    [1.68, (DESK_TOP_HEIGHT - 0.06) / 2, -0.78],
-    [-1.68, (DESK_TOP_HEIGHT - 0.06) / 2, 0.78],
-    [1.68, (DESK_TOP_HEIGHT - 0.06) / 2, 0.78]
+    [-1.2, (DESK_TOP_HEIGHT - 0.045) / 2, -0.6],
+    [1.2, (DESK_TOP_HEIGHT - 0.045) / 2, -0.6],
+    [-1.2, (DESK_TOP_HEIGHT - 0.045) / 2, 0.6],
+    [1.2, (DESK_TOP_HEIGHT - 0.045) / 2, 0.6]
   ];
 
   legPositions.forEach(([x, y, z]) => {
+    const legGeo = new THREE.CylinderGeometry(0.028, 0.028, DESK_TOP_HEIGHT - 0.045, 16);
     const leg = new THREE.Mesh(legGeo, legMat);
     leg.position.set(x, y, z);
     leg.castShadow = true;
@@ -397,325 +280,244 @@ function buildLuxuryDesk() {
     deskGroup.add(leg);
   });
 
-  // Black & White Topographic Contour Line Table Mat (Ultra-Thin 3mm)
-  const topoTexture = createTopographicTexture();
-  const matGeo = new THREE.BoxGeometry(2.3, 0.003, 0.98);
-  const matMaterial = new THREE.MeshStandardMaterial({
-    map: topoTexture,
-    roughness: 0.88,
-    metalness: 0.08
+  const floorMat = new THREE.MeshStandardMaterial({
+    color: '#080a0c',
+    roughness: 0.85,
+    metalness: 0.1
   });
-  const deskMat = new THREE.Mesh(matGeo, matMaterial);
-  deskMat.position.set(0.06, DESK_TOP_HEIGHT + 0.0015, 0.12);
-  deskMat.receiveShadow = true;
-  deskMat.castShadow = true;
-  deskGroup.add(deskMat);
-  world.deskMat = deskMat;
+  const floorGeo = new THREE.PlaneGeometry(16, 16);
+  const floor = new THREE.Mesh(floorGeo, floorMat);
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = 0;
+  floor.receiveShadow = true;
+  deskGroup.add(floor);
 
   stage.add(deskGroup);
   world.desk = deskGroup;
 }
 
-// Precision Smooth High-Poly Ergonomic Engineering Mouse (Zero light sources)
-function buildEngineeringMouse() {
+function createMouse() {
+  if (!stage) return;
   const mouseGroup = new THREE.Group();
 
-  // Smooth Sculpted Palm Body
-  const palmGeo = new THREE.SphereGeometry(0.048, 48, 32);
-  palmGeo.scale(0.9, 0.45, 1.45);
-  const bodyMat = new THREE.MeshStandardMaterial({
-    color: '#181b1f',
-    roughness: 0.52,
-    metalness: 0.18
+  const mouseBodyMat = new THREE.MeshStandardMaterial({
+    color: '#1a1d22',
+    roughness: 0.35,
+    metalness: 0.65,
+    name: 'mouse_body'
   });
-  const palm = new THREE.Mesh(palmGeo, bodyMat);
-  palm.position.set(0, 0.018, 0.01);
-  palm.castShadow = true;
-  palm.receiveShadow = true;
-  mouseGroup.add(palm);
 
-  // Left & Right Click Chamfered Buttons
-  const clickGeo = new THREE.BoxGeometry(0.034, 0.008, 0.065);
-  const clickMat = new THREE.MeshStandardMaterial({
-    color: '#131518',
-    roughness: 0.38,
-    metalness: 0.28
-  });
-  const leftClick = new THREE.Mesh(clickGeo, clickMat);
-  leftClick.position.set(-0.019, 0.031, -0.038);
-  leftClick.rotation.x = -0.15;
-  mouseGroup.add(leftClick);
+  const mouseBodyGeo = new THREE.BoxGeometry(0.065, 0.025, 0.115);
+  const mouseBody = new THREE.Mesh(mouseBodyGeo, mouseBodyMat);
+  mouseBody.position.y = 0.0125;
+  mouseBody.castShadow = true;
+  mouseBody.receiveShadow = true;
+  mouseGroup.add(mouseBody);
 
-  const rightClick = new THREE.Mesh(clickGeo, clickMat);
-  rightClick.position.set(0.019, 0.031, -0.038);
-  rightClick.rotation.x = -0.15;
-  mouseGroup.add(rightClick);
-
-  // Precision Metallic Knurled Scroll Wheel (48 segments)
-  const wheelGeo = new THREE.CylinderGeometry(0.0095, 0.0095, 0.007, 48);
   const wheelMat = new THREE.MeshStandardMaterial({
-    color: '#8b949e',
-    roughness: 0.22,
-    metalness: 0.95
+    color: '#38bdf8',
+    roughness: 0.2,
+    metalness: 0.8,
+    emissive: '#0284c7',
+    emissiveIntensity: 0.4
   });
-  const scrollWheel = new THREE.Mesh(wheelGeo, wheelMat);
-  scrollWheel.rotation.z = Math.PI / 2;
-  scrollWheel.position.set(0, 0.033, -0.036);
-  mouseGroup.add(scrollWheel);
+  const wheelGeo = new THREE.CylinderGeometry(0.006, 0.006, 0.012, 12);
+  const wheel = new THREE.Mesh(wheelGeo, wheelMat);
+  wheel.rotation.z = Math.PI / 2;
+  wheel.position.set(0, 0.025, -0.025);
+  mouseGroup.add(wheel);
 
-  // Ergonomic Sculpted Thumb Wing Flare on Left
-  const thumbGeo = new THREE.CylinderGeometry(0.018, 0.024, 0.075, 32);
-  thumbGeo.scale(1.2, 0.4, 1.0);
-  const thumbFlare = new THREE.Mesh(thumbGeo, bodyMat);
-  thumbFlare.position.set(-0.042, 0.01, 0.01);
-  thumbFlare.rotation.y = 0.2;
-  mouseGroup.add(thumbFlare);
-
-  // Thumb Scroll Wheel
-  const thumbWheel = new THREE.Mesh(wheelGeo, wheelMat);
-  thumbWheel.scale.set(0.75, 0.75, 0.75);
-  thumbWheel.position.set(-0.044, 0.024, -0.01);
-  thumbWheel.rotation.x = Math.PI / 2;
-  mouseGroup.add(thumbWheel);
-
-  // Position mouse naturally on the right side of the topographic desk mat (Zero light emitters)
-  mouseGroup.position.set(0.68, DESK_TOP_HEIGHT + 0.003, 0.16);
+  mouseGroup.position.set(0.48, DESK_TOP_HEIGHT + 0.005, 0.12);
   mouseGroup.rotation.y = -0.12;
 
   stage.add(mouseGroup);
-  return mouseGroup;
+  world.mouse = mouseGroup;
 }
 
-function loadGlb(path) {
-  return new Promise((resolve, reject) => loader.load(path, resolve, undefined, reject));
-}
-
-function makeScreenTexture() {
-  const screenCanvas = document.createElement('canvas');
-  screenCanvas.width = 1280;
-  screenCanvas.height = 800;
-  const texture = new THREE.CanvasTexture(screenCanvas);
+function createScreenCanvas() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 1024;
+  canvas.height = 640;
+  const ctx = canvas.getContext('2d');
+  const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
-  texture.flipY = false;
-  texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-  
-  world.screenCanvas = screenCanvas;
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+
+  world.screenCanvas = canvas;
+  world.screenCtx = ctx;
   world.screenTexture = texture;
   drawLaptopScreen();
 }
 
 function drawLaptopScreen() {
-  if (!world.screenCanvas) return;
-  const c = world.screenCanvas;
-  const ctx = c.getContext('2d');
-  const w = c.width;
-  const h = c.height;
+  const ctx = world.screenCtx;
+  if (!ctx) return;
 
-  ctx.clearRect(0, 0, w, h);
+  const w = 1024;
+  const h = 640;
 
   if (state.screenState === 'sleep') {
-    ctx.fillStyle = '#0a0d10';
+    ctx.fillStyle = '#050708';
     ctx.fillRect(0, 0, w, h);
-    ctx.strokeStyle = 'rgba(56, 189, 248, 0.4)';
-    ctx.strokeRect(40, 40, w - 80, h - 80);
 
-    ctx.fillStyle = '#f3f4f6';
-    ctx.font = 'bold 36px "Space Grotesk", sans-serif';
-    ctx.fillText('JAIJITESH SURYAPRAKASH // WORKSTATION', 70, 110);
-
-    ctx.fillStyle = '#8b949e';
-    ctx.font = '20px "Space Mono", monospace';
-    ctx.fillText('B.TECH INFORMATION TECHNOLOGY • VIT VELLORE (2025-2029)', 70, 160);
+    ctx.strokeStyle = 'rgba(56, 189, 248, 0.35)';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(w / 2 - 140, h / 2 - 45, 280, 90);
 
     ctx.fillStyle = '#38bdf8';
-    ctx.font = '24px "Space Mono", monospace';
-    ctx.fillText('CLICK WORKSTATION TO POWER ON', 70, h - 90);
+    ctx.font = 'bold 22px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('JAIJITESH.OS // SLEEP', w / 2, h / 2 - 8);
 
-    ctx.strokeStyle = '#38bdf8';
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(70, h - 65);
-    ctx.lineTo(440, h - 65);
-    ctx.stroke();
-
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '14px monospace';
+    ctx.fillText('CLICK WORKSTATION TO BOOT', w / 2, h / 2 + 22);
   } else if (state.screenState === 'boot') {
     ctx.fillStyle = '#080a0c';
     ctx.fillRect(0, 0, w, h);
 
     ctx.fillStyle = '#38bdf8';
-    ctx.font = '26px "Space Mono", monospace';
-    ctx.fillText('STARTING JAIJITESH.OS // KERNEL v2.6.4', 70, 110);
+    ctx.font = 'bold 24px monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText('INITIALIZING JAIJITESH.OS v2.6.4...', w / 2, h / 2 - 15);
 
-    ctx.fillStyle = '#e2e8f0';
-    ctx.font = '18px "Space Mono", monospace';
-    const lines = [
-      'SYSTEM MEMORY .................... 32768 MB DDR5 OK',
-      'GRAPHICS PIPELINE ................ VULKAN / WEBGL2 OK',
-      'HARDWARE TELEMETRY BUS ........... CONNECTED',
-      'WINDSIM LBM ENGINE ............... READY',
-      'BERRY LOCAL AGENT CORE ........... LOADED',
-      'BERRYBOT TELEMETRY LOOP .......... SYNCHRONIZED',
-      'INITIALIZING WORKSTATION DESKTOP .'
-    ];
-    lines.forEach((line, idx) => {
-      ctx.fillText(line, 70, 185 + idx * 42);
-    });
-
+    ctx.fillStyle = '#1c222b';
+    ctx.fillRect(w / 2 - 180, h / 2 + 15, 360, 10);
     ctx.fillStyle = '#38bdf8';
-    ctx.fillRect(70, h - 110, w - 140, 14);
-
+    ctx.fillRect(w / 2 - 180, h / 2 + 15, 280, 10);
   } else {
-    ctx.fillStyle = '#0e1115';
+    ctx.fillStyle = '#090b0d';
     ctx.fillRect(0, 0, w, h);
 
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-    for (let x = 0; x < w; x += 64) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke(); }
-    for (let y = 0; y < h; y += 64) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
+    ctx.fillStyle = '#111418';
+    ctx.fillRect(0, h - 42, w, 42);
 
     ctx.fillStyle = '#38bdf8';
-    ctx.font = 'bold 38px "Space Grotesk", sans-serif';
-    ctx.fillText('JAIJITESH.OS', 60, 100);
+    ctx.font = 'bold 15px monospace';
+    ctx.textAlign = 'left';
+    ctx.fillText('⊞ START', 16, h - 16);
 
-    ctx.fillStyle = '#8b949e';
-    ctx.font = '18px "Space Mono", monospace';
-    ctx.fillText('PERSONAL OPERATING ENVIRONMENT // ACTIVE SESSION', 60, 140);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '13px monospace';
+    ctx.fillText('JAIJITESH.OS ACTIVE', 120, h - 16);
+
+    ctx.textAlign = 'right';
+    ctx.fillText(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }), w - 20, h - 16);
   }
 
   world.screenTexture.needsUpdate = true;
 }
 
-function applyScreenTexture(root) {
-  root.traverse((child) => {
-    if (!child.isMesh) return;
-    if (child.material?.name === 'screen') {
-      world.screenMesh = child;
-      const mat = child.material.clone();
-      mat.map = world.screenTexture;
-      mat.emissive = new THREE.Color('#94a3b8');
-      mat.emissiveMap = world.screenTexture;
-      mat.emissiveIntensity = 0.9;
-      mat.roughness = 0.3;
-      mat.metalness = 0.04;
-      mat.side = THREE.DoubleSide;
-      mat.needsUpdate = true;
-      child.material = mat;
-    }
-  });
+async function loadLaptopModel() {
+  createScreenCanvas();
+  try {
+    const gltf = await modelManager.loadGlb('assets/gaming_laptop.glb');
+    const laptopRoot = gltf.scene;
+
+    laptopRoot.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+
+        if (/screen|display|monitor|lcd|glass/i.test(child.name)) {
+          child.material = new THREE.MeshBasicMaterial({
+            map: world.screenTexture,
+            toneMapped: false
+          });
+          world.screenMesh = child;
+        } else if (child.material) {
+          child.material = child.material.clone();
+          child.material.roughness = 0.45;
+          child.material.metalness = 0.75;
+          if (child.material.map) child.material.map.colorSpace = THREE.SRGBColorSpace;
+        }
+      }
+    });
+
+    laptopRoot.updateMatrixWorld(true);
+    const box = new THREE.Box3().setFromObject(laptopRoot);
+    const size = box.getSize(new THREE.Vector3());
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const targetScale = 0.54 / maxDim;
+
+    laptopRoot.scale.set(targetScale, targetScale, targetScale);
+    laptopRoot.updateMatrixWorld(true);
+
+    const boxScaled = new THREE.Box3().setFromObject(laptopRoot);
+    const yOffset = -boxScaled.min.y;
+
+    laptopRoot.position.set(0, DESK_TOP_HEIGHT + yOffset + 0.002, 0.05);
+
+    stage.add(laptopRoot);
+    world.laptop = laptopRoot;
+    world.clickable.push(laptopRoot);
+  } catch (err) {
+    console.error('Failed to load laptop GLB:', err);
+  }
 }
 
 async function buildWorld() {
-  makeBenchRoom();
-  buildLuxuryDesk();
-  buildEngineeringMouse();
-  makeScreenTexture();
-  setLoading(12, 'LOADING WORKSTATION');
+  if (!isWebGLAvailable) return;
+  setLoading(15, 'CREATING STUDIO LIGHTING & RIGGING');
+  createStudioLighting();
 
-  const laptopRes = await loadGlb('assets/hp_omen_laptop.glb');
+  setLoading(30, 'CONSTRUCTING LUXURY WORKBENCH');
+  createLuxuryDesk();
+  createMouse();
 
-  setLoading(40, 'PLACING WORKSTATION ON TOPOGRAPHIC MAT');
-  world.laptop = laptopRes.scene;
-  world.laptop.traverse((c) => {
-    if (c.isMesh) {
-      c.castShadow = true;
-      c.receiveShadow = true;
-      if (c.material) {
-        c.material = c.material.clone();
-        c.material.envMapIntensity = 0.85;
-      }
-    }
+  setLoading(45, 'INITIALIZING OMEN WORKSTATION PORTAL');
+  await loadLaptopModel();
+
+  setLoading(60, 'LOADING 3D HARDWARE TELEMETRY NODES');
+  const clickables = await modelManager.loadAllHardware(stage, DESK_TOP_HEIGHT, (p, txt) => {
+    setLoading(60 + Math.round((p / 100) * 35), txt);
   });
-  stage.add(world.laptop);
+  world.clickable.push(...clickables);
 
-  // Normalize laptop scale (width ~1.05m)
-  world.laptop.updateMatrixWorld(true);
-  const lapBoxRaw = new THREE.Box3().setFromObject(world.laptop);
-  const lapSizeRaw = lapBoxRaw.getSize(new THREE.Vector3());
-  const lapScale = 1.05 / Math.max(lapSizeRaw.x, lapSizeRaw.z);
-  world.laptop.scale.set(lapScale, lapScale, lapScale);
-  
-  // Rotate laptop to face front towards camera
-  world.laptop.rotation.y = 0;
-  world.laptop.updateMatrixWorld(true);
+  camera.position.copy(world.overview.position);
+  controls.target.copy(world.overview.target);
+  controls.update();
 
-  // Place laptop centered on the topographic desk mat (3mm above tabletop)
-  const lapBoxScaled = new THREE.Box3().setFromObject(world.laptop);
-  world.laptop.position.set(0, DESK_TOP_HEIGHT - lapBoxScaled.min.y + 0.003, 0.05);
-  world.laptop.updateMatrixWorld(true);
-
-  applyScreenTexture(world.laptop);
-
-  const finalLapBox = new THREE.Box3().setFromObject(world.laptop);
-  finalLapBox.getCenter(world.laptopCenter);
-  world.screenCenter.set(world.laptopCenter.x, DESK_TOP_HEIGHT + 0.38, world.laptopCenter.z);
-
-  world.clickable.push(world.laptop);
-
-  setLoading(60, 'LOADING 3D HARDWARE & CAD MODELS');
-  // Load real GLB models (Pi, ESP32, BerryBot, Berry Dog, Crispy Cat, Camera, Telescope)
-  const hardwareClickables = await modelManager.loadAllHardware(stage, DESK_TOP_HEIGHT, (p, msg) => {
-    setLoading(p, msg);
-  });
-  world.clickable.push(...hardwareClickables);
-
-  // Blinking LEDs on Pi and ESP32
-  const ledGeo = new THREE.SphereGeometry(0.008, 8, 8);
-  const piLedMat = new THREE.MeshBasicMaterial({ color: '#38ef7d' });
-  const espLedMat = new THREE.MeshBasicMaterial({ color: '#38bdf8' });
-
-  const piLed = new THREE.Mesh(ledGeo, piLedMat);
-  piLed.position.set(0.92, DESK_TOP_HEIGHT + 0.035, 0.22);
-  stage.add(piLed);
-  world.leds.piGreen = piLed;
-
-  const espLed = new THREE.Mesh(ledGeo, espLedMat);
-  espLed.position.set(1.22, DESK_TOP_HEIGHT + 0.025, 0.22);
-  stage.add(espLed);
-  world.leds.espBlue = espLed;
-
-  setLoading(92, 'INITIALIZING JAIJITESH.OS');
-  world.desktopManager = new DesktopManager(
-    screenBody,
-    (hwKey) => inspectHardware(hwKey),
-    () => exitLaptop()
-  );
-
-  state.ready = true;
-  setLoading(100, 'ENGINEERING WORKBENCH READY');
-  setTimeout(() => loading.classList.add('is-done'), 450);
+  setLoading(100, 'LAB BENCH CALIBRATED');
+  setTimeout(() => {
+    loading.classList.add('is-hidden');
+    state.ready = true;
+    sound.powerOn();
+  }, 400);
 }
 
 function enterLab() {
   if (state.entered) return;
   state.entered = true;
-  sound.powerOn();
+  sound.click(520, 0.03);
 
-  const introEl = document.getElementById('intro');
-  const worldUiEl = document.getElementById('worldUi');
+  intro.style.transform = 'translateY(-100%)';
+  intro.style.opacity = '0';
+  worldUi.classList.add('is-visible');
 
-  if (introEl) {
-    introEl.classList.add('is-exiting');
-    introEl.style.transform = 'translateY(-100%)';
-    introEl.style.opacity = '0';
-    introEl.style.pointerEvents = 'none';
-    setTimeout(() => {
-      introEl.hidden = true;
-      introEl.style.display = 'none';
-    }, 850);
+  // Initialize DesktopManager early in background
+  if (!world.desktopManager) {
+    world.desktopManager = new DesktopManager(
+      screenBody,
+      (key) => inspectHardware(key),
+      () => exitLaptop()
+    );
   }
 
-  if (worldUiEl) {
-    worldUiEl.classList.add('is-visible');
-    worldUiEl.style.opacity = '1';
-    worldUiEl.style.pointerEvents = 'none';
-  }
+  easeCamera(world.overview.position, world.overview.target, 1.2, () => {
+    showToast('WORKBENCH READY • CLICK HARDWARE OR LAPTOP TO INSPECT');
+  });
 }
-
 window.enterLab = enterLab;
 
 let pendingAppToOpen = null;
 
 function focusLaptop(targetApp = null) {
-  if (!world.laptop) return;
+  if (!world.laptop) {
+    bootSystem();
+    return;
+  }
   state.busy = true;
   state.focused = true;
   state.inspecting = null;
@@ -726,7 +528,6 @@ function focusLaptop(targetApp = null) {
 
   sound.click(450, 0.04);
 
-  // Laptop lid hinges upright while camera approaches
   motion.to(world.laptop.rotation, {
     x: 0.34,
     duration: 0.85,
@@ -753,7 +554,7 @@ function bootSystem() {
   state.screenState = 'boot';
   drawLaptopScreen();
   sound.bootChime();
-  showToast('INITIALIZING JAIJITESH.OS v2.6');
+  showToast('INITIALIZING JAIJITESH.OS v2.6.4');
 
   setTimeout(() => {
     state.screenState = 'desktop';
@@ -791,13 +592,15 @@ function exitLaptop() {
   hideInspectorOverlay();
   state.focused = false;
   state.inspecting = null;
-  controls.enabled = true;
+  if (controls) controls.enabled = true;
 
-  motion.to(world.laptop.rotation, {
-    x: 0,
-    duration: 0.9,
-    ease: 'power3.inOut'
-  });
+  if (world.laptop) {
+    motion.to(world.laptop.rotation, {
+      x: 0,
+      duration: 0.9,
+      ease: 'power3.inOut'
+    });
+  }
 
   sound.click(320, 0.03);
   easeCamera(world.overview.position, world.overview.target, 0.95, () => {
@@ -826,7 +629,7 @@ function inspectHardware(key) {
   const size = box.getSize(new THREE.Vector3());
   const span = Math.max(size.x, size.y, size.z);
 
-  controls.enabled = true;
+  if (controls) controls.enabled = true;
   state.focused = false;
 
   const camPos = center.clone().add(new THREE.Vector3(span * 1.3, span * 0.9, span * 1.5));
@@ -837,6 +640,7 @@ function inspectHardware(key) {
 
   showInspectorOverlay(def);
 }
+window.inspectHardware = inspectHardware;
 
 // High-Precision Tactical HUD Cursor Elements
 const hudCursor = $('#hudCursor');
@@ -884,6 +688,32 @@ function hideInspectorOverlay() {
   state.inspecting = null;
 }
 
+// Touch / Pointer Tracking to distinguish click/tap from drag/orbit
+let pointerDownPos = { x: 0, y: 0 };
+let pointerDownTime = 0;
+
+function handlePointerDown(e) {
+  pointerDownPos = { x: e.clientX, y: e.clientY };
+  pointerDownTime = Date.now();
+  isMouseDown = true;
+  hudCursor?.classList.add('is-active');
+}
+
+function handlePointerUp(e) {
+  isMouseDown = false;
+  hudCursor?.classList.remove('is-active');
+
+  const dx = e.clientX - pointerDownPos.x;
+  const dy = e.clientY - pointerDownPos.y;
+  const dist = Math.hypot(dx, dy);
+  const dt = Date.now() - pointerDownTime;
+
+  // Only trigger 3D object pick if tap/click was within small travel distance and short duration
+  if (dist < 10 && dt < 400) {
+    pick3DObject(e);
+  }
+}
+
 function pick3DObject(e) {
   if (!state.ready || screenUi.classList.contains('is-open')) return;
 
@@ -920,10 +750,9 @@ function updateCursor(e) {
     hudCursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
   }
 
-  // Check interactive elements under cursor
   const target = e.target;
-  const isButton = target && target.closest && target.closest('button, a, [role="button"], input, select, .win-btn, .dock__item, .proj-card, .hw-card, .lab-card, .enter, .top-dock__item');
-  const isInput = target && target.closest && target.closest('input, textarea, .cli-input');
+  const isButton = target && target.closest && target.closest('button, a, [role="button"], input, select, .enter');
+  const isInput = target && target.closest && target.closest('input, textarea');
 
   if (isInput) {
     if (hudCursor) hudCursor.className = 'hud-cursor is-text';
@@ -940,7 +769,6 @@ function updateCursor(e) {
     return;
   }
 
-  // If in 3D workbench view and not inside full-screen OS
   if (state.ready && !screenUi.classList.contains('is-open')) {
     pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
     pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -966,49 +794,35 @@ function updateCursor(e) {
     }
   }
 
-  // Default state
   if (hudCursor) {
     hudCursor.className = isMouseDown ? 'hud-cursor is-active' : 'hud-cursor';
   }
 }
 
 function updateIdleAnimations(time) {
-  // Idle micro-movement on Raspberry Pi
   const rpi = modelManager.benchMeshes.get('raspberry');
   if (rpi && rpi.userData.baseY) {
     rpi.position.y = rpi.userData.baseY + Math.sin(time * 2.2) * 0.0016;
   }
 
-  // Idle micro-movement on ESP32
   const esp = modelManager.benchMeshes.get('esp32');
   if (esp && esp.userData.baseY) {
     esp.position.y = esp.userData.baseY + Math.sin(time * 2.6 + 1.2) * 0.0016;
   }
 
-  // Idle micro-movement on BerryBot Tracked Chassis
   const bot = modelManager.benchMeshes.get('robot');
   if (bot && bot.userData.baseY) {
     bot.position.y = bot.userData.baseY + Math.sin(time * 1.5) * 0.0012;
   }
 
-  // Idle breathing on Berry Dog (Belgian Malinois)
   const dog = modelManager.benchMeshes.get('dog');
   if (dog && dog.userData.baseY) {
     dog.position.y = dog.userData.baseY + Math.sin(time * 1.8) * 0.002;
   }
 
-  // Idle breathing on Crispy Cat
   const cat = modelManager.benchMeshes.get('cat');
   if (cat && cat.userData.baseY) {
     cat.position.y = cat.userData.baseY + Math.sin(time * 2.0 + 0.8) * 0.0015;
-  }
-
-  // Blinking hardware status LEDs
-  if (world.leds.piGreen) {
-    world.leds.piGreen.visible = Math.sin(time * 8.0) > -0.2;
-  }
-  if (world.leds.espBlue) {
-    world.leds.espBlue.visible = Math.sin(time * 5.5 + 2.0) > 0.0;
   }
 }
 
@@ -1021,6 +835,30 @@ function bindEvents() {
     exitLaptop();
   });
 
+  // Bench Audio and Theme Controls
+  const benchSound = $('#benchSoundBtn');
+  benchSound?.addEventListener('click', () => {
+    const isMuted = sound.toggleMute();
+    benchSound.textContent = isMuted ? '🔇' : '🔊';
+    sound.click(600, 0.02);
+  });
+
+  const benchTheme = $('#benchThemeBtn');
+  benchTheme?.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = cur === 'dark' ? 'matrix' : (cur === 'matrix' ? 'light' : 'dark');
+    document.documentElement.setAttribute('data-theme', next);
+    set3DTheme(next);
+    sound.click(750, 0.02);
+  });
+
+  // Fallback direct entrance
+  webglFallbackBtn?.addEventListener('click', () => {
+    webglFallback.hidden = true;
+    enterLab();
+    bootSystem();
+  });
+
   $$('[data-action]').forEach((btn) => {
     btn.addEventListener('click', () => {
       if (btn.dataset.action === 'focus-laptop') focusLaptop();
@@ -1028,7 +866,8 @@ function bindEvents() {
     });
   });
 
-  canvas.addEventListener('click', pick3DObject);
+  window.addEventListener('pointerdown', handlePointerDown);
+  window.addEventListener('pointerup', handlePointerUp);
   window.addEventListener('pointermove', updateCursor);
 
   document.addEventListener('mouseleave', () => {
@@ -1039,29 +878,33 @@ function bindEvents() {
     if (hudCursor) hudCursor.style.opacity = '1';
   });
 
-  window.addEventListener('mousedown', () => {
-    isMouseDown = true;
-    hudCursor?.classList.add('is-active');
-  });
-
-  window.addEventListener('mouseup', () => {
-    isMouseDown = false;
-    hudCursor?.classList.remove('is-active');
-  });
-
   window.addEventListener('resize', () => {
+    if (!renderer || !camera) return;
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
+  // Global Keyboard Accessibility
   window.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
-      if (inspect.classList.contains('is-open')) {
+      const lightbox = $('#winLightbox');
+      const startMenu = $('#winStartMenu');
+
+      if (lightbox && !lightbox.hidden) {
+        lightbox.hidden = true;
+        lightbox.classList.remove('is-open');
+      } else if (inspect.classList.contains('is-open')) {
         hideInspectorOverlay();
+      } else if (startMenu && startMenu.classList.contains('is-open')) {
+        world.desktopManager?.closeStartMenu();
       } else if (screenUi.classList.contains('is-open')) {
         exitLaptop();
+      }
+    } else if (e.key === 'Enter') {
+      if (!state.entered && intro.style.opacity !== '0') {
+        enterLab();
       }
     }
   });
@@ -1078,11 +921,11 @@ function animate() {
   }
 
   // Skip 3D frame rendering when OS is maximized full-screen to save GPU
-  if (state.is3DOffloaded) return;
+  if (state.is3DOffloaded || !renderer || !scene || !camera) return;
 
   const time = clock.getElapsedTime();
   updateIdleAnimations(time);
-  controls.update();
+  controls?.update();
   renderer.render(scene, camera);
 }
 
@@ -1095,7 +938,7 @@ async function start() {
   } catch (err) {
     console.error('Initialization error:', err);
     loadingText.textContent = 'INITIALIZATION FAILED';
-    loadingDetail.textContent = 'Check console logs and model files.';
+    loadingDetail.textContent = 'Check console logs.';
     showToast('ASSET LOAD FAILED');
   }
 }

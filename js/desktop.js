@@ -278,6 +278,24 @@ export class DesktopManager {
       this.onExit?.();
     });
 
+    const traySoundBtn = this.container.querySelector('#winTraySoundBtn');
+    const trayThemeBtn = this.container.querySelector('#winTrayThemeBtn');
+
+    traySoundBtn?.addEventListener('click', () => {
+      const isMuted = sound.toggleMute();
+      traySoundBtn.textContent = isMuted ? '🔇' : '🔊';
+      traySoundBtn.title = isMuted ? 'Unmute Audio' : 'Mute Audio';
+      sound.click(600, 0.02);
+    });
+
+    trayThemeBtn?.addEventListener('click', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+      const nextTheme = currentTheme === 'dark' ? 'matrix' : (currentTheme === 'matrix' ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', nextTheme);
+      window.set3DTheme?.(nextTheme);
+      sound.click(750, 0.02);
+    });
+
     showDesktop.addEventListener('click', () => {
       this.windows.forEach((win) => {
         win.classList.add('is-minimized');

@@ -3,9 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#0a0c0a" />
-    <meta name="description" content="Jaijitesh Suryaprakash - Personal Operating Environment disguised as a minimalist engineering portfolio." />
-    <title>JAIJITESH / SYSTEMS — JAIJITESH.OS</title>
+    <meta name="theme-color" content="#090b0d" />
+    <meta name="color-scheme" content="dark light" />
+    
+    <!-- Primary Meta Tags -->
+    <title>JAIJITESH SURYAPRAKASH — Systems &amp; Robotics Portfolio | JAIJITESH.OS</title>
+    <meta name="title" content="JAIJITESH SURYAPRAKASH — Systems &amp; Robotics Portfolio | JAIJITESH.OS" />
+    <meta name="description" content="Personal Operating Environment &amp; 3D Engineering Workbench of Jaijitesh Suryaprakash. Computational fluid dynamics (LBM D2Q9), autonomous robotics (SolidWorks/ESP32), local-first AI agents, and academic research." />
+    <meta name="author" content="Jaijitesh Suryaprakash" />
+    <meta name="keywords" content="Jaijitesh Suryaprakash, BerrF35, Portfolio, Lattice Boltzmann Method, CFD, Robotics, ESP32, SolidWorks, AI Agents, VIT Vellore" />
+    <link rel="canonical" href="https://berrf35.github.io/Portfolio/" />
+
+    <!-- Open Graph / Facebook / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://berrf35.github.io/Portfolio/" />
+    <meta property="og:title" content="JAIJITESH SURYAPRAKASH — Systems &amp; Robotics Portfolio | JAIJITESH.OS" />
+    <meta property="og:description" content="Personal Operating Environment disguised as a minimalist engineering portfolio. Lattice Boltzmann CFD, Autonomous Tracked Robotics, Local AI Agents." />
+    <meta property="og:image" content="assets/images/profile/portrait_full_body.jpg" />
+    <meta property="og:site_name" content="JAIJITESH.OS" />
+
+    <!-- Favicon: High-precision SVG Terminal Prompt -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23090b0d'/%3E%3Cpath d='M8 10l6 6-6 6M16 22h8' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" />
+
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="stylesheet" href="style.css" />
     
@@ -27,9 +46,9 @@
   <body>
     <main id="app">
       <!-- 3D WebGL Canvas for the Engineering Lab Bench -->
-      <canvas id="scene" aria-label="Interactive 3D Engineering Workspace"></canvas>
+      <canvas id="scene" role="region" aria-label="Interactive 3D Engineering Workspace"></canvas>
       
-      <!-- Subtle tactile film grain overlay -->
+      <!-- Tactile film grain overlay -->
       <div class="grain" aria-hidden="true"></div>
       
       <!-- Tactical HUD High-Precision Cursor System -->
@@ -83,12 +102,16 @@
       <!-- Layer 2: 3D Engineering Lab Bench HUD Controls -->
       <section class="world-ui" id="worldUi" aria-label="Lab bench HUD controls">
         <header class="world-ui__header">
-          <button class="wordmark" id="homeBtn" type="button">
+          <button class="wordmark" id="homeBtn" type="button" aria-label="Bench Home">
             JAIJITESH<span>SYS_01 // WORKBENCH</span>
           </button>
-          <div class="world-ui__status">
-            <i class="status-indicator"></i>
-            <span>SYSTEM READY</span>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button class="bench-control-btn" id="benchSoundBtn" type="button" title="Toggle Sound" aria-label="Toggle Sound">🔊</button>
+            <button class="bench-control-btn" id="benchThemeBtn" type="button" title="Toggle Theme" aria-label="Toggle Display Theme">◐</button>
+            <div class="world-ui__status">
+              <i class="status-indicator"></i>
+              <span>SYSTEM READY</span>
+            </div>
           </div>
         </header>
 
@@ -139,6 +162,16 @@
         </div>
       </aside>
 
+      <!-- WebGL Fallback Notification Container -->
+      <div class="webgl-fallback" id="webglFallback" hidden>
+        <div class="webgl-fallback__box">
+          <div style="font-family: var(--font-mono); font-size: 11px; color: #38bdf8; letter-spacing: 0.1em; margin-bottom: 8px;">HARDWARE ACCELERATION NOTICE</div>
+          <h2 style="font-size: 16px; margin: 0 0 10px 0; color: #ffffff;">3D WebGL Context Unavailable</h2>
+          <p style="font-size: 12px; color: #94a3b8; margin: 0 0 16px 0; line-height: 1.5;">Your browser is running without 3D WebGL acceleration. JAIJITESH.OS has automatically initialized the desktop environment for full access to all projects, case files, and research papers.</p>
+          <button id="webglFallbackBtn" type="button" style="padding: 9px 18px; background: #38bdf8; color: #090b0d; font-weight: 700; font-family: var(--font-mono); border: 0; cursor: pointer;">ENTER JAIJITESH.OS DESKTOP &rarr;</button>
+        </div>
+      </div>
+
       <!-- Toast Feedback Message -->
       <div class="toast" id="toast" role="status"></div>
       
@@ -147,6 +180,29 @@
         <span class="pulse-dot"></span>
         <span id="performanceNoteText">Tessellating CAD geometry locally...</span>
       </div>
+
+      <!-- Semantic Crawlable Fallback for Search Engines & Accessibility -->
+      <section class="sr-only" aria-label="Portfolio Content Index">
+        <h1>Jaijitesh Suryaprakash - Systems &amp; Robotics Portfolio</h1>
+        <p>B.Tech Information Technology student at Vellore Institute of Technology (VIT Vellore, 2025-2029). Focus areas include Computational Fluid Dynamics (LBM D2Q9), Autonomous Robotics (SolidWorks CAD &amp; ESP32 FreeRTOS), Local-First AI Agents, and Academic Research.</p>
+        <h2>Major Engineering Projects</h2>
+        <ul>
+          <li><strong>WindSim:</strong> Real-time browser-native 2D LBM D2Q9 computational fluid dynamics aerodynamics platform. Solves discrete BGK collision equations with Zou-He boundary conditions at 60 FPS.</li>
+          <li><strong>Berry AI:</strong> Local-first air-gapped desktop assistant with computer-use automation and on-device LLMs.</li>
+          <li><strong>BerryBot:</strong> Tracked autonomous robotics platform built with SolidWorks CAD, dual-core ESP32 20kHz PWM, optical encoders, S-curve profiling, and closed-loop PID control.</li>
+          <li><strong>ImpactX 3.0:</strong> 3rd Place Overall Winner hackathon project for real-time logistics routing.</li>
+          <li><strong>FarmAssist AI:</strong> Edge computer vision crop diagnostics built for Yantra 26 hackathon.</li>
+          <li><strong>VinHack 25:</strong> Decentralized peer-to-peer academic resource exchange.</li>
+        </ul>
+        <h2>Academic Research Focus</h2>
+        <ul>
+          <li>Spectral Color Splitter: Optical image decomposition and color-space filtering.</li>
+          <li>Synthetic Training Data Generation: Parametric domain randomization pipelines.</li>
+          <li>Edge Vision Systems on Constrained Microcontrollers.</li>
+        </ul>
+        <h2>Contact</h2>
+        <p>Email: jaijiteshsp@gmail.com | Phone: +91 9940970749 | GitHub: https://github.com/BerrF35 | LinkedIn: https://linkedin.com/in/jaijitesh-suryaprakash-j</p>
+      </section>
     </main>
 
     <script type="module" src="app.js"></script>

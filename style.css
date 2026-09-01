@@ -2682,24 +2682,151 @@ button, a, [role="button"], select, input, textarea {
   background: #1c232e !important;
 }
 
-/* Responsive Overrides */
+/* Accessibility: Visible Focus Rings & Screen Reader Utility */
+:focus-visible {
+  outline: 2px solid #38bdf8 !important;
+  outline-offset: 2px !important;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Bench Control Buttons in Header */
+.bench-control-btn {
+  background: rgba(20, 24, 30, 0.85);
+  border: 1px solid #283342;
+  color: #94a3b8;
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.15s ease;
+}
+
+.bench-control-btn:hover {
+  border-color: #38bdf8;
+  color: #ffffff;
+  background: rgba(30, 40, 52, 0.95);
+}
+
+/* WebGL Fallback Notification Container */
+.webgl-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(5, 7, 9, 0.96);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.webgl-fallback[hidden] {
+  display: none !important;
+}
+
+.webgl-fallback__box {
+  max-width: 480px;
+  background: #111418;
+  border: 1px solid #283342;
+  padding: 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
+}
+
+/* Responsive Overrides Across Resolutions */
+@media (max-width: 1024px) {
+  .screen-ui {
+    width: 100vw;
+    height: 100vh;
+    border: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .screen-ui {
-    width: calc(100vw - 20px);
-    height: min(82vw, 560px);
-    min-width: 0;
+    width: 100vw;
+    height: 100vh;
+    border: 0;
   }
-  .projects-app { grid-template-columns: 1fr; }
-  .projects-sidebar { display: none; }
-  .about-columns, .contact-grid { grid-template-columns: 1fr; }
-  .uwb-sim__workspace, .wind-sim__body { grid-template-columns: 1fr; }
-  .uwb-sim__telemetry, .wind-sim__controls { display: none; }
-  .inspect { top: auto; right: 14px; bottom: 14px; transform: translateY(20px); }
-  .inspect.is-open { transform: translateY(0); }
+  
+  .win-window {
+    width: calc(100vw - 12px) !important;
+    max-width: calc(100vw - 12px) !important;
+    left: 6px !important;
+    top: 6px !important;
+    height: calc(100% - 48px) !important;
+    transform: none !important;
+  }
+
+  .win-start-menu {
+    width: calc(100vw - 16px) !important;
+    max-width: 360px !important;
+    left: 8px !important;
+    bottom: 42px !important;
+  }
+
+  .win-taskbar__tasks {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .win-taskbar-search {
+    display: none;
+  }
+
+  .intro__centre h1 {
+    font-size: 32px;
+  }
+
+  .world-ui__footer {
+    display: none;
+  }
+
+  .world-ui__instruction {
+    display: none;
+  }
+
+  .inspect {
+    top: auto;
+    right: 8px;
+    left: 8px;
+    bottom: 8px;
+    width: auto;
+    max-width: none;
+    transform: translateY(20px);
+  }
+  .inspect.is-open {
+    transform: translateY(0);
+  }
 }
 
 @media (pointer: coarse) {
-  body, button, input { cursor: auto; }
-  .hud-cursor { display: none !important; }
+  body, button, input, a, select, textarea {
+    cursor: auto !important;
+  }
+  * {
+    cursor: auto !important;
+  }
+  .hud-cursor {
+    display: none !important;
+  }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001s !important;
+    transition-duration: 0.001s !important;
+  }
+}
+
 
