@@ -124,6 +124,11 @@ class ModelManager {
           }
         });
 
+        if (key === 'cat') {
+          root.rotation.x = Math.PI;
+          root.updateMatrixWorld(true);
+        }
+
         // Center inner geometry around local origin
         root.updateMatrixWorld(true);
         const boxBefore = new THREE.Box3().setFromObject(root);

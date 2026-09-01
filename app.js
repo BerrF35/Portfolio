@@ -401,6 +401,7 @@ function createScreenCanvas() {
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.minFilter = THREE.LinearFilter;
   texture.magFilter = THREE.LinearFilter;
+  texture.flipY = false;
 
   world.screenCanvas = canvas;
   world.screenCtx = ctx;
