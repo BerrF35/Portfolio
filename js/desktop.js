@@ -43,57 +43,227 @@ export class DesktopManager {
       <div class="os-workspace">
         <header class="os-topbar">
           <div class="os-topbar__left">
-            <button class="os-back-bench-btn" id="osTopBackBtn" type="button">
-              &larr; BACK TO BENCH
+            <button class="os-logo" id="osStartBtn" type="button" title="Open Command Shell">
+              <span class="os-logo__mark">⬡</span>
+              <b>JAIJITESH.OS</b>
+              <span class="os-logo__ver">v2.6.4</span>
             </button>
-            <button class="os-logo" id="osStartBtn" type="button">JAIJITESH.OS <span>v2.6</span></button>
             <div class="os-topbar__divider"></div>
-            <div class="os-topbar__menu">
-              <span>PROJECTS</span>
-              <span>SIMULATORS</span>
-              <span>ROBOTICS</span>
-              <span>AI</span>
+            <nav class="os-topbar__nav">
+              <button class="os-nav-link" data-app="projects" type="button">Projects</button>
+              <button class="os-nav-link" data-app="windsim" type="button">WindSim</button>
+              <button class="os-nav-link" data-app="berrybot" type="button">Robotics</button>
+              <button class="os-nav-link" data-app="berry" type="button">Berry AI</button>
+              <button class="os-nav-link" data-app="terminal" type="button">Terminal</button>
+            </nav>
+          </div>
+
+          <div class="os-topbar__center">
+            <div class="os-status-pill">
+              <span class="os-status-pill__dot"></span>
+              <span>HOST: WORKSTATION 16 // 7 HARDWARE NODES ONLINE</span>
             </div>
           </div>
 
           <div class="os-topbar__right">
-            <button class="os-topbar__btn" id="audioToggleBtn" type="button" title="Toggle Sound">
+            <button class="os-topbar__pill-btn" id="audioToggleBtn" type="button" title="Toggle Sound Synth">
               <span id="audioIcon">🔊 SOUND: ON</span>
             </button>
-            <button class="os-topbar__btn" id="themeToggleBtn" type="button" title="Toggle Theme">
+            <button class="os-topbar__pill-btn" id="themeToggleBtn" type="button" title="Toggle Color Theme">
               <span>◐ THEME</span>
             </button>
-            <div class="os-topbar__status">
-              <i class="pulse-dot"></i>
-              <span>WORKSTATION 16</span>
-            </div>
-            <button class="os-topbar__exit" id="osExitBtn" type="button" title="Step back to 3D workbench">
-              EXIT WORKSTATION &times;
+            <button class="os-topbar__exit-btn" id="osExitBtn" type="button" title="Return to 3D Workbench (ESC)">
+              <span>EXIT TO BENCH</span>
+              <i>&nearr;</i>
             </button>
           </div>
         </header>
 
-        <main class="os-desktop-grid" id="osDesktopGrid">
-          <div class="os-grid-meta">
-            <span>JAIJITESH SURYAPRAKASH // PERSONAL OPERATING ENVIRONMENT</span>
-            <span>10 INTERACTIVE APPLICATIONS</span>
-          </div>
+        <main class="os-desktop-canvas" id="osDesktopGrid">
+          <div class="os-dashboard-layout">
+            
+            <!-- Left Column: Engineer Profile & Node Stream -->
+            <aside class="os-dash-sidebar">
+              <div class="os-profile-card">
+                <div class="os-profile-card__head">
+                  <div class="os-avatar">JS</div>
+                  <div>
+                    <h3>Jaijitesh Suryaprakash</h3>
+                    <p>B.Tech IT • VIT Vellore (2025–2029)</p>
+                  </div>
+                </div>
+                <div class="os-profile-tags">
+                  <span>CFD &amp; Aerodynamics</span>
+                  <span>Autonomous Robotics</span>
+                  <span>Local AI Agents</span>
+                </div>
+              </div>
 
-          <div class="os-icons-container">
-            ${this.apps.map(app => `
-              <button class="os-icon" data-app="${app.id}" type="button">
-                <span class="os-icon__glyph">${app.icon}</span>
-                <span class="os-icon__label">
-                  <b>${app.title}</b>
-                  <small>${app.detail}</small>
-                </span>
-              </button>
-            `).join('')}
-          </div>
+              <div class="os-telemetry-widget">
+                <div class="os-widget-head">
+                  <span class="os-widget-title">HARDWARE TELEMETRY BUS</span>
+                  <span class="os-widget-badge">LIVE</span>
+                </div>
+                <ul class="os-node-list">
+                  <li data-app="hardware">
+                    <span class="node-indicator node-ok"></span>
+                    <span class="node-name">BerryBot Tracked Chassis</span>
+                    <span class="node-meta">SolidWorks M4</span>
+                  </li>
+                  <li data-app="hardware">
+                    <span class="node-indicator node-ok"></span>
+                    <span class="node-name">Raspberry Pi 4 Model B</span>
+                    <span class="node-meta">BCM2711 4GB</span>
+                  </li>
+                  <li data-app="hardware">
+                    <span class="node-indicator node-ok"></span>
+                    <span class="node-name">ESP32-WROOM Dual-Core</span>
+                    <span class="node-meta">20kHz Motor PWM</span>
+                  </li>
+                  <li data-app="hardware">
+                    <span class="node-indicator node-ok"></span>
+                    <span class="node-name">Canon AT-1 Retro 35mm</span>
+                    <span class="node-meta">Vision &amp; Optics</span>
+                  </li>
+                  <li data-app="hardware">
+                    <span class="node-indicator node-ok"></span>
+                    <span class="node-name">Refractor Telescope</span>
+                    <span class="node-meta">Scientific Optics</span>
+                  </li>
+                  <li data-app="hardware">
+                    <span class="node-indicator node-ok"></span>
+                    <span class="node-name">Berry • Belgian Malinois</span>
+                    <span class="node-meta">12yo Companion</span>
+                  </li>
+                  <li data-app="hardware">
+                    <span class="node-indicator node-ok"></span>
+                    <span class="node-name">Crispy • Companion Cat</span>
+                    <span class="node-meta">10yo Supervisor</span>
+                  </li>
+                </ul>
+              </div>
+            </aside>
 
-          <div class="os-desktop-watermark">
-            <p>Minimalist appearance. Maximalist interaction.</p>
-            <em>Scientific Simulation &bull; Local AI &bull; Autonomous Robotics</em>
+            <!-- Center Column: Application Bento Launchpad -->
+            <section class="os-dash-main">
+              <div class="os-section-header">
+                <h2>Interactive Engineering Applications</h2>
+                <span>10 RUNTIME MODULES READY</span>
+              </div>
+
+              <div class="os-app-bento">
+                <!-- Featured App 1: WindSim -->
+                <button class="os-bento-card os-bento-card--featured" data-app="windsim" type="button">
+                  <div class="os-bento-card__badge">FEATURED // #1 BEST WORK</div>
+                  <div class="os-bento-card__icon">≋</div>
+                  <div class="os-bento-card__content">
+                    <h4>WindSim &mdash; Aerodynamics CFD Lab</h4>
+                    <p>Real-time Lattice Boltzmann Method aerodynamic wind sandbox with streamline generation and velocity field visualization.</p>
+                  </div>
+                  <span class="os-bento-card__launch">LAUNCH SIMULATOR &rarr;</span>
+                </button>
+
+                <!-- Featured App 2: Berry AI -->
+                <button class="os-bento-card os-bento-card--featured" data-app="berry" type="button">
+                  <div class="os-bento-card__badge">LOCAL AI AGENT</div>
+                  <div class="os-bento-card__icon">☍</div>
+                  <div class="os-bento-card__content">
+                    <h4>Berry AI &mdash; Desktop Assistant</h4>
+                    <p>Local-first autonomous desktop agent built in Python featuring CUA automation, Browser Relay, and Skill Codex.</p>
+                  </div>
+                  <span class="os-bento-card__launch">VIEW ARCHITECTURE &rarr;</span>
+                </button>
+
+                <!-- Regular Apps -->
+                <button class="os-bento-card" data-app="berrybot" type="button">
+                  <div class="os-bento-card__tag">ROBOTICS</div>
+                  <div class="os-bento-card__icon">◈</div>
+                  <h4>BerryBot Robotics</h4>
+                  <p>Tracked kinematics, optical encoder telemetry, and S-curve motion profiling.</p>
+                </button>
+
+                <button class="os-bento-card" data-app="projects" type="button">
+                  <div class="os-bento-card__tag">PORTFOLIO</div>
+                  <div class="os-bento-card__icon">▤</div>
+                  <h4>Projects Archive</h4>
+                  <p>ImpactX 3.0 (3rd Place), FarmAssist AI, VinHack, and open-source systems.</p>
+                </button>
+
+                <button class="os-bento-card" data-app="terminal" type="button">
+                  <div class="os-bento-card__tag">UNIX SHELL</div>
+                  <div class="os-bento-card__icon">_</div>
+                  <h4>Command Terminal</h4>
+                  <p>Full interactive CLI with system commands, filesystem inspection, and logs.</p>
+                </button>
+
+                <button class="os-bento-card" data-app="timeline" type="button">
+                  <div class="os-bento-card__tag">INTERACTIVE</div>
+                  <div class="os-bento-card__icon">▦</div>
+                  <h4>Pixel World</h4>
+                  <p>High-DPI playable memory timeline featuring Berry &amp; Crispy pixel sprites.</p>
+                </button>
+
+                <button class="os-bento-card" data-app="research" type="button">
+                  <div class="os-bento-card__tag">ACADEMIC</div>
+                  <div class="os-bento-card__icon">↗</div>
+                  <h4>Research Papers</h4>
+                  <p>Synthetic data generation and spectral color-space analysis with faculty group.</p>
+                </button>
+
+                <button class="os-bento-card" data-app="hardware" type="button">
+                  <div class="os-bento-card__tag">PHYSICAL 3D</div>
+                  <div class="os-bento-card__icon">＋</div>
+                  <h4>Hardware 3D CAD</h4>
+                  <p>Inspect CAD nodes, single-board compute, and sensors directly in 3D.</p>
+                </button>
+
+                <button class="os-bento-card" data-app="about" type="button">
+                  <div class="os-bento-card__tag">BIO</div>
+                  <div class="os-bento-card__icon">◆</div>
+                  <h4>About Dossier</h4>
+                  <p>Academic record, background, companion history, and philosophy.</p>
+                </button>
+
+                <button class="os-bento-card" data-app="contact" type="button">
+                  <div class="os-bento-card__tag">NETWORK</div>
+                  <div class="os-bento-card__icon">@</div>
+                  <h4>Contact Dispatch</h4>
+                  <p>Direct communication channels, email dispatch, and social profiles.</p>
+                </button>
+              </div>
+            </section>
+
+            <!-- Right Column: System Status & Quick Shortcuts -->
+            <aside class="os-dash-status">
+              <div class="os-stat-card">
+                <div class="os-stat-card__label">SYSTEM STATUS</div>
+                <div class="os-stat-card__val">OPTIMAL</div>
+                <div class="os-stat-card__sub">WebGL2 Hardware Accelerated</div>
+              </div>
+
+              <div class="os-stat-card">
+                <div class="os-stat-card__label">ACADEMIC PROFILE</div>
+                <div class="os-stat-card__val">VIT VELLORE</div>
+                <div class="os-stat-card__sub">B.Tech IT • 2025–2029</div>
+              </div>
+
+              <div class="os-shortcuts-widget">
+                <div class="os-widget-head">
+                  <span class="os-widget-title">KEYBOARD SHORTCUTS</span>
+                </div>
+                <div class="os-shortcut-row"><kbd>ESC</kbd> <span>Return to 3D Bench</span></div>
+                <div class="os-shortcut-row"><kbd>T</kbd> <span>Command Shell</span></div>
+                <div class="os-shortcut-row"><kbd>W</kbd> <span>WindSim CFD Lab</span></div>
+                <div class="os-shortcut-row"><kbd>B</kbd> <span>BerryBot Simulator</span></div>
+              </div>
+
+              <div class="os-bench-return-card">
+                <button class="os-bench-return-btn" id="osSideBenchBtn" type="button">
+                  <span>&larr; RETURN TO 3D BENCH</span>
+                </button>
+              </div>
+            </aside>
+
           </div>
         </main>
 
@@ -102,14 +272,14 @@ export class DesktopManager {
         <footer class="os-taskbar">
           <div class="os-taskbar__left-controls">
             <button class="os-taskbar__back" id="osTaskbarBackBtn" type="button">
-              &larr; BACK TO 3D BENCH
+              &larr; 3D BENCH
             </button>
             <div class="os-taskbar__tasks" id="osTaskbarItems"></div>
           </div>
           <div class="os-taskbar__tray">
             <span class="taskbar-badge">VIT VELLORE</span>
             <span id="osClock">00:00:00</span>
-            <span class="taskbar-zone">IST (UTC+5:30)</span>
+            <span class="taskbar-zone">IST (+05:30)</span>
           </div>
         </footer>
       </div>
@@ -149,6 +319,7 @@ export class DesktopManager {
     this.container.querySelector('#osTopBackBtn')?.addEventListener('click', handleExit);
     this.container.querySelector('#osTaskbarBackBtn')?.addEventListener('click', handleExit);
     this.container.querySelector('#osExitBtn')?.addEventListener('click', handleExit);
+    this.container.querySelector('#osSideBenchBtn')?.addEventListener('click', handleExit);
 
     this.container.querySelector('#osStartBtn')?.addEventListener('click', () => {
       this.openApp('terminal');
