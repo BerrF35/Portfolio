@@ -173,7 +173,7 @@ Application Launchers:
 Windows IP Configuration
 
 Ethernet adapter Ethernet 2:
-   Connection-specific DNS Suffix  . : vitstudent.ac.in
+   Connection-specific DNS Suffix  . : localdomain
    Link-local IPv6 Address . . . . . : fe80::d914:482e:5141:8920%14
    IPv4 Address. . . . . . . . . . . : 192.168.1.108
    Subnet Mask . . . . . . . . . . . : 255.255.255.0
@@ -185,12 +185,11 @@ Ethernet adapter Ethernet 2:
       case 'neofetch':
         this.appendLine(`
 Host Name:                 OMEN-WORKSTATION-16
-OS Name:                   Microsoft Windows 10 Pro
-OS Version:                10.0.19045 N/A Build 19045
+OS Name:                   Microsoft Windows 11 Pro
+OS Version:                10.0.22631 N/A Build 22631
 Engineer:                  Jaijitesh Suryaprakash (VIT Vellore IT '29)
-Status:                    1st Year B.Tech IT • 3 Research Papers in Prep
-Hackathon Track:           ImpactX 3.0 (3rd Place Lead), FarmAssist AI Lead
-Companions:                Berry (12yo Belgian Malinois), Crispy (10yo Cat)
+Affiliation:               B.Tech Information Technology • 3 Research Papers in Prep
+Hackathon Track:           ImpactX 3.0 (3rd Place Lead), FarmAssist AI Lead, VinHack 25 Lead
 System Model:              HP OMEN Laptop 16-wd0xxx
 Processor:                 13th Gen Intel(R) Core(TM) i7-13700HX (16 CPUs)
 Memory:                    32,768 MB RAM
@@ -233,7 +232,8 @@ Memory:                    32,768 MB RAM
       case 'pixel':
       case 'pixelworld':
       case 'pixelworld.exe':
-        this.appendLine('Launching Pixel World 8-bit memory game...');
+      case 'timeline':
+        this.appendLine('Opening Projects & Hackathons Directory...');
         this.onSim?.('timeline');
         break;
 
@@ -312,10 +312,10 @@ Memory:                    32,768 MB RAM
                     JAIJITESH SURYAPRAKASH — PERSONNEL DOSSIER
 ================================================================================
 Name: Jaijitesh Suryaprakash
-University: VIT Vellore (B.Tech IT 2025–2029)
-Standing: CGPA 5.89 | SCTS 10th: 93.4%, 12th: 76.4%
-Contact: jaijitesh.2025@vitstudent.ac.in | 9940970749 | github.com/BerrF35
-Companions: Berry (12yo Belgian Malinois), Crispy (10yo Companion Cat)
+University: VIT Vellore (B.Tech IT 2025–2029, 1st Year)
+Contact: jaijiteshsp@gmail.com | +91 9940970749 | https://github.com/BerrF35
+LinkedIn: https://linkedin.com/in/jaijitesh-suryaprakash-j
+Focus: LBM CFD Simulation, Local-First AI Agents, Autonomous Tracked Robotics
 ================================================================================
       `);
     } else if (t.includes('impactx')) {
