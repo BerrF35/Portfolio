@@ -1633,6 +1633,8 @@ button, a, [role="button"], select, input, textarea {
   font-weight: 500;
 }
 
+
+
 .taskbar-item.is-active {
   border-color: var(--accent);
   background: var(--surface-raised);
@@ -2593,6 +2595,93 @@ button, a, [role="button"], select, input, textarea {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
 }
 
+/* ==========================================================================
+   WIN LIGHTBOX & CASE FILE POLISH
+   ========================================================================== */
+
+.win-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.win-lightbox[hidden] {
+  display: none !important;
+}
+
+.win-lightbox__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(4, 6, 8, 0.88);
+  backdrop-filter: blur(10px);
+}
+
+.win-lightbox__content {
+  position: relative;
+  z-index: 2;
+  max-width: min(90vw, 1100px);
+  max-height: min(85vh, 850px);
+  background: #14171c;
+  border: 1px solid #384252;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.win-lightbox__close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #384252;
+  background: #1c222b;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.win-lightbox__close:hover {
+  background: #e81123;
+  border-color: #e81123;
+}
+
+.win-lightbox__img {
+  max-width: 100%;
+  max-height: calc(85vh - 120px);
+  object-fit: contain;
+  display: block;
+}
+
+.win-lightbox__caption {
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #94a3b8;
+  text-align: center;
+  max-width: 800px;
+  line-height: 1.4;
+}
+
+.casefile-evidence-card:hover {
+  border-color: #38bdf8 !important;
+}
+
+.timeline-card:hover {
+  border-color: #38bdf8 !important;
+  background: #1c232e !important;
+}
+
 /* Responsive Overrides */
 @media (max-width: 768px) {
   .screen-ui {
@@ -2611,5 +2700,6 @@ button, a, [role="button"], select, input, textarea {
 
 @media (pointer: coarse) {
   body, button, input { cursor: auto; }
-  .cursor { display: none; }
+  .hud-cursor { display: none !important; }
 }
+

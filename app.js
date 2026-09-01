@@ -712,11 +712,14 @@ function enterLab() {
 
 window.enterLab = enterLab;
 
-function focusLaptop() {
+let pendingAppToOpen = null;
+
+function focusLaptop(targetApp = null) {
   if (!world.laptop) return;
   state.busy = true;
   state.focused = true;
   state.inspecting = null;
+  if (targetApp) pendingAppToOpen = targetApp;
   worldInstruction.classList.add('is-hidden');
   hideInspectorOverlay();
   controls.enabled = false;
@@ -766,6 +769,16 @@ function openScreen() {
     setTimeout(() => {
       if (screenUi.classList.contains('is-open')) {
         state.is3DOffloaded = true;
+      }
+      if (pendingAppToOpen) {
+        if (world.desktopManager) {
+          if (pendingAppToOpen.startsWith('res_') || pendingAppToOpen === 'about') {
+            world.desktopManager.openDocument(pendingAppToOpen);
+          } else {
+            world.desktopManager.openApp(pendingAppToOpen);
+          }
+        }
+        pendingAppToOpen = null;
       }
     }, 400);
   }
@@ -842,6 +855,27 @@ function showInspectorOverlay(def) {
   $('#inspectTitle').textContent = def.title;
   $('#inspectCopy').textContent = def.summary;
   $('#inspectData').innerHTML = def.specs.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+
+  const openProjBtn = $('#inspectOpenProject');
+  if (openProjBtn) {
+    if (def.projectId) {
+      openProjBtn.style.display = 'block';
+      openProjBtn.textContent = `EXPLORE ${def.projectId.toUpperCase()} CASE FILE ↗`;
+      openProjBtn.onclick = () => {
+        focusLaptop(def.projectId);
+      };
+    } else if (def.id === 'camera') {
+      openProjBtn.style.display = 'block';
+      openProjBtn.textContent = 'EXPLORE RESEARCH CASE FILE: COLOR SPLITTER ↗';
+      openProjBtn.onclick = () => {
+        focusLaptop('res_color');
+      };
+    } else {
+      openProjBtn.style.display = 'none';
+      openProjBtn.onclick = null;
+    }
+  }
+
   inspect.classList.add('is-open');
 }
 

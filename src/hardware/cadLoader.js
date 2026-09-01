@@ -1,6 +1,17 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { HARDWARE_DEFINITIONS } from './definitions.js';
+import { HARDWARE_DEFINITIONS as RAW_DEFS } from './portfolioData.js';
+
+export const HARDWARE_DEFINITIONS = Object.fromEntries(
+  Object.entries(RAW_DEFS).map(([k, v]) => [
+    k,
+    {
+      ...v,
+      benchPosition: new THREE.Vector3(v.benchPosition.x, v.benchPosition.y, v.benchPosition.z),
+      benchRotation: new THREE.Euler(v.benchRotation.x, v.benchRotation.y, v.benchRotation.z)
+    }
+  ])
+);
 
 class ModelManager {
   constructor() {
@@ -73,7 +84,7 @@ class ModelManager {
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       const def = HARDWARE_DEFINITIONS[key];
-      onProgress?.(45 + Math.round((i / keys.length) * 45), `LOADING ${def.title.split('//')[0].trim()}`);
+      onProgress?.(45 + Math.round((i / keys.length) * 45), `CALIBRATING ${def.title.split('//')[0].trim()}`);
 
       try {
         const gltf = await this.loadGlb(def.file);
@@ -113,32 +124,29 @@ class ModelManager {
           }
         });
 
-        // Flip cat model upright so legs/paws point downwards onto table surface
+        // Flip cat model upright so paws sit correctly on tabletop
         if (key === 'cat') {
           root.rotation.x = Math.PI;
           root.updateMatrixWorld(true);
         }
 
-        // Compute natural bounding box before centering
+        // Center inner geometry around local origin
         root.updateMatrixWorld(true);
         const boxBefore = new THREE.Box3().setFromObject(root);
         const centerBefore = boxBefore.getCenter(new THREE.Vector3());
         const sizeBefore = boxBefore.getSize(new THREE.Vector3());
         const maxDim = Math.max(sizeBefore.x, sizeBefore.y, sizeBefore.z);
 
-        // Center inner geometry around local origin (0, 0, 0)
         root.position.sub(centerBefore);
 
-        // Wrap in parent anchor group for reliable transformation and animations
+        // Wrap in anchor group for reliable transformations
         const wrapper = new THREE.Group();
         wrapper.add(root);
 
-        // Scale wrapper to target real-world dimension
         const targetScale = def.scale / maxDim;
         wrapper.scale.set(targetScale, targetScale, targetScale);
         wrapper.updateMatrixWorld(true);
 
-        // Calculate bottom offset so model sits flush on either floor or tabletop
         const boxAfter = new THREE.Box3().setFromObject(wrapper);
         const yOffset = -boxAfter.min.y;
         const groundLevel = def.isGroundedOnFloor ? 0 : deskTopHeight;

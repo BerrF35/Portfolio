@@ -1,15 +1,28 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { sound } from './core/audio.js';
-import { state, DESK_TOP_HEIGHT } from './core/state.js';
-import { setupScene, buildBenchRoom, easeCamera, motion } from './core/scene.js';
-import { buildLuxuryDesk, buildEngineeringMouse } from './core/desk.js';
-import { modelManager, HARDWARE_DEFINITIONS } from './hardware/cadLoader.js';
-import { DesktopManager } from './os/desktop.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { sound } from './js/audio.js';
+import { modelManager, HARDWARE_DEFINITIONS } from './js/cadLoader.js';
+import { DesktopManager } from './js/desktop.js';
 
 // DOM Selectors
 const $ = (selector, parent = document) => parent.querySelector(selector);
 const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
+
+// Fallback GSAP motion
+const fallbackMotion = {
+  to(target, options) {
+    ['x', 'y', 'z', 'rotationX', 'rotationY'].forEach((k) => { 
+      if (typeof options[k] === 'number') target[k] = options[k]; 
+    });
+    options.onComplete?.();
+    return { kill() {} };
+  }
+};
+const motion = {
+  to(...args) { return (window.gsap || fallbackMotion).to(...args); },
+  killTweensOf(...args) { return window.gsap?.killTweensOf?.(...args); }
+};
 
 // UI Elements
 const canvas = $('#scene');
@@ -27,13 +40,59 @@ const toast = $('#toast');
 const cursor = $('#cursor');
 const cursorGlyph = $('#cursorGlyph');
 
-// Initialize 3D Scene
-const { renderer, scene, camera, controls, stage } = setupScene(canvas);
+// Application State
+const state = {
+  entered: false,
+  ready: false,
+  focused: false,
+  inspecting: null,
+  screenState: 'sleep', // 'sleep' | 'boot' | 'desktop'
+  is3DOffloaded: false,
+  busy: false,
+};
+
+// Three.js Scene Setup
+const renderer = new THREE.WebGLRenderer({
+  canvas,
+  antialias: true,
+  alpha: false,
+  powerPreference: 'high-performance'
+});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.18;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#07090b');
+scene.fog = new THREE.Fog('#07090b', 8, 22);
+
+const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.01, 100);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.06;
+controls.enablePan = false;
+
+// Strict Orbit Constraints to prevent seeing behind the scenes or under floor
+controls.minAzimuthAngle = -Math.PI * 0.36; // -65 degrees
+controls.maxAzimuthAngle = Math.PI * 0.36;  // +65 degrees
+controls.minPolarAngle = Math.PI * 0.22;    // Prevents looking straight from above
+controls.maxPolarAngle = Math.PI * 0.46;    // Prevents going below desk/floor level
+controls.minDistance = 1.15;
+controls.maxDistance = 4.2;                 // Prevents zooming past room perimeter
 
 const clock = new THREE.Clock();
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 const loader = new GLTFLoader();
+const stage = new THREE.Group();
+scene.add(stage);
+
+const DESK_TOP_HEIGHT = 0.85; // Fixed physical tabletop height in world units
 
 const world = {
   desk: null,
@@ -73,6 +132,358 @@ function setLoading(percent, text) {
   loadingText.textContent = text;
   loadingDetail.textContent = `${Math.round(percent)}%`;
   loadingBar.style.width = `${percent}%`;
+}
+
+function easeCamera(position, target, duration = 1.2, onComplete) {
+  motion.killTweensOf(camera.position);
+  motion.killTweensOf(controls.target);
+  motion.to(camera.position, {
+    x: position.x,
+    y: position.y,
+    z: position.z,
+    duration,
+    ease: 'power3.inOut'
+  });
+  motion.to(controls.target, {
+    x: target.x,
+    y: target.y,
+    z: target.z,
+    duration,
+    ease: 'power3.inOut',
+    onComplete
+  });
+}
+
+// Generate black & white topographic contour elevation desk mat texture
+function createTopographicTexture() {
+  const c = document.createElement('canvas');
+  c.width = 2048;
+  c.height = 1024;
+  const ctx = c.getContext('2d');
+
+  // Deep matte black surface
+  ctx.fillStyle = '#0a0d10';
+  ctx.fillRect(0, 0, c.width, c.height);
+
+  // Subtle coordinate grid dots
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
+  for (let x = 64; x < c.width; x += 64) {
+    for (let y = 64; y < c.height; y += 64) {
+      ctx.fillRect(x - 1, y - 1, 2, 2);
+    }
+  }
+
+  // Draw smooth topographic elevation contour curves
+  const centers = [
+    { x: 500, y: 350, rMax: 480 },
+    { x: 1450, y: 650, rMax: 540 },
+    { x: 1024, y: 480, rMax: 420 },
+    { x: 300, y: 750, rMax: 360 }
+  ];
+
+  ctx.lineWidth = 1.8;
+  centers.forEach((ctr, cIdx) => {
+    const steps = 18;
+    for (let i = 2; i <= steps; i++) {
+      const radius = (i / steps) * ctr.rMax;
+      const isIndexLine = i % 5 === 0;
+
+      ctx.strokeStyle = isIndexLine ? 'rgba(255, 255, 255, 0.65)' : 'rgba(255, 255, 255, 0.28)';
+      ctx.lineWidth = isIndexLine ? 2.2 : 1.4;
+
+      ctx.beginPath();
+      const points = 72;
+      for (let p = 0; p <= points; p++) {
+        const angle = (p / points) * Math.PI * 2;
+        const noise = Math.sin(angle * 3 + cIdx) * 22 + Math.cos(angle * 5 + i) * 16 + Math.sin(angle * 7) * 8;
+        const r = radius + noise;
+        const px = ctr.x + Math.cos(angle) * r * 1.35;
+        const py = ctr.y + Math.sin(angle) * r;
+        if (p === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.closePath();
+      ctx.stroke();
+
+      // Elevation labels along index contours
+      if (isIndexLine) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.55)';
+        ctx.font = '11px monospace';
+        ctx.fillText(`+${i * 40}m`, ctr.x + radius * 1.15, ctr.y - 12);
+      }
+    }
+  });
+
+  // Perimeter Stitched Border
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(18, 18, c.width - 36, c.height - 36);
+
+  // Technical crosshairs in corners
+  const crosshairs = [[48, 48], [c.width - 48, 48], [48, c.height - 48], [c.width - 48, c.height - 48]];
+  crosshairs.forEach(([cx, cy]) => {
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(cx - 12, cy); ctx.lineTo(cx + 12, cy);
+    ctx.moveTo(cx, cy - 12); ctx.lineTo(cx, cy + 12);
+    ctx.stroke();
+  });
+
+  // Technical Mat Label
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+  ctx.font = '14px "Space Mono", monospace';
+  ctx.fillText('TOPOGRAPHIC ELEVATION SPEC // 01-SYS', 54, c.height - 44);
+
+  const texture = new THREE.CanvasTexture(c);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  return texture;
+}
+
+function makeBenchRoom() {
+  // Atmospheric Floor
+  const floorGeo = new THREE.PlaneGeometry(32, 32);
+  const floorMat = new THREE.MeshStandardMaterial({
+    color: '#090b0d',
+    roughness: 0.85,
+    metalness: 0.12
+  });
+  const floor = new THREE.Mesh(floorGeo, floorMat);
+  floor.rotation.x = -Math.PI / 2;
+  floor.receiveShadow = true;
+  scene.add(floor);
+
+  // Continuous Seamless Architectural Slat Walls across Back, Left, and Right
+  const wallGroup = new THREE.Group();
+  const slatMat = new THREE.MeshStandardMaterial({
+    color: '#13171c',
+    roughness: 0.75,
+    metalness: 0.28
+  });
+  const wallBackMat = new THREE.MeshStandardMaterial({
+    color: '#080a0c',
+    roughness: 0.95
+  });
+
+  // 1. Back Wall
+  const backWall = new THREE.Mesh(new THREE.PlaneGeometry(28, 14), wallBackMat);
+  backWall.position.set(0, 5.0, -4.5);
+  backWall.receiveShadow = true;
+  wallGroup.add(backWall);
+
+  for (let x = -10.0; x <= 10.0; x += 0.42) {
+    const slat = new THREE.Mesh(new THREE.BoxGeometry(0.038, 9.0, 0.07), slatMat);
+    slat.position.set(x, 4.5, -4.45);
+    slat.castShadow = true;
+    slat.receiveShadow = true;
+    wallGroup.add(slat);
+  }
+
+  // 2. Left Wall
+  const leftWall = new THREE.Mesh(new THREE.PlaneGeometry(28, 14), wallBackMat);
+  leftWall.position.set(-8.5, 5.0, 0);
+  leftWall.rotation.y = Math.PI / 2;
+  leftWall.receiveShadow = true;
+  wallGroup.add(leftWall);
+
+  for (let z = -6.0; z <= 8.0; z += 0.42) {
+    const slat = new THREE.Mesh(new THREE.BoxGeometry(0.07, 9.0, 0.038), slatMat);
+    slat.position.set(-8.45, 4.5, z);
+    slat.castShadow = true;
+    slat.receiveShadow = true;
+    wallGroup.add(slat);
+  }
+
+  // 3. Right Wall
+  const rightWall = new THREE.Mesh(new THREE.PlaneGeometry(28, 14), wallBackMat);
+  rightWall.position.set(8.5, 5.0, 0);
+  rightWall.rotation.y = -Math.PI / 2;
+  rightWall.receiveShadow = true;
+  wallGroup.add(rightWall);
+
+  for (let z = -6.0; z <= 8.0; z += 0.42) {
+    const slat = new THREE.Mesh(new THREE.BoxGeometry(0.07, 9.0, 0.038), slatMat);
+    slat.position.set(8.45, 4.5, z);
+    slat.castShadow = true;
+    slat.receiveShadow = true;
+    wallGroup.add(slat);
+  }
+
+  scene.add(wallGroup);
+
+  // Crisp Studio Key Directional Light
+  const keyDirLight = new THREE.DirectionalLight('#ffffff', 2.8);
+  keyDirLight.position.set(2.5, 6.0, 3.5);
+  keyDirLight.castShadow = true;
+  keyDirLight.shadow.mapSize.set(2048, 2048);
+  keyDirLight.shadow.bias = -0.0001;
+  keyDirLight.shadow.camera.near = 0.5;
+  keyDirLight.shadow.camera.far = 18;
+  keyDirLight.shadow.camera.left = -4;
+  keyDirLight.shadow.camera.right = 4;
+  keyDirLight.shadow.camera.top = 4;
+  keyDirLight.shadow.camera.bottom = -4;
+  scene.add(keyDirLight);
+
+  // High-Ceiling Studio Point Light
+  const keyLight = new THREE.PointLight('#f8fafc', 45, 14, 1.6);
+  keyLight.position.set(0, 3.8, 1.2);
+  scene.add(keyLight);
+
+  // Subtle Warm Amber Studio Rim Light (Left)
+  const rimLightLeft = new THREE.PointLight('#f3ba4b', 14, 10, 1.8);
+  rimLightLeft.position.set(-3.8, 2.6, -1.5);
+  scene.add(rimLightLeft);
+
+  // Subtle Electric Ice Blue Studio Rim Light (Right)
+  const rimLightRight = new THREE.PointLight('#38bdf8', 12, 10, 1.8);
+  rimLightRight.position.set(3.8, 2.6, -1.5);
+  scene.add(rimLightRight);
+
+  // Soft Front Fill
+  const fillLight = new THREE.DirectionalLight('#64748b', 1.2);
+  fillLight.position.set(-1.5, 4.0, 4.0);
+  scene.add(fillLight);
+
+  // Ambient & Hemisphere Fill
+  scene.add(new THREE.HemisphereLight('#f1f5f9', '#0b0e12', 2.4));
+  scene.add(new THREE.AmbientLight('#18202a', 1.4));
+
+  // Floor Grid
+  const grid = new THREE.GridHelper(16, 32, '#1a2027', '#0e1216');
+  grid.position.y = 0.005;
+  grid.material.opacity = 0.3;
+  grid.material.transparent = true;
+  scene.add(grid);
+}
+
+function buildLuxuryDesk() {
+  const deskGroup = new THREE.Group();
+
+  // Chamfered Tabletop Slab
+  const topGeo = new THREE.BoxGeometry(3.6, 0.06, 1.8);
+  const topMat = new THREE.MeshStandardMaterial({
+    color: '#14171a',
+    roughness: 0.7,
+    metalness: 0.15
+  });
+  const tabletop = new THREE.Mesh(topGeo, topMat);
+  tabletop.position.y = DESK_TOP_HEIGHT - 0.03;
+  tabletop.castShadow = true;
+  tabletop.receiveShadow = true;
+  deskGroup.add(tabletop);
+
+  // 4 Brushed Titanium Steel Legs
+  const legGeo = new THREE.CylinderGeometry(0.042, 0.042, DESK_TOP_HEIGHT - 0.06, 16);
+  const legMat = new THREE.MeshStandardMaterial({
+    color: '#2a2f35',
+    roughness: 0.4,
+    metalness: 0.85
+  });
+
+  const legPositions = [
+    [-1.68, (DESK_TOP_HEIGHT - 0.06) / 2, -0.78],
+    [1.68, (DESK_TOP_HEIGHT - 0.06) / 2, -0.78],
+    [-1.68, (DESK_TOP_HEIGHT - 0.06) / 2, 0.78],
+    [1.68, (DESK_TOP_HEIGHT - 0.06) / 2, 0.78]
+  ];
+
+  legPositions.forEach(([x, y, z]) => {
+    const leg = new THREE.Mesh(legGeo, legMat);
+    leg.position.set(x, y, z);
+    leg.castShadow = true;
+    leg.receiveShadow = true;
+    deskGroup.add(leg);
+  });
+
+  // Black & White Topographic Contour Line Table Mat (Ultra-Thin 3mm)
+  const topoTexture = createTopographicTexture();
+  const matGeo = new THREE.BoxGeometry(2.3, 0.003, 0.98);
+  const matMaterial = new THREE.MeshStandardMaterial({
+    map: topoTexture,
+    roughness: 0.88,
+    metalness: 0.08
+  });
+  const deskMat = new THREE.Mesh(matGeo, matMaterial);
+  deskMat.position.set(0.06, DESK_TOP_HEIGHT + 0.0015, 0.12);
+  deskMat.receiveShadow = true;
+  deskMat.castShadow = true;
+  deskGroup.add(deskMat);
+  world.deskMat = deskMat;
+
+  stage.add(deskGroup);
+  world.desk = deskGroup;
+}
+
+// Precision Smooth High-Poly Ergonomic Engineering Mouse (Zero light sources)
+function buildEngineeringMouse() {
+  const mouseGroup = new THREE.Group();
+
+  // Smooth Sculpted Palm Body
+  const palmGeo = new THREE.SphereGeometry(0.048, 48, 32);
+  palmGeo.scale(0.9, 0.45, 1.45);
+  const bodyMat = new THREE.MeshStandardMaterial({
+    color: '#181b1f',
+    roughness: 0.52,
+    metalness: 0.18
+  });
+  const palm = new THREE.Mesh(palmGeo, bodyMat);
+  palm.position.set(0, 0.018, 0.01);
+  palm.castShadow = true;
+  palm.receiveShadow = true;
+  mouseGroup.add(palm);
+
+  // Left & Right Click Chamfered Buttons
+  const clickGeo = new THREE.BoxGeometry(0.034, 0.008, 0.065);
+  const clickMat = new THREE.MeshStandardMaterial({
+    color: '#131518',
+    roughness: 0.38,
+    metalness: 0.28
+  });
+  const leftClick = new THREE.Mesh(clickGeo, clickMat);
+  leftClick.position.set(-0.019, 0.031, -0.038);
+  leftClick.rotation.x = -0.15;
+  mouseGroup.add(leftClick);
+
+  const rightClick = new THREE.Mesh(clickGeo, clickMat);
+  rightClick.position.set(0.019, 0.031, -0.038);
+  rightClick.rotation.x = -0.15;
+  mouseGroup.add(rightClick);
+
+  // Precision Metallic Knurled Scroll Wheel (48 segments)
+  const wheelGeo = new THREE.CylinderGeometry(0.0095, 0.0095, 0.007, 48);
+  const wheelMat = new THREE.MeshStandardMaterial({
+    color: '#8b949e',
+    roughness: 0.22,
+    metalness: 0.95
+  });
+  const scrollWheel = new THREE.Mesh(wheelGeo, wheelMat);
+  scrollWheel.rotation.z = Math.PI / 2;
+  scrollWheel.position.set(0, 0.033, -0.036);
+  mouseGroup.add(scrollWheel);
+
+  // Ergonomic Sculpted Thumb Wing Flare on Left
+  const thumbGeo = new THREE.CylinderGeometry(0.018, 0.024, 0.075, 32);
+  thumbGeo.scale(1.2, 0.4, 1.0);
+  const thumbFlare = new THREE.Mesh(thumbGeo, bodyMat);
+  thumbFlare.position.set(-0.042, 0.01, 0.01);
+  thumbFlare.rotation.y = 0.2;
+  mouseGroup.add(thumbFlare);
+
+  // Thumb Scroll Wheel
+  const thumbWheel = new THREE.Mesh(wheelGeo, wheelMat);
+  thumbWheel.scale.set(0.75, 0.75, 0.75);
+  thumbWheel.position.set(-0.044, 0.024, -0.01);
+  thumbWheel.rotation.x = Math.PI / 2;
+  mouseGroup.add(thumbWheel);
+
+  // Position mouse naturally on the right side of the topographic desk mat (Zero light emitters)
+  mouseGroup.position.set(0.68, DESK_TOP_HEIGHT + 0.003, 0.16);
+  mouseGroup.rotation.y = -0.12;
+
+  stage.add(mouseGroup);
+  return mouseGroup;
 }
 
 function loadGlb(path) {
@@ -193,12 +604,9 @@ function applyScreenTexture(root) {
 }
 
 async function buildWorld() {
-  buildBenchRoom(scene);
-  const { deskGroup, deskMat } = buildLuxuryDesk(stage, renderer);
-  world.desk = deskGroup;
-  world.deskMat = deskMat;
-
-  world.mouse = buildEngineeringMouse(stage);
+  makeBenchRoom();
+  buildLuxuryDesk();
+  buildEngineeringMouse();
   makeScreenTexture();
   setLoading(12, 'LOADING WORKSTATION');
 
@@ -304,17 +712,21 @@ function enterLab() {
 
 window.enterLab = enterLab;
 
-function focusLaptop() {
+let pendingAppToOpen = null;
+
+function focusLaptop(targetApp = null) {
   if (!world.laptop) return;
   state.busy = true;
   state.focused = true;
   state.inspecting = null;
+  if (targetApp) pendingAppToOpen = targetApp;
   worldInstruction.classList.add('is-hidden');
   hideInspectorOverlay();
   controls.enabled = false;
 
   sound.click(450, 0.04);
 
+  // Laptop lid hinges upright while camera approaches
   motion.to(world.laptop.rotation, {
     x: 0.34,
     duration: 0.85,
@@ -325,8 +737,8 @@ function focusLaptop() {
   const approachPos = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.38, 0.95);
   const deepFillPos = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.38, 0.36);
 
-  easeCamera(camera, controls, approachPos, screenTarget, 0.75, () => {
-    easeCamera(camera, controls, deepFillPos, screenTarget, 0.65, () => {
+  easeCamera(approachPos, screenTarget, 0.75, () => {
+    easeCamera(deepFillPos, screenTarget, 0.65, () => {
       state.busy = false;
       if (state.screenState === 'sleep') {
         bootSystem();
@@ -358,6 +770,16 @@ function openScreen() {
       if (screenUi.classList.contains('is-open')) {
         state.is3DOffloaded = true;
       }
+      if (pendingAppToOpen) {
+        if (world.desktopManager) {
+          if (pendingAppToOpen.startsWith('res_') || pendingAppToOpen === 'about') {
+            world.desktopManager.openDocument(pendingAppToOpen);
+          } else {
+            world.desktopManager.openApp(pendingAppToOpen);
+          }
+        }
+        pendingAppToOpen = null;
+      }
     }, 400);
   }
 }
@@ -378,7 +800,7 @@ function exitLaptop() {
   });
 
   sound.click(320, 0.03);
-  easeCamera(camera, controls, world.overview.position, world.overview.target, 0.95, () => {
+  easeCamera(world.overview.position, world.overview.target, 0.95, () => {
     state.busy = false;
   });
 }
@@ -409,18 +831,51 @@ function inspectHardware(key) {
 
   const camPos = center.clone().add(new THREE.Vector3(span * 1.3, span * 0.9, span * 1.5));
   sound.sonarPing(880);
-  easeCamera(camera, controls, camPos, center, 0.95, () => {
+  easeCamera(camPos, center, 0.95, () => {
     state.busy = false;
   });
 
   showInspectorOverlay(def);
 }
 
+// High-Precision Tactical HUD Cursor Elements
+const hudCursor = $('#hudCursor');
+const cursorDot = $('#cursorDot');
+const cursorRing = $('#cursorRing');
+const cursorTag = $('#cursorTag');
+const cursorMode = $('#cursorMode');
+const cursorLabel = $('#cursorLabel');
+
+let mouseX = -100, mouseY = -100;
+let ringX = -100, ringY = -100;
+let isMouseDown = false;
+
 function showInspectorOverlay(def) {
   $('#inspectEyebrow').textContent = def.eyebrow;
   $('#inspectTitle').textContent = def.title;
   $('#inspectCopy').textContent = def.summary;
   $('#inspectData').innerHTML = def.specs.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+
+  const openProjBtn = $('#inspectOpenProject');
+  if (openProjBtn) {
+    if (def.projectId) {
+      openProjBtn.style.display = 'block';
+      openProjBtn.textContent = `EXPLORE ${def.projectId.toUpperCase()} CASE FILE ↗`;
+      openProjBtn.onclick = () => {
+        focusLaptop(def.projectId);
+      };
+    } else if (def.id === 'camera') {
+      openProjBtn.style.display = 'block';
+      openProjBtn.textContent = 'EXPLORE RESEARCH CASE FILE: COLOR SPLITTER ↗';
+      openProjBtn.onclick = () => {
+        focusLaptop('res_color');
+      };
+    } else {
+      openProjBtn.style.display = 'none';
+      openProjBtn.onclick = null;
+    }
+  }
+
   inspect.classList.add('is-open');
 }
 
@@ -456,18 +911,6 @@ function pick3DObject(e) {
     focusLaptop();
   }
 }
-
-// High-Precision Tactical HUD Cursor Elements
-const hudCursor = $('#hudCursor');
-const cursorDot = $('#cursorDot');
-const cursorRing = $('#cursorRing');
-const cursorTag = $('#cursorTag');
-const cursorMode = $('#cursorMode');
-const cursorLabel = $('#cursorLabel');
-
-let mouseX = -100, mouseY = -100;
-let ringX = -100, ringY = -100;
-let isMouseDown = false;
 
 function updateCursor(e) {
   mouseX = e.clientX;
@@ -557,17 +1000,15 @@ function updateIdleAnimations(time) {
   // Idle breathing on Crispy Cat
   const cat = modelManager.benchMeshes.get('cat');
   if (cat && cat.userData.baseY) {
-    cat.position.y = cat.userData.baseY + Math.sin(time * 1.9 + 0.8) * 0.0018;
+    cat.position.y = cat.userData.baseY + Math.sin(time * 2.0 + 0.8) * 0.0015;
   }
 
   // Blinking hardware status LEDs
   if (world.leds.piGreen) {
-    const pulse = Math.sin(time * 8.5) > 0.15;
-    world.leds.piGreen.visible = pulse;
+    world.leds.piGreen.visible = Math.sin(time * 8.0) > -0.2;
   }
   if (world.leds.espBlue) {
-    const pulse = Math.sin(time * 11.2 + 2.0) > 0.05;
-    world.leds.espBlue.visible = pulse;
+    world.leds.espBlue.visible = Math.sin(time * 5.5 + 2.0) > 0.0;
   }
 }
 
