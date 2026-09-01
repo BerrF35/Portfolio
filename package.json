@@ -1,0 +1,21 @@
+{
+  "name": "jaijitesh-os",
+  "version": "2.6.0",
+  "description": "Jaijitesh Suryaprakash - Personal Operating Environment disguised as a minimalist engineering portfolio.",
+  "type": "module",
+  "scripts": {
+    "dev": "python -m http.server 4173",
+    "preview": "python -m http.server 4173"
+  },
+  "keywords": [
+    "portfolio",
+    "threejs",
+    "webgl",
+    "operating-system",
+    "robotics",
+    "simulation",
+    "cad"
+  ],
+  "author": "Jaijitesh Suryaprakash <jaijitesh.2025@vitstudent.ac.in>",
+  "license": "AGPL-3.0"
+}
