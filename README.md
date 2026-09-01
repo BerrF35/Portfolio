@@ -25,12 +25,12 @@ JAIJITESH.OS/
 │   │
 │   ├── hardware/               # 3D Hardware CAD & Telemetry
 │   │   ├── cadLoader.js        # GLTF loader, PBR materials, centering wrappers, and positioning
-│   │   └── definitions.js      # Technical telemetry definitions (Robot, Pi, ESP32, Camera, Telescope, Pets)
+│   │   └── definitions.js      # Technical telemetry definitions (Robot, Pi, ESP32, Camera, Telescope)
 │   │
 │   ├── os/                     # JAIJITESH.OS Operating Environment
 │   │   ├── desktop.js          # Window manager, dock, taskbar, theme system, application routing
 │   │   ├── terminal.js         # Interactive UNIX CLI shell with real facts & commands
-│   │   └── pixelGame.js        # High-DPI retro pixel memory timeline world & animated companions
+│   │   └── pixelGame.js        # High-DPI retro pixel memory timeline world
 │   │
 │   ├── apps/                   # Interactive Simulation & Engineering Apps
 │   │   ├── simRobot.js         # BerryBot autonomous robotics telemetry & S-curve kinematics sandbox
@@ -48,8 +48,8 @@ JAIJITESH.OS/
 │   ├── esp32.glb               # ESP32-WROOM microcontroller
 │   ├── hp_omen_laptop.glb      # Engineering Workstation 16
 │   ├── ice_claw_mouse.glb      # Precision CAD mouse
-│   ├── full_body_shepherd_dog_meshy.glb # Berry (12yo Belgian Malinois)
-│   ├── 3d_modelling_my_cat_fripouille.glb # Crispy (10yo Companion Cat)
+│   ├── full_body_shepherd_dog_meshy.glb # Berry the Dog
+│   ├── 3d_modelling_my_cat_fripouille.glb # Crispy the Cat
 │   ├── canon_at-1_retro_camera.glb # Canon AT-1 retro optics
 │   ├── telescope.glb           # Refractor telescope
 │   └── cad/                    # Technical engineering STEP CAD archives
@@ -67,7 +67,7 @@ JAIJITESH.OS/
 1. **3D Engineering Lab Bench (Three.js & WebGL)**:
    - Photorealistic illumination with dark architectural slat acoustic walls.
    - High-resolution Black & White Topographic Contour Line desk mat.
-   - Real 3D CAD models: **BerryBot Tracked Chassis**, **Raspberry Pi 4**, **ESP32-WROOM**, **Canon AT-1 Camera**, **Refractor Telescope**, **Berry the Belgian Malinois**, and **Crispy the Cat**.
+   - Real 3D CAD models: **BerryBot Tracked Chassis**, **Raspberry Pi 4**, **ESP32-WROOM**, **Canon AT-1 Camera**, and **Refractor Telescope**.
    - Camera orbit constraints preventing out-of-bounds viewing.
 
 2. **Workstation Zoom & GPU Offloading**:
@@ -84,8 +84,8 @@ JAIJITESH.OS/
    - **WindSim CFD Lab**: Real-time Lattice Boltzmann Method aerodynamic simulation.
    - **BerryBot Telemetry Sandbox**: ESP32 differential track kinematics, optical encoder counting, S-curve profiling, and Return-to-Home (RTH).
    - **Berry AI Visualizer**: Architecture graph for the local-first desktop agent (`BerrF35/Berry`).
-   - **Interactive CLI Terminal**: Full UNIX shell (`neofetch`, `projects`, `skills`, `research`, `cat`, `inspect`).
-   - **Memory World**: Playable high-DPI 2D pixel timeline world with animated companions.
+   - **Interactive CLI Terminal**: Full Windows CMD shell (`neofetch`, `dir`, `systeminfo`, `type`, `help`).
+   - **Projects Directory**: Detailed technical specifications, solvers breakdown, and direct repository links.
 
 ---
 
