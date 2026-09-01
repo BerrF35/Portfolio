@@ -548,9 +548,9 @@ export const HARDWARE_DEFINITIONS = {
       ['NAME', 'Crispy'],
       ['STATUS', 'Workbench Supervisor & Nap Specialist']
     ],
-    scale: 0.26,
+    scale: 0.42,
     isGroundedOnFloor: false,
-    benchPosition: { x: 0.92, y: 0.80, z: 0.12 },
+    benchPosition: { x: 0.95, y: 0.80, z: 0.12 },
     benchRotation: { x: 0, y: -0.65, z: 0 }
   }
 };

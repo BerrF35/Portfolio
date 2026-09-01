@@ -337,18 +337,111 @@ function createLuxuryDesk() {
 
   // Studio Curved Backdrop Wall
   const wallMat = new THREE.MeshStandardMaterial({
-    color: '#090c10',
+    color: '#06080a',
     roughness: 0.95,
     metalness: 0.05
   });
-  const wallGeo = new THREE.PlaneGeometry(24, 12);
+  const wallGeo = new THREE.PlaneGeometry(28, 14);
   const wall = new THREE.Mesh(wallGeo, wallMat);
-  wall.position.set(0, 6, -3.2);
+  wall.position.set(0, 6, -3.3);
   wall.receiveShadow = true;
   deskGroup.add(wall);
 
   stage.add(deskGroup);
   world.desk = deskGroup;
+}
+
+const BACKWALL_IMAGES = [
+  'assets/images/profile/portrait_full_body.jpg',
+  'assets/images/projects/windsim/Screenshot 2026-09-01 204058.png',
+  'assets/images/projects/windsim/Screenshot 2026-09-01 204116.png',
+  'assets/images/projects/windsim/Screenshot 2026-09-01 204130.png',
+  'assets/images/projects/windsim/Screenshot 2026-09-01 204359.png',
+  'assets/images/projects/windsim/Screenshot 2026-09-01 204434.png',
+  'assets/images/hardware/berrybot/robot_photo_01.jpg',
+  'assets/images/hardware/berrybot/robot_photo_02.jpg',
+  'assets/images/hardware/berrybot/robot_photo_03.jpg',
+  'assets/images/projects/berry_ai/hero.png',
+  'assets/images/projects/berry_ai/Screenshot 2026-09-01 205412.png',
+  'assets/images/research/colorsplitter/ui.png',
+  'assets/images/research/colorsplitter/Screenshot 2026-09-01 210312.png',
+  'assets/images/hackathons/impactx/team.jpg',
+  'assets/images/hackathons/yantra/team.jpg',
+  'assets/images/projects/windsim/streamlines.png',
+  'assets/images/projects/windsim/airfoil_slice.png',
+  'assets/images/projects/windsim/pressure_field.png'
+];
+
+const mediaWallRows = [];
+
+function createPanoramicMediaWall() {
+  if (!stage) return;
+  const wallGroup = new THREE.Group();
+  wallGroup.position.set(0, 0, -3.15);
+
+  const texLoader = new THREE.TextureLoader();
+  const textures = BACKWALL_IMAGES.map((url) => {
+    const tex = texLoader.load(url);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    tex.generateMipmaps = true;
+    tex.minFilter = THREE.LinearMipmapLinearFilter;
+    return tex;
+  });
+
+  const rowConfigs = [
+    { y: 2.75, speed: 0.22, dir: -1 },
+    { y: 1.65, speed: 0.16, dir: 1 },
+    { y: 0.55, speed: 0.19, dir: -1 }
+  ];
+
+  const panelW = 1.6;
+  const panelH = 0.95;
+  const gap = 0.25;
+  const countPerRow = 14;
+  const totalSpan = countPerRow * (panelW + gap);
+
+  const panelGeo = new THREE.PlaneGeometry(panelW, panelH);
+  const borderGeo = new THREE.EdgesGeometry(panelGeo);
+  const borderMat = new THREE.LineBasicMaterial({ color: '#253346', transparent: true, opacity: 0.7 });
+
+  rowConfigs.forEach((cfg, rIdx) => {
+    const rowGroup = new THREE.Group();
+    rowGroup.position.y = cfg.y;
+
+    const panels = [];
+    for (let i = 0; i < countPerRow; i++) {
+      const tex = textures[(rIdx * 5 + i * 3) % textures.length];
+      const mat = new THREE.MeshBasicMaterial({
+        map: tex,
+        transparent: true,
+        opacity: 0.58,
+        toneMapped: false
+      });
+
+      const mesh = new THREE.Mesh(panelGeo, mat);
+      const startX = (i - countPerRow / 2) * (panelW + gap);
+      mesh.position.set(startX, 0, 0);
+
+      const border = new THREE.LineSegments(borderGeo, borderMat);
+      mesh.add(border);
+
+      rowGroup.add(mesh);
+      panels.push(mesh);
+    }
+
+    wallGroup.add(rowGroup);
+    mediaWallRows.push({
+      group: rowGroup,
+      panels,
+      speed: cfg.speed * cfg.dir,
+      totalSpan,
+      minX: -totalSpan / 2,
+      maxX: totalSpan / 2
+    });
+  });
+
+  stage.add(wallGroup);
+  world.mediaWall = wallGroup;
 }
 
 async function createMouse() {
@@ -377,13 +470,14 @@ async function createMouse() {
     const targetScale = 0.12 / maxDim;
 
     mouseRoot.scale.set(targetScale, targetScale, targetScale);
-    mouseRoot.rotation.y = -0.12;
+    // Point toward the back wall behind the laptop
+    mouseRoot.rotation.y = Math.PI - 0.08;
     mouseRoot.updateMatrixWorld(true);
 
     const boxScaled = new THREE.Box3().setFromObject(mouseRoot);
     const yOffset = -boxScaled.min.y;
 
-    mouseRoot.position.set(0.44, DESK_TOP_HEIGHT + yOffset + 0.003, 0.14);
+    mouseRoot.position.set(0.45, DESK_TOP_HEIGHT + yOffset + 0.003, 0.18);
 
     stage.add(mouseRoot);
     world.mouse = mouseRoot;
@@ -521,16 +615,19 @@ async function buildWorld() {
   setLoading(15, 'CREATING STUDIO LIGHTING & RIGGING');
   createStudioLighting();
 
-  setLoading(30, 'CONSTRUCTING LUXURY WORKBENCH');
+  setLoading(25, 'INITIALIZING PANORAMIC MEDIA MATRIX');
+  createPanoramicMediaWall();
+
+  setLoading(35, 'CONSTRUCTING LUXURY WORKBENCH');
   createLuxuryDesk();
   await createMouse();
 
-  setLoading(45, 'INITIALIZING OMEN WORKSTATION PORTAL');
+  setLoading(50, 'INITIALIZING OMEN WORKSTATION PORTAL');
   await loadLaptopModel();
 
-  setLoading(60, 'LOADING 3D HARDWARE TELEMETRY NODES');
+  setLoading(65, 'LOADING 3D HARDWARE TELEMETRY NODES');
   const clickables = await modelManager.loadAllHardware(stage, DESK_TOP_HEIGHT, (p, txt) => {
-    setLoading(60 + Math.round((p / 100) * 35), txt);
+    setLoading(65 + Math.round((p / 100) * 30), txt);
   });
   world.clickable.push(...clickables);
 
@@ -981,6 +1078,20 @@ function animate() {
 
   // Skip 3D frame rendering when OS is maximized full-screen to save GPU
   if (state.is3DOffloaded || !renderer || !scene || !camera) return;
+
+  // Animate horizontal sliding panoramic media wall
+  if (mediaWallRows.length > 0) {
+    mediaWallRows.forEach(row => {
+      row.panels.forEach(panel => {
+        panel.position.x += row.speed * 0.035;
+        if (row.speed > 0 && panel.position.x > row.maxX) {
+          panel.position.x -= row.totalSpan;
+        } else if (row.speed < 0 && panel.position.x < row.minX) {
+          panel.position.x += row.totalSpan;
+        }
+      });
+    });
+  }
 
   const time = clock.getElapsedTime();
   updateIdleAnimations(time);
