@@ -305,29 +305,28 @@ function enterLab() {
 window.enterLab = enterLab;
 
 function focusLaptop() {
-  if (!world.laptop || state.busy) return;
-  state.focused = true;
+  if (!world.laptop) return;
   state.busy = true;
+  state.focused = true;
+  state.inspecting = null;
   worldInstruction.classList.add('is-hidden');
-  inspect.classList.remove('is-open');
+  hideInspectorOverlay();
   controls.enabled = false;
 
   sound.click(450, 0.04);
 
-  // Stage 1: Laptop lid hinges upright while camera approaches
   motion.to(world.laptop.rotation, {
-    x: 0.34, // Sits upright perpendicular to ground
-    duration: 1.0,
+    x: 0.34,
+    duration: 0.85,
     ease: 'power2.inOut'
   });
 
   const screenTarget = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.38, 0.05);
   const approachPos = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.38, 0.95);
-  const deepFillPos = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.38, 0.36); // Deep zoom where screen fills viewport
+  const deepFillPos = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.38, 0.36);
 
-  easeCamera(camera, controls, approachPos, screenTarget, 0.95, () => {
-    // Stage 2: After upright, zoom in deep until the screen fills the user's screen
-    easeCamera(camera, controls, deepFillPos, screenTarget, 0.85, () => {
+  easeCamera(camera, controls, approachPos, screenTarget, 0.75, () => {
+    easeCamera(camera, controls, deepFillPos, screenTarget, 0.65, () => {
       state.busy = false;
       if (state.screenState === 'sleep') {
         bootSystem();
@@ -349,47 +348,44 @@ function bootSystem() {
     drawLaptopScreen();
     openScreen();
     sound.click(850, 0.03);
-  }, 1100);
+  }, 900);
 }
 
 function openScreen() {
   if (state.screenState !== 'sleep') {
     screenUi.classList.add('is-open');
-    // GPU Offloading: Pause heavy 3D rendering loop once full-screen OS is active
     setTimeout(() => {
       if (screenUi.classList.contains('is-open')) {
         state.is3DOffloaded = true;
       }
-    }, 500);
+    }, 400);
   }
 }
 
 function exitLaptop() {
-  if (state.busy) return;
   state.busy = true;
-  state.is3DOffloaded = false; // Re-enable 3D rendering loop
+  state.is3DOffloaded = false;
   screenUi.classList.remove('is-open');
-  inspect.classList.remove('is-open');
+  hideInspectorOverlay();
   state.focused = false;
   state.inspecting = null;
   controls.enabled = true;
 
-  // Restore laptop tilt to resting angle
   motion.to(world.laptop.rotation, {
     x: 0,
-    duration: 1.2,
+    duration: 0.9,
     ease: 'power3.inOut'
   });
 
   sound.click(320, 0.03);
-  easeCamera(camera, controls, world.overview.position, world.overview.target, 1.2, () => {
+  easeCamera(camera, controls, world.overview.position, world.overview.target, 0.95, () => {
     state.busy = false;
   });
 }
 
 function inspectHardware(key) {
   const def = HARDWARE_DEFINITIONS[key];
-  if (!def || state.busy) return;
+  if (!def) return;
 
   state.busy = true;
   state.inspecting = key;
@@ -413,7 +409,7 @@ function inspectHardware(key) {
 
   const camPos = center.clone().add(new THREE.Vector3(span * 1.3, span * 0.9, span * 1.5));
   sound.sonarPing(880);
-  easeCamera(camera, controls, camPos, center, 1.15, () => {
+  easeCamera(camera, controls, camPos, center, 0.95, () => {
     state.busy = false;
   });
 
@@ -434,14 +430,19 @@ function hideInspectorOverlay() {
 }
 
 function pick3DObject(e) {
-  if (!state.ready || state.busy || screenUi.classList.contains('is-open')) return;
+  if (!state.ready || screenUi.classList.contains('is-open')) return;
 
   pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
   pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
   raycaster.setFromCamera(pointer, camera);
 
   const hits = raycaster.intersectObjects(world.clickable, true);
-  if (!hits.length) return;
+  if (!hits.length) {
+    if (state.inspecting) {
+      hideInspectorOverlay();
+    }
+    return;
+  }
 
   let obj = hits[0].object;
   while (obj && !obj.userData.hardwareKey && obj !== world.laptop) {
@@ -451,6 +452,7 @@ function pick3DObject(e) {
   if (obj?.userData?.hardwareKey) {
     inspectHardware(obj.userData.hardwareKey);
   } else {
+    hideInspectorOverlay();
     focusLaptop();
   }
 }
