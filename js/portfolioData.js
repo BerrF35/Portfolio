@@ -433,10 +433,10 @@ export const HARDWARE_DEFINITIONS = {
       ['EDGE COMPUTE', 'Raspberry Pi 4 Model B (Vision Coordinator)'],
       ['SOURCE', 'SolidWorks CAD Assembly (TV_ensemble / M4)']
     ],
-    scale: 0.44,
+    scale: 0.30,
     isGroundedOnFloor: false,
-    benchPosition: { x: -0.82, y: 0.80, z: 0.05 },
-    benchRotation: { x: 0, y: 0.35, z: 0 },
+    benchPosition: { x: -3.40, y: 0.380, z: 0.25 },
+    benchRotation: { x: 0, y: 1.57, z: 0 },
     projectId: 'berrybot'
   },
 
@@ -454,10 +454,10 @@ export const HARDWARE_DEFINITIONS = {
       ['GPIO', 'Standard 40-Pin Header (I2C, SPI, UART, PWM)'],
       ['ROLE', 'Edge Vision & High-Level Autonomy Coordinator']
     ],
-    scale: 0.14,
+    scale: 0.12,
     isGroundedOnFloor: false,
-    benchPosition: { x: 0.44, y: 0.80, z: -0.18 },
-    benchRotation: { x: 0, y: -0.25, z: 0 }
+    benchPosition: { x: -3.30, y: 0.380, z: -0.10 },
+    benchRotation: { x: 0, y: -0.35, z: 0 }
   },
 
   esp32: {
@@ -474,10 +474,10 @@ export const HARDWARE_DEFINITIONS = {
       ['CONNECTIVITY', '2.4 GHz Wi-Fi & Bluetooth v4.2 BR/EDR/BLE'],
       ['ROLE', 'Low-Level Real-Time Motor & Sensor Controller']
     ],
-    scale: 0.12,
+    scale: 0.10,
     isGroundedOnFloor: false,
-    benchPosition: { x: 0.76, y: 0.80, z: -0.15 },
-    benchRotation: { x: 0, y: 0.15, z: 0 }
+    benchPosition: { x: -3.50, y: 0.380, z: -0.25 },
+    benchRotation: { x: 0, y: 0.45, z: 0 }
   },
 
   camera: {
@@ -493,29 +493,10 @@ export const HARDWARE_DEFINITIONS = {
       ['SHUTTER', 'Focal-Plane Electronic Shutter'],
       ['RESEARCH LINK', 'Spectral Color-Space & Data Generation']
     ],
-    scale: 0.16,
+    scale: 0.14,
     isGroundedOnFloor: false,
-    benchPosition: { x: -0.46, y: 0.80, z: 0.28 },
-    benchRotation: { x: 0, y: 0.45, z: 0 }
-  },
-
-  telescope: {
-    id: 'telescope',
-    file: 'assets/telescope.glb',
-    title: 'REFRACTOR TELESCOPE // ASTRONOMICAL OPTICS',
-    eyebrow: 'PERSONALITY PROP // SCIENTIFIC CURIOSITY',
-    category: 'SPACE & ASTRONOMICAL INTERESTS',
-    summary: 'Precision equatorial refractor telescope standing right beside the workbench, symbolizing celestial observation, rockets, mathematical systems, and scientific curiosity.',
-    specs: [
-      ['OPTICS', 'Achromatic Refractor Objective Lens'],
-      ['MOUNT', 'Heavy-Duty Equatorial Tripod with Setting Circles'],
-      ['SIGNIFICANCE', 'Personal curiosity in space, astrophysics & rocket systems'],
-      ['TYPE', 'Personality Prop (Not a formal portfolio project)']
-    ],
-    scale: 1.55,
-    isGroundedOnFloor: true,
-    benchPosition: { x: 1.48, y: 0, z: 0.55 },
-    benchRotation: { x: 0, y: -0.55, z: 0 }
+    benchPosition: { x: 0.42, y: 0.850, z: -0.22 },
+    benchRotation: { x: 0, y: 0.35, z: 0 }
   },
 
   dog: {
@@ -524,16 +505,16 @@ export const HARDWARE_DEFINITIONS = {
     title: 'BERRY // PET DOG',
     eyebrow: 'EASTER EGG // BERRY',
     category: 'COMPANION',
-    summary: 'Berry the loyal Belgian Malinois resting beside the engineering lab bench.',
+    summary: 'Berry the loyal Belgian Malinois resting beside the sofa table.',
     specs: [
       ['BREED', 'Belgian Malinois'],
       ['NAME', 'Berry'],
       ['STATUS', 'Chief Morale Officer & Lab Companion']
     ],
-    scale: 0.85,
+    scale: 0.75,
     isGroundedOnFloor: true,
-    benchPosition: { x: -1.48, y: 0, z: 0.70 },
-    benchRotation: { x: 0, y: 0.55, z: 0 }
+    benchPosition: { x: -2.60, y: 0.05, z: 0.20 },
+    benchRotation: { x: 0, y: -0.75, z: 0 }
   },
 
   cat: {
@@ -542,16 +523,16 @@ export const HARDWARE_DEFINITIONS = {
     title: 'CRISPY // PET CAT',
     eyebrow: 'EASTER EGG // CRISPY',
     category: 'COMPANION',
-    summary: 'Crispy the pet cat peacefully resting on the edge of the workbench.',
+    summary: 'Crispy the pet cat peacefully resting on top of the bed.',
     specs: [
       ['SPECIES', 'Domestic Cat'],
       ['NAME', 'Crispy'],
       ['STATUS', 'Workbench Supervisor & Nap Specialist']
     ],
-    scale: 0.42,
+    scale: 0.40,
     isGroundedOnFloor: false,
-    benchPosition: { x: 0.95, y: 0.80, z: 0.12 },
-    benchRotation: { x: 0, y: -0.65, z: 0 }
+    benchPosition: { x: -0.65, y: 0.44, z: -1.85 },
+    benchRotation: { x: 0, y: 0.65, z: 0 }
   }
 };
 

@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { sound } from './js/audio.js';
-import { modelManager, HARDWARE_DEFINITIONS } from './js/cadLoader.js';
+import { modelManager, HARDWARE_DEFINITIONS } from './js/cadLoader.js?v=3';
 import { DesktopManager } from './js/desktop.js';
 import { HomeTubesCursor } from './js/tubesCursor.js';
 
@@ -83,7 +83,6 @@ try {
 
   scene = new THREE.Scene();
   scene.background = new THREE.Color('#07090b');
-  scene.fog = new THREE.Fog('#07090b', 8, 22);
 
   camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.01, 100);
 
@@ -93,13 +92,13 @@ try {
   controls.enablePan = false;
   controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
 
-  // Strict Orbit Constraints
-  controls.minAzimuthAngle = -Math.PI * 0.36; // -65 degrees
-  controls.maxAzimuthAngle = Math.PI * 0.36;  // +65 degrees
-  controls.minPolarAngle = Math.PI * 0.22;    // Prevents looking straight from above
-  controls.maxPolarAngle = Math.PI * 0.46;    // Prevents going below desk level
-  controls.minDistance = 1.15;
-  controls.maxDistance = 4.2;
+  // Orbit Constraints allowing rich exploration of the room
+  controls.minAzimuthAngle = -Math.PI * 0.45;
+  controls.maxAzimuthAngle = Math.PI * 0.45;
+  controls.minPolarAngle = Math.PI * 0.15;
+  controls.maxPolarAngle = Math.PI * 0.49;
+  controls.minDistance = 0.6;
+  controls.maxDistance = 7.5;
 } catch (e) {
   console.warn('WebGL Initialization failed. Activating graceful 2D fallback.', e);
   isWebGLAvailable = false;
@@ -112,11 +111,12 @@ const pointer = new THREE.Vector2();
 const stage = new THREE.Group();
 if (scene) scene.add(stage);
 
-const DESK_TOP_HEIGHT = 0.80; // Ergonomic tabletop height in world units
+const DESK_TOP_HEIGHT = 0.850; // Tabletop height in world units
 
 const world = {
+  room: null,
+  roomMixer: null,
   desk: null,
-  deskMat: null,
   mouse: null,
   laptop: null,
   screenMesh: null,
@@ -127,8 +127,8 @@ const world = {
   clickable: [],
   leds: {},
   overview: {
-    position: new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.65, 2.35),
-    target: new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.18, 0.05)
+    position: new THREE.Vector3(-1.85, 1.85, 3.2),
+    target: new THREE.Vector3(-1.60, 0.95, -0.6)
   }
 };
 
@@ -138,15 +138,12 @@ export function set3DTheme(themeName) {
 
   if (themeName === 'light') {
     scene.background.set('#d8e1e8');
-    scene.fog.color.set('#d8e1e8');
     if (renderer) renderer.toneMappingExposure = 1.05;
   } else if (themeName === 'matrix') {
     scene.background.set('#030706');
-    scene.fog.color.set('#030706');
     if (renderer) renderer.toneMappingExposure = 1.25;
   } else {
     scene.background.set('#07090b');
-    scene.fog.color.set('#07090b');
     if (renderer) renderer.toneMappingExposure = 1.18;
   }
 }
@@ -195,295 +192,94 @@ function easeCamera(toPos, toTarget, duration = 0.95, onComplete) {
 
 function createStudioLighting() {
   if (!scene) return;
-  const ambient = new THREE.AmbientLight('#c8d3df', 0.85);
+  const ambient = new THREE.AmbientLight('#ffffff', 1.8);
   scene.add(ambient);
 
-  const overheadKey = new THREE.DirectionalLight('#ffffff', 2.8);
-  overheadKey.position.set(2.5, 5.5, 3.2);
-  overheadKey.castShadow = true;
-  overheadKey.shadow.mapSize.width = 2048;
-  overheadKey.shadow.mapSize.height = 2048;
-  overheadKey.shadow.bias = -0.00008;
-  overheadKey.shadow.camera.near = 0.5;
-  overheadKey.shadow.camera.far = 12;
-  overheadKey.shadow.camera.left = -2.8;
-  overheadKey.shadow.camera.right = 2.8;
-  overheadKey.shadow.camera.top = 2.8;
-  overheadKey.shadow.camera.bottom = -2.8;
-  overheadKey.shadow.radius = 1.8;
-  scene.add(overheadKey);
+  // Key directional light illuminating the room
+  const keyLight = new THREE.DirectionalLight('#ffffff', 2.0);
+  keyLight.position.set(-1.5, 4.5, 2.5);
+  keyLight.castShadow = true;
+  keyLight.shadow.mapSize.width = 2048;
+  keyLight.shadow.mapSize.height = 2048;
+  keyLight.shadow.bias = -0.0001;
+  scene.add(keyLight);
 
-  const rimLight = new THREE.DirectionalLight('#38bdf8', 1.6);
-  rimLight.position.set(-3.5, 2.5, -2.5);
-  scene.add(rimLight);
+  // Fill directional light from side
+  const fillLight = new THREE.DirectionalLight('#93c5fd', 1.2);
+  fillLight.position.set(3.0, 3.0, -1.0);
+  scene.add(fillLight);
 
-  const fillWarm = new THREE.DirectionalLight('#ffd8a8', 0.9);
-  fillWarm.position.set(0, 1.8, 4.0);
-  scene.add(fillWarm);
+  // Main overhead ceiling lamp point light
+  const lampLight = new THREE.PointLight('#ffeedb', 3.5, 9.0, 1.1);
+  lampLight.position.set(-3.27, 2.70, -2.15);
+  lampLight.castShadow = true;
+  lampLight.shadow.bias = -0.0001;
+  lampLight.shadow.mapSize.width = 1024;
+  lampLight.shadow.mapSize.height = 1024;
+  scene.add(lampLight);
 
-  const screenBounce = new THREE.PointLight('#38bdf8', 0.65, 2.2);
-  screenBounce.position.set(0, DESK_TOP_HEIGHT + 0.45, 0.4);
-  scene.add(screenBounce);
+  // Monitor array cyan glow point light on the computer desk
+  const monitorGlow = new THREE.PointLight('#00f0ff', 3.0, 5.0, 1.2);
+  monitorGlow.position.set(0.095, 1.15, -0.45);
+  scene.add(monitorGlow);
+
+  // Bed area soft blue ambient light
+  const bedLight = new THREE.PointLight('#7dd3fc', 2.0, 5.0, 1.4);
+  bedLight.position.set(-0.65, 1.25, -1.85);
+  scene.add(bedLight);
+
+  // Airlock / entrance warm accent light
+  const airlockLight = new THREE.PointLight('#ffaa22', 2.2, 7.0, 1.2);
+  airlockLight.position.set(3.5, 1.6, 1.5);
+  scene.add(airlockLight);
 }
 
-function createLuxuryDesk() {
-  if (!stage) return;
-  const deskGroup = new THREE.Group();
-
-  // 1. Solid Matte Graphite Tabletop (2.8m x 1.3m x 0.04m)
-  const topMat = new THREE.MeshStandardMaterial({
-    color: '#0e1115',
-    roughness: 0.65,
-    metalness: 0.22,
-    name: 'desk_matte_linoleum'
-  });
-  world.deskMat = topMat;
-
-  const topGeo = new THREE.BoxGeometry(2.8, 0.04, 1.3);
-  const topMesh = new THREE.Mesh(topGeo, topMat);
-  topMesh.position.y = DESK_TOP_HEIGHT - 0.02; // surface is at y = 0.80
-  topMesh.receiveShadow = true;
-  topMesh.castShadow = true;
-  deskGroup.add(topMesh);
-
-  // Beveled Steel Edge Trim around table perimeter
-  const edgeMat = new THREE.MeshStandardMaterial({
-    color: '#2a3340',
-    roughness: 0.32,
-    metalness: 0.88,
-    name: 'desk_steel_trim'
-  });
-  const edgeGeo = new THREE.BoxGeometry(2.82, 0.015, 1.32);
-  const edgeMesh = new THREE.Mesh(edgeGeo, edgeMat);
-  edgeMesh.position.y = DESK_TOP_HEIGHT - 0.02;
-  deskGroup.add(edgeMesh);
-
-  // 2. Center Felt Desk Mat (1.5m x 0.75m x 0.005m)
-  const padMat = new THREE.MeshStandardMaterial({
-    color: '#15191f',
-    roughness: 0.94,
-    metalness: 0.04,
-    name: 'felt_desk_pad'
-  });
-  const padGeo = new THREE.BoxGeometry(1.5, 0.006, 0.75);
-  const padMesh = new THREE.Mesh(padGeo, padMat);
-  padMesh.position.set(0, DESK_TOP_HEIGHT + 0.003, 0.05);
-  padMesh.receiveShadow = true;
-  deskGroup.add(padMesh);
-
-  // 3. Sturdy Grounded Steel Legs reaching y = 0
-  const legMat = new THREE.MeshStandardMaterial({
-    color: '#1c222a',
-    roughness: 0.35,
-    metalness: 0.85,
-    name: 'steel_legs'
-  });
-  const footMat = new THREE.MeshStandardMaterial({
-    color: '#080a0c',
-    roughness: 0.88,
-    metalness: 0.12,
-    name: 'rubber_feet'
-  });
-
-  const legHeight = DESK_TOP_HEIGHT - 0.04; // 0.76m
-  const legPositions = [
-    [-1.22, legHeight / 2, -0.52],
-    [1.22, legHeight / 2, -0.52],
-    [-1.22, legHeight / 2, 0.52],
-    [1.22, legHeight / 2, 0.52]
-  ];
-
-  legPositions.forEach(([x, y, z]) => {
-    // Steel Leg Post
-    const legGeo = new THREE.CylinderGeometry(0.032, 0.032, legHeight, 18);
-    const leg = new THREE.Mesh(legGeo, legMat);
-    leg.position.set(x, y, z);
-    leg.castShadow = true;
-    leg.receiveShadow = true;
-    deskGroup.add(leg);
-
-    // Rubber Foot Disc resting on floor
-    const footGeo = new THREE.CylinderGeometry(0.045, 0.048, 0.016, 18);
-    const foot = new THREE.Mesh(footGeo, footMat);
-    foot.position.set(x, 0.008, z);
-    foot.castShadow = true;
-    foot.receiveShadow = true;
-    deskGroup.add(foot);
-  });
-
-  // Cross Support Beam underneath tabletop
-  const beamMat = new THREE.MeshStandardMaterial({ color: '#161a20', roughness: 0.4, metalness: 0.8 });
-  const beamGeo = new THREE.BoxGeometry(2.44, 0.04, 0.04);
-  const beam = new THREE.Mesh(beamGeo, beamMat);
-  beam.position.set(0, DESK_TOP_HEIGHT - 0.06, 0);
-  deskGroup.add(beam);
-
-  // 4. Studio Floor (y = 0) with subtle engineering grid
-  const floorMat = new THREE.MeshStandardMaterial({
-    color: '#07090b',
-    roughness: 0.75,
-    metalness: 0.25
-  });
-  const floorGeo = new THREE.PlaneGeometry(24, 24);
-  const floor = new THREE.Mesh(floorGeo, floorMat);
-  floor.rotation.x = -Math.PI / 2;
-  floor.position.y = 0;
-  floor.receiveShadow = true;
-  deskGroup.add(floor);
-
-  // Floor Grid Overlay
-  const gridHelper = new THREE.GridHelper(16, 32, 0x1f2937, 0x111827);
-  gridHelper.position.y = 0.001;
-  deskGroup.add(gridHelper);
-
-  // Studio Curved Backdrop Wall
-  const wallMat = new THREE.MeshStandardMaterial({
-    color: '#06080a',
-    roughness: 0.95,
-    metalness: 0.05
-  });
-  const wallGeo = new THREE.PlaneGeometry(28, 14);
-  const wall = new THREE.Mesh(wallGeo, wallMat);
-  wall.position.set(0, 6, -3.3);
-  wall.receiveShadow = true;
-  deskGroup.add(wall);
-
-  stage.add(deskGroup);
-  world.desk = deskGroup;
-}
-
-const BACKWALL_IMAGES = [
-  'assets/images/profile/portrait_full_body.jpg',
-  'assets/images/projects/windsim/Screenshot 2026-09-01 204058.png',
-  'assets/images/projects/windsim/Screenshot 2026-09-01 204116.png',
-  'assets/images/projects/windsim/Screenshot 2026-09-01 204130.png',
-  'assets/images/projects/windsim/Screenshot 2026-09-01 204359.png',
-  'assets/images/projects/windsim/Screenshot 2026-09-01 204434.png',
-  'assets/images/hardware/berrybot/robot_photo_01.jpg',
-  'assets/images/hardware/berrybot/robot_photo_02.jpg',
-  'assets/images/hardware/berrybot/robot_photo_03.jpg',
-  'assets/images/projects/berry_ai/hero.png',
-  'assets/images/projects/berry_ai/Screenshot 2026-09-01 205412.png',
-  'assets/images/research/colorsplitter/ui.png',
-  'assets/images/research/colorsplitter/Screenshot 2026-09-01 210312.png',
-  'assets/images/hackathons/impactx/team.jpg',
-  'assets/images/hackathons/yantra/team.jpg',
-  'assets/images/projects/windsim/streamlines.png',
-  'assets/images/projects/windsim/airfoil_slice.png',
-  'assets/images/projects/windsim/pressure_field.png'
-];
-
-const mediaWallRows = [];
-
-function createPanoramicMediaWall() {
-  if (!stage) return;
-  const wallGroup = new THREE.Group();
-  wallGroup.position.set(0, 0, -3.15);
-
-  const texLoader = new THREE.TextureLoader();
-  const textures = BACKWALL_IMAGES.map((url) => {
-    const tex = texLoader.load(url);
-    tex.colorSpace = THREE.SRGBColorSpace;
-    tex.generateMipmaps = true;
-    tex.minFilter = THREE.LinearMipmapLinearFilter;
-    return tex;
-  });
-
-  const rowConfigs = [
-    { y: 2.75, speed: 0.22, dir: -1 },
-    { y: 1.65, speed: 0.16, dir: 1 },
-    { y: 0.55, speed: 0.19, dir: -1 }
-  ];
-
-  const panelW = 1.6;
-  const panelH = 0.95;
-  const gap = 0.25;
-  const countPerRow = 14;
-  const totalSpan = countPerRow * (panelW + gap);
-
-  const panelGeo = new THREE.PlaneGeometry(panelW, panelH);
-  const borderGeo = new THREE.EdgesGeometry(panelGeo);
-  const borderMat = new THREE.LineBasicMaterial({ color: '#253346', transparent: true, opacity: 0.7 });
-
-  rowConfigs.forEach((cfg, rIdx) => {
-    const rowGroup = new THREE.Group();
-    rowGroup.position.y = cfg.y;
-
-    const panels = [];
-    for (let i = 0; i < countPerRow; i++) {
-      const tex = textures[(rIdx * 5 + i * 3) % textures.length];
-      const mat = new THREE.MeshBasicMaterial({
-        map: tex,
-        transparent: true,
-        opacity: 0.58,
-        toneMapped: false
-      });
-
-      const mesh = new THREE.Mesh(panelGeo, mat);
-      const startX = (i - countPerRow / 2) * (panelW + gap);
-      mesh.position.set(startX, 0, 0);
-
-      const border = new THREE.LineSegments(borderGeo, borderMat);
-      mesh.add(border);
-
-      rowGroup.add(mesh);
-      panels.push(mesh);
-    }
-
-    wallGroup.add(rowGroup);
-    mediaWallRows.push({
-      group: rowGroup,
-      panels,
-      speed: cfg.speed * cfg.dir,
-      totalSpan,
-      minX: -totalSpan / 2,
-      maxX: totalSpan / 2
-    });
-  });
-
-  stage.add(wallGroup);
-  world.mediaWall = wallGroup;
-}
-
-async function createMouse() {
+async function loadFuturisticRoom() {
   if (!stage) return;
   try {
-    const gltf = await modelManager.loadGlb('assets/ice_claw_mouse.glb');
-    const mouseRoot = gltf.scene;
+    const gltf = await modelManager.loadGlb('assets/futuristic_room.glb');
+    const roomRoot = gltf.scene;
 
-    mouseRoot.traverse((child) => {
+    roomRoot.traverse((child) => {
       if (child.isMesh) {
         child.castShadow = true;
         child.receiveShadow = true;
-        if (child.material) {
-          child.material = child.material.clone();
-          child.material.roughness = 0.35;
-          child.material.metalness = 0.65;
-          if (child.material.map) child.material.map.colorSpace = THREE.SRGBColorSpace;
+
+        // Hide handcuffs and bottle from the sofa coffee table
+        if (/handcuff|bottle/i.test(child.name) || /handcuff|bottle/i.test(child.parent?.name)) {
+          child.visible = false;
+        }
+
+        // Hide middle monitor on desk (Monitor.001) so our HP OMEN laptop takes center stage
+        if (/Monitor\.001/i.test(child.name) || /Monitor\.001/i.test(child.parent?.name)) {
+          child.visible = false;
+        }
+
+        // Hide decorative slatted panels to provide wide unobstructed view of the room
+        if (/decorativepanel|slat/i.test(child.name) || /decorativepanel|slat/i.test(child.parent?.name)) {
+          child.visible = false;
         }
       }
     });
 
-    mouseRoot.updateMatrixWorld(true);
-    const box = new THREE.Box3().setFromObject(mouseRoot);
-    const size = box.getSize(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const targetScale = 0.12 / maxDim;
+    const handcuffsNode = roomRoot.getObjectByName('Handcuffs&Bottle');
+    if (handcuffsNode) handcuffsNode.visible = false;
+    const monitor1Node = roomRoot.getObjectByName('Monitor.001');
+    if (monitor1Node) monitor1Node.visible = false;
 
-    mouseRoot.scale.set(targetScale, targetScale, targetScale);
-    // Point toward the back wall behind the laptop
-    mouseRoot.rotation.y = Math.PI - 0.08;
-    mouseRoot.updateMatrixWorld(true);
+    // Initialize animation mixer for fan spinning animation
+    if (gltf.animations && gltf.animations.length > 0) {
+      world.roomMixer = new THREE.AnimationMixer(roomRoot);
+      gltf.animations.forEach((clip) => {
+        const action = world.roomMixer.clipAction(clip);
+        action.play();
+      });
+    }
 
-    const boxScaled = new THREE.Box3().setFromObject(mouseRoot);
-    const yOffset = -boxScaled.min.y;
-
-    mouseRoot.position.set(0.45, DESK_TOP_HEIGHT + yOffset + 0.003, 0.18);
-
-    stage.add(mouseRoot);
-    world.mouse = mouseRoot;
+    stage.add(roomRoot);
+    world.room = roomRoot;
   } catch (err) {
-    console.warn('Fallback procedural mouse:', err);
+    console.error('Failed to load futuristic room GLB:', err);
   }
 }
 
@@ -593,15 +389,17 @@ async function loadLaptopModel() {
     const box = new THREE.Box3().setFromObject(laptopRoot);
     const size = box.getSize(new THREE.Vector3());
     const maxDim = Math.max(size.x, size.y, size.z);
-    const targetScale = 0.52 / maxDim;
+    const targetScale = 0.48 / maxDim;
 
     laptopRoot.scale.set(targetScale, targetScale, targetScale);
+    laptopRoot.rotation.set(0, 0, 0);
     laptopRoot.updateMatrixWorld(true);
 
     const boxScaled = new THREE.Box3().setFromObject(laptopRoot);
     const yOffset = -boxScaled.min.y;
 
-    laptopRoot.position.set(0, DESK_TOP_HEIGHT + yOffset + 0.003, 0.05);
+    // Positioned directly at center desk monitor slot
+    laptopRoot.position.set(0.095, 0.850 + yOffset + 0.001, -0.28);
 
     stage.add(laptopRoot);
     world.laptop = laptopRoot;
@@ -613,22 +411,18 @@ async function loadLaptopModel() {
 
 async function buildWorld() {
   if (!isWebGLAvailable) return;
-  setLoading(15, 'CREATING STUDIO LIGHTING & RIGGING');
+  setLoading(15, 'CREATING CYBERPUNK STUDIO LIGHTING');
   createStudioLighting();
 
-  setLoading(25, 'INITIALIZING PANORAMIC MEDIA MATRIX');
-  createPanoramicMediaWall();
+  setLoading(30, 'LOADING FUTURISTIC ROOM ENVIRONMENT');
+  await loadFuturisticRoom();
 
-  setLoading(35, 'CONSTRUCTING LUXURY WORKBENCH');
-  createLuxuryDesk();
-  await createMouse();
-
-  setLoading(50, 'INITIALIZING OMEN WORKSTATION PORTAL');
+  setLoading(60, 'INITIALIZING OMEN WORKSTATION PORTAL');
   await loadLaptopModel();
 
-  setLoading(65, 'LOADING 3D HARDWARE TELEMETRY NODES');
-  const clickables = await modelManager.loadAllHardware(stage, DESK_TOP_HEIGHT, (p, txt) => {
-    setLoading(65 + Math.round((p / 100) * 30), txt);
+  setLoading(75, 'PLACING 3D HARDWARE TELEMETRY NODES');
+  const clickables = await modelManager.loadAllHardware(stage, 0.850, (p, txt) => {
+    setLoading(75 + Math.round((p / 100) * 20), txt);
   });
   world.clickable.push(...clickables);
 
@@ -636,7 +430,7 @@ async function buildWorld() {
   controls.target.copy(world.overview.target);
   controls.update();
 
-  setLoading(100, 'LAB BENCH CALIBRATED');
+  setLoading(100, 'ROOM CALIBRATED');
   setTimeout(() => {
     loading.classList.add('is-hidden');
     state.ready = true;
@@ -655,14 +449,10 @@ function enterLab() {
   }
 
   intro.classList.add('is-exiting');
-  intro.style.transform = 'translateY(-100%)';
-  intro.style.opacity = '0';
+  intro.style.display = 'none';
   intro.style.visibility = 'hidden';
+  intro.style.opacity = '0';
   intro.style.pointerEvents = 'none';
-
-  setTimeout(() => {
-    intro.style.display = 'none';
-  }, 900);
 
   worldUi.classList.add('is-visible');
 
@@ -696,17 +486,9 @@ function focusLaptop(targetApp = null) {
   hideInspectorOverlay();
   controls.enabled = false;
 
-  sound.click(450, 0.04);
-
-  motion.to(world.laptop.rotation, {
-    x: 0.34,
-    duration: 0.85,
-    ease: 'power2.inOut'
-  });
-
-  const screenTarget = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.32, 0.05);
-  const approachPos = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.32, 0.92);
-  const deepFillPos = new THREE.Vector3(0, DESK_TOP_HEIGHT + 0.32, 0.36);
+  const screenTarget = new THREE.Vector3(0.095, 1.05, -0.28);
+  const approachPos = new THREE.Vector3(0.095, 1.15, 0.55);
+  const deepFillPos = new THREE.Vector3(0.095, 1.05, 0.10);
 
   easeCamera(approachPos, screenTarget, 0.75, () => {
     easeCamera(deepFillPos, screenTarget, 0.65, () => {
@@ -1037,18 +819,9 @@ function animate() {
   // Skip 3D frame rendering when OS is maximized full-screen to save GPU
   if (state.is3DOffloaded || !renderer || !scene || !camera) return;
 
-  // Animate horizontal sliding panoramic media wall
-  if (mediaWallRows.length > 0) {
-    mediaWallRows.forEach(row => {
-      row.panels.forEach(panel => {
-        panel.position.x += row.speed * 0.035;
-        if (row.speed > 0 && panel.position.x > row.maxX) {
-          panel.position.x -= row.totalSpan;
-        } else if (row.speed < 0 && panel.position.x < row.minX) {
-          panel.position.x += row.totalSpan;
-        }
-      });
-    });
+  const delta = clock.getDelta();
+  if (world.roomMixer) {
+    world.roomMixer.update(delta);
   }
 
   const time = clock.getElapsedTime();

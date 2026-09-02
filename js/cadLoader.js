@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { HARDWARE_DEFINITIONS as RAW_DEFS } from './portfolioData.js';
+import { HARDWARE_DEFINITIONS as RAW_DEFS } from './portfolioData.js?v=3';
 
 export const HARDWARE_DEFINITIONS = Object.fromEntries(
   Object.entries(RAW_DEFS).map(([k, v]) => [
@@ -152,11 +152,13 @@ class ModelManager {
 
         const boxAfter = new THREE.Box3().setFromObject(wrapper);
         const yOffset = -boxAfter.min.y;
-        const groundLevel = def.isGroundedOnFloor ? 0 : deskTopHeight;
+        const baseSurfaceY = (typeof def.benchPosition.y === 'number') 
+          ? def.benchPosition.y 
+          : (def.isGroundedOnFloor ? 0 : deskTopHeight);
 
         wrapper.position.set(
           def.benchPosition.x,
-          groundLevel + yOffset + 0.001,
+          baseSurfaceY + yOffset + 0.001,
           def.benchPosition.z
         );
 

@@ -97,7 +97,6 @@ input, textarea, [contenteditable="true"] {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
 }
 
-/* Layer 1: Ultra-Minimalist Surface Entry with 3D Tubes Cursor */
 .intro {
   position: fixed;
   inset: 0;
@@ -114,6 +113,13 @@ input, textarea, [contenteditable="true"] {
   overflow: hidden;
   touch-action: none;
   transition: transform 0.85s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.6s ease, visibility 0.85s;
+}
+
+.intro.is-exiting {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .intro__tubes-canvas {
