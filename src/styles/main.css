@@ -104,8 +104,8 @@ input, textarea, [contenteditable="true"] {
   z-index: 80;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: clamp(24px, 4vw, 64px);
+  justify-content: flex-end;
+  padding: clamp(28px, 5vw, 72px);
   background: var(--bg);
   color: var(--text);
   transform: translateY(0);
@@ -126,23 +126,12 @@ input, textarea, [contenteditable="true"] {
   display: block;
 }
 
-.intro__top,
-.intro__bottom {
-  position: relative;
-  z-index: 5;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  color: var(--text-muted);
-  pointer-events: none;
-}
-
 .intro__centre {
-  position: relative;
+  position: absolute;
+  top: 50%;
+  left: clamp(28px, 5vw, 72px);
+  transform: translateY(-50%);
   z-index: 5;
-  margin: auto 0;
   pointer-events: none;
 }
 
@@ -171,13 +160,6 @@ input, textarea, [contenteditable="true"] {
   display: block;
 }
 
-.intro__eyebrow {
-  margin: 0 0 16px;
-  font-size: clamp(10px, 0.9vw, 13px);
-  letter-spacing: 0.18em;
-  color: var(--text-muted);
-}
-
 .intro.is-exiting {
   transform: translateY(-100%) !important;
   opacity: 0 !important;
@@ -185,46 +167,18 @@ input, textarea, [contenteditable="true"] {
   pointer-events: none !important;
 }
 
-.intro__top, .intro__bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  color: var(--text-muted);
-}
-
-.intro__centre {
-  margin: auto 0;
-}
-
-.intro__centre p {
-  margin: 0 0 16px;
-  font-size: clamp(10px, 0.9vw, 13px);
-  letter-spacing: 0.18em;
-  color: var(--text-muted);
-}
-
-.intro h1 {
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: clamp(48px, 11vw, 160px);
-  font-weight: 500;
-  letter-spacing: -0.06em;
-  line-height: 0.84;
-}
-
 .enter {
   position: relative;
   z-index: 90;
-  align-self: flex-end;
+  align-self: flex-start;
   display: inline-flex;
-  gap: 18px;
+  gap: 16px;
   align-items: center;
   border: 0;
-  padding: 10px 14px;
+  padding: 10px 0;
   background: transparent;
   color: var(--text);
+  font-family: var(--font-mono);
   font-size: 13px;
   letter-spacing: 0.18em;
   cursor: pointer !important;
