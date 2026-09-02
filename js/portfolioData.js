@@ -435,7 +435,7 @@ export const HARDWARE_DEFINITIONS = {
     ],
     scale: 0.30,
     isGroundedOnFloor: false,
-    benchPosition: { x: -3.40, y: 0.380, z: 0.25 },
+    benchPosition: { x: -3.22, y: 0.380, z: -0.05 },
     benchRotation: { x: 0, y: 1.57, z: 0 },
     projectId: 'berrybot'
   },
@@ -456,7 +456,7 @@ export const HARDWARE_DEFINITIONS = {
     ],
     scale: 0.12,
     isGroundedOnFloor: false,
-    benchPosition: { x: -3.30, y: 0.380, z: -0.10 },
+    benchPosition: { x: -3.60, y: 0.380, z: -0.22 },
     benchRotation: { x: 0, y: -0.35, z: 0 }
   },
 
@@ -476,7 +476,7 @@ export const HARDWARE_DEFINITIONS = {
     ],
     scale: 0.10,
     isGroundedOnFloor: false,
-    benchPosition: { x: -3.50, y: 0.380, z: -0.25 },
+    benchPosition: { x: -3.15, y: 0.380, z: 0.15 },
     benchRotation: { x: 0, y: 0.45, z: 0 }
   },
 
@@ -486,17 +486,18 @@ export const HARDWARE_DEFINITIONS = {
     title: 'CANON AT-1 // 35MM RETRO OPTICS',
     eyebrow: 'PHYSICAL 3D MODEL // COMPUTER VISION & SENSING',
     category: 'OPTICAL SENSING PROP',
-    summary: 'Retro 35mm SLR optical camera body representing computer vision, photogrammetry data synthesis pipelines, and spectral chromaticity research.',
+    summary: 'Retro 35mm SLR optical camera body resting on the leather sofa cushion, representing computer vision, photogrammetry data synthesis pipelines, and spectral chromaticity research.',
     specs: [
       ['MOUNT', 'Canon FD Bayonet System'],
+      ['LOCATION', 'Chesterfield Leather Sofa Cushion'],
       ['ROLE', 'Optical Perception & Image Processing Asset'],
       ['SHUTTER', 'Focal-Plane Electronic Shutter'],
       ['RESEARCH LINK', 'Spectral Color-Space & Data Generation']
     ],
-    scale: 0.14,
+    scale: 0.15,
     isGroundedOnFloor: false,
-    benchPosition: { x: 0.42, y: 0.850, z: -0.22 },
-    benchRotation: { x: 0, y: 0.35, z: 0 }
+    benchPosition: { x: -4.35, y: 0.465, z: -0.15 },
+    benchRotation: { x: 0.1, y: 0.85, z: 0.05 }
   },
 
   dog: {
@@ -523,15 +524,15 @@ export const HARDWARE_DEFINITIONS = {
     title: 'CRISPY // PET CAT',
     eyebrow: 'EASTER EGG // CRISPY',
     category: 'COMPANION',
-    summary: 'Crispy the pet cat peacefully resting on top of the bed.',
+    summary: 'Crispy the pet cat peacefully resting on top of the bed sheets.',
     specs: [
       ['SPECIES', 'Domestic Cat'],
       ['NAME', 'Crispy'],
       ['STATUS', 'Workbench Supervisor & Nap Specialist']
     ],
-    scale: 0.40,
+    scale: 0.48,
     isGroundedOnFloor: false,
-    benchPosition: { x: -0.65, y: 0.44, z: -1.85 },
+    benchPosition: { x: -0.75, y: 0.735, z: -1.90 },
     benchRotation: { x: 0, y: 0.65, z: 0 }
   }
 };

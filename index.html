@@ -114,9 +114,36 @@
 
         <div class="world-ui__footer">
           <span>VIT VELLORE / TAMIL NADU (+05:30 IST)</span>
-          <span>DRAG TO ORBIT BENCH // CLICK OBJECTS TO ENTER</span>
+          <span>[WASD] WALK // [MOUSE] LOOK // [E] INTERACT</span>
         </div>
       </section>
+
+      <!-- First Person Gaming HUD: Crosshair & Interaction Prompt -->
+      <div id="fpovHud" class="fpov-hud" hidden>
+        <div class="fpov-crosshair" id="crosshair">
+          <span class="fpov-crosshair__dot"></span>
+        </div>
+        <div class="fpov-prompt" id="fpovPrompt" hidden>
+          <span class="fpov-prompt__key">E</span>
+          <span class="fpov-prompt__text" id="fpovPromptText">INTERACT</span>
+        </div>
+        <div class="fpov-controls-hint" id="fpovControlsHint">
+          <span><b>WASD</b> Walk</span>
+          <span><b>SPACE / SHIFT</b> Up / Down</span>
+          <span><b>E / F</b> Interact</span>
+          <span><b>ESC</b> Release Mouse</span>
+        </div>
+      </div>
+
+      <!-- Cyberpunk Door Access Denied Warning Modal -->
+      <div class="door-alert" id="doorAlert" hidden>
+        <div class="door-alert__box">
+          <div class="door-alert__badge">ACCESS RESTRICTED // PROTOCOL 451</div>
+          <h3>DECONTAMINATION LOCKDOWN ACTIVE</h3>
+          <p>Vault bulkhead security protocol engaged. Terminal authorization required from the workstation desk.</p>
+          <div class="door-alert__bar"></div>
+        </div>
+      </div>
 
       <!-- Layer 3: JAIJITESH.OS Interface on the Omen Screen -->
       <section class="screen-ui" id="screenUi" aria-label="JAIJITESH.OS Workstation">
