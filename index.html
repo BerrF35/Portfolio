@@ -28,8 +28,6 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="stylesheet" href="style.css" />
     
-    <!-- OGL.js for WebGL Fluid Simulation & Liquid Distortion Typography -->
-    <script src="https://cdn.jsdelivr.net/npm/ogl@0.0.116/dist/ogl.umd.js"></script>
     <!-- GSAP for choreographed camera transitions and UI motion -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
     <!-- occt-import-js WebAssembly for direct in-browser STEP CAD tessellation -->
@@ -55,6 +53,9 @@
 
       <!-- Layer 1: Ultra-Minimalist Surface Entry -->
       <section class="intro" id="intro" aria-label="Welcome">
+        <!-- 3D Glowing Tubes Cursor Canvas for Home/Intro Screen -->
+        <canvas id="tubesCanvas" class="intro__tubes-canvas" aria-hidden="true"></canvas>
+
         <div class="intro__top">
           <span>JAIJITESH SURYAPRAKASH</span>
           <span>PORTFOLIO / 2026</span>
@@ -63,12 +64,10 @@
         <div class="intro__centre">
           <p class="intro__eyebrow">ENGINEERING / AI / SYSTEMS / EXPERIMENTS</p>
           
-          <!-- WebGL Liquid Distortion Typography Focal Point -->
           <div class="intro__title-container" id="introTitleContainer">
-            <canvas class="intro__liquid-canvas" id="introLiquidCanvas"></canvas>
             <h1 class="intro__title" id="introTitle" aria-label="JAIJITESH SURYAPRAKASH">
-              <span class="intro__title-line">JAIJITESH</span>
-              <span class="intro__title-line">SURYAPRAKASH</span>
+              <span>JAIJITESH</span>
+              <span>SURYAPRAKASH</span>
             </h1>
           </div>
 

@@ -97,59 +97,7 @@ input, textarea, [contenteditable="true"] {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
 }
 
-/* Interactive WebGL Liquid Distortion Typography Focal Point */
-.intro__title-container {
-  position: relative;
-  display: inline-block;
-  z-index: 2;
-  margin: 0;
-  width: fit-content;
-  max-width: 100%;
-}
-
-.intro__liquid-canvas {
-  position: absolute;
-  top: -8%;
-  left: -6%;
-  width: 112%;
-  height: 116%;
-  display: block;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.95;
-  filter: drop-shadow(0 0 45px rgba(56, 189, 248, 0.22));
-  border-radius: 8px;
-}
-
-.intro__title {
-  position: relative;
-  z-index: 2;
-  margin: 0;
-  font-family: var(--font-sans);
-  font-size: clamp(48px, 11vw, 160px);
-  font-weight: 700;
-  letter-spacing: -0.06em;
-  line-height: 0.84;
-  display: flex;
-  flex-direction: column;
-  pointer-events: none;
-}
-
-.intro__title-line {
-  display: block;
-  color: #ffffff;
-  mix-blend-mode: difference;
-  user-select: none;
-}
-
-.intro__eyebrow {
-  margin: 0 0 16px;
-  font-size: clamp(10px, 0.9vw, 13px);
-  letter-spacing: 0.18em;
-  color: var(--text-muted);
-}
-
-/* Layer 1: Ultra-Minimalist Surface Entry */
+/* Layer 1: Ultra-Minimalist Surface Entry with 3D Tubes Cursor */
 .intro {
   position: fixed;
   inset: 0;
@@ -163,7 +111,71 @@ input, textarea, [contenteditable="true"] {
   transform: translateY(0);
   opacity: 1;
   visibility: visible;
+  overflow: hidden;
+  touch-action: none;
   transition: transform 0.85s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.6s ease, visibility 0.85s;
+}
+
+.intro__tubes-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  display: block;
+}
+
+.intro__top,
+.intro__bottom {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.intro__centre {
+  position: relative;
+  z-index: 5;
+  margin: auto 0;
+  pointer-events: none;
+}
+
+.intro__title-container {
+  position: relative;
+  display: inline-block;
+  z-index: 5;
+  margin: 0;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.intro__title {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: clamp(48px, 11vw, 160px);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 0.84;
+  color: #ffffff;
+  text-shadow: 0 0 35px rgba(0, 0, 0, 0.95), 0 0 10px rgba(0, 0, 0, 0.9);
+  user-select: none;
+}
+
+.intro__title span {
+  display: block;
+}
+
+.intro__eyebrow {
+  margin: 0 0 16px;
+  font-size: clamp(10px, 0.9vw, 13px);
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
 }
 
 .intro.is-exiting {

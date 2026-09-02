@@ -4,7 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { sound } from './js/audio.js';
 import { modelManager, HARDWARE_DEFINITIONS } from './js/cadLoader.js';
 import { DesktopManager } from './js/desktop.js';
-import { LiquidTypography } from './js/liquidTypography.js';
+import { HomeTubesCursor } from './js/tubesCursor.js';
 
 // DOM Selectors
 const $ = (selector, parent = document) => parent.querySelector(selector);
@@ -649,13 +649,21 @@ function enterLab() {
   state.entered = true;
   sound.click(520, 0.03);
 
-  // Smoothly pause intro WebGL liquid simulation to free GPU resources
-  if (window.liquidTypographyInstance) {
-    window.liquidTypographyInstance.pause();
+  // Smoothly hide intro 3D tubes cursor to free GPU resources
+  if (window.tubesCursorInstance) {
+    window.tubesCursorInstance.hide();
   }
 
+  intro.classList.add('is-exiting');
   intro.style.transform = 'translateY(-100%)';
   intro.style.opacity = '0';
+  intro.style.visibility = 'hidden';
+  intro.style.pointerEvents = 'none';
+
+  setTimeout(() => {
+    intro.style.display = 'none';
+  }, 900);
+
   worldUi.classList.add('is-visible');
 
   // Initialize DesktopManager early in background
@@ -804,13 +812,13 @@ function inspectHardware(key) {
 }
 window.inspectHardware = inspectHardware;
 
-// Initialize Liquid Distortion Typography on the Hero Surface
-let liquidTypographyInstance = null;
+// Initialize 3D Tubes Cursor on the Landing Screen
+let tubesCursorInstance = null;
 try {
-  liquidTypographyInstance = new LiquidTypography();
-  window.liquidTypographyInstance = liquidTypographyInstance;
+  tubesCursorInstance = new HomeTubesCursor('tubesCanvas');
+  window.tubesCursorInstance = tubesCursorInstance;
 } catch (e) {
-  console.warn('LiquidTypography initialization deferred:', e);
+  console.warn('HomeTubesCursor initialization deferred:', e);
 }
 
 let isMouseDown = false;
@@ -1025,13 +1033,6 @@ function bindEvents() {
 
 function animate() {
   requestAnimationFrame(animate);
-  
-  // Smooth tactical HUD cursor follower
-  ringX += (mouseX - ringX) * 0.28;
-  ringY += (mouseY - ringY) * 0.28;
-  if (cursorRing) {
-    cursorRing.style.transform = `translate3d(${ringX - mouseX}px, ${ringY - mouseY}px, 0)`;
-  }
 
   // Skip 3D frame rendering when OS is maximized full-screen to save GPU
   if (state.is3DOffloaded || !renderer || !scene || !camera) return;
