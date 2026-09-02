@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import { sound } from './js/audio.js';
 import { modelManager, HARDWARE_DEFINITIONS } from './js/cadLoader.js?v=3';
 import { PROJECTS } from './js/portfolioData.js?v=3';
@@ -241,43 +242,50 @@ function easeCamera(toPos, toTarget, duration = 0.95, onComplete) {
 }
 
 // =============================================================================
-// AUTHENTIC ROOM LIGHTING (REMOVING GENERIC BULBS, MATCHING SKETCHFAB PALETTE)
+// AUTHENTIC ROOM LIGHTING (100% AREA & BAR EMITTERS - NO BULBS/SPOTS)
 // =============================================================================
 function createStudioLighting() {
   if (!scene) return;
 
+  // Initialize RectAreaLight shader uniforms for standard PBR materials
+  RectAreaLightUniformsLib.init();
+
   // 1. Deep Atmospheric Ambient (Dark bunker interior)
-  world.lights.ambient = new THREE.AmbientLight('#05080c', 0.20);
+  world.lights.ambient = new THREE.AmbientLight('#080d14', 0.40);
   scene.add(world.lights.ambient);
 
-  // 2. Bed Overhead Giant Rectangular LED Light Panel
-  // Soft downward wash from under the upper bunk
-  world.lights.bedLed = new THREE.SpotLight('#a5f3fc', 2.0, 4.2, Math.PI * 0.4, 0.35, 1.5);
-  world.lights.bedLed.position.set(-0.85, 1.62, -2.15);
-  world.lights.bedLed.target.position.set(-0.85, 0.4, -2.15);
-  world.lights.bedLed.castShadow = true;
-  world.lights.bedLed.shadow.mapSize.width = 1024;
-  world.lights.bedLed.shadow.mapSize.height = 1024;
-  world.lights.bedLed.shadow.bias = -0.0001;
+  // 2. Bed Overhead Giant Rectangular LED Light Panel (Area Emitter)
+  // RectAreaLight default orientation points towards -Z.
+  // Rotating by -Math.PI / 2 points it straight down (-Y) onto the bed!
+  world.lights.bedLed = new THREE.RectAreaLight('#a5f3fc', 18.0, 1.8, 0.9);
+  world.lights.bedLed.position.set(-0.85, 1.72, -2.15);
+  world.lights.bedLed.rotation.set(-Math.PI / 2, 0, 0); // Downward wash onto bed
   scene.add(world.lights.bedLed);
-  scene.add(world.lights.bedLed.target);
 
-  // 3. Fluorescent Ceiling Tubelight 1 (Above Sofa / Coffee Table)
-  world.lights.tube1 = new THREE.PointLight('#ffddaa', 1.1, 5.0, 1.5);
-  world.lights.tube1.position.set(-3.27, 2.75, -2.15);
-  world.lights.tube1.castShadow = true;
-  world.lights.tube1.shadow.mapSize.width = 1024;
-  world.lights.tube1.shadow.mapSize.height = 1024;
+  // Soft directional fill to match realistic architectural diffusion
+  const bedFill = new THREE.DirectionalLight('#a5f3fc', 0.85);
+  bedFill.position.set(-0.85, 1.70, -2.15);
+  bedFill.target.position.set(-0.85, 0.4, -2.15);
+  scene.add(bedFill);
+  scene.add(bedFill.target);
+  world.lights.bedFill = bedFill;
+
+  // 3. Fluorescent Ceiling Tubelight 1 (Above Sofa / Table - Bar Emitter)
+  world.lights.tube1 = new THREE.RectAreaLight('#ffeedb', 12.0, 1.8, 0.22);
+  world.lights.tube1.position.set(-3.27, 2.74, -2.15);
+  world.lights.tube1.rotation.set(-Math.PI / 2, 0, 0);
   scene.add(world.lights.tube1);
 
-  // 4. Fluorescent Ceiling Tubelight 2 (Overhead Hallway Center)
-  world.lights.tube2 = new THREE.PointLight('#94a3b8', 0.85, 4.5, 1.5);
-  world.lights.tube2.position.set(-0.5, 2.75, 0.2);
+  // 4. Fluorescent Ceiling Tubelight 2 (Overhead Hallway Center - Bar Emitter)
+  world.lights.tube2 = new THREE.RectAreaLight('#e2e8f0', 10.0, 1.8, 0.22);
+  world.lights.tube2.position.set(-0.5, 2.74, 0.2);
+  world.lights.tube2.rotation.set(-Math.PI / 2, 0, 0);
   scene.add(world.lights.tube2);
 
-  // 5. Desk HUD Monitors Cyan Emission Glow (Only illuminates desk & keyboard)
-  world.lights.deskHud = new THREE.PointLight('#00f0ff', 1.8, 2.6, 1.6);
-  world.lights.deskHud.position.set(0.10, 1.05, -0.35);
+  // 5. Desk HUD Monitors Cyan Emission Glow (Flat Monitor Bar Emitter)
+  world.lights.deskHud = new THREE.RectAreaLight('#00f0ff', 12.0, 1.3, 0.45);
+  world.lights.deskHud.position.set(0.12, 1.05, -0.28);
+  world.lights.deskHud.rotation.set(0, -Math.PI / 2, 0); // Facing desk/chair
   scene.add(world.lights.deskHud);
 }
 
@@ -498,6 +506,7 @@ function toggleBedLed() {
   world.switchStates.bedLed = !world.switchStates.bedLed;
   const active = world.switchStates.bedLed;
   if (world.lights.bedLed) world.lights.bedLed.visible = active;
+  if (world.lights.bedFill) world.lights.bedFill.visible = active;
   updateSwitchLed('bedLed', active);
   sound.click(active ? 720 : 380, 0.03);
   showToast(active ? 'BED LED PANEL // ACTIVATED' : 'BED LED PANEL // DEACTIVATED');
@@ -553,14 +562,15 @@ function updateSwitchLed(key, isActive) {
 }
 
 // =============================================================================
-// 3D PROJECT MEDIA CAROUSEL ON RIGHT ROOM WALL (BESIDE DESK)
+// 3D PROJECT MEDIA CAROUSEL ON OPEN WHITE WALL (PAST SCREENS)
 // =============================================================================
 function createPanoramicMediaWall() {
   const projectList = Object.values(PROJECTS);
   if (!projectList.length) return;
 
   const carouselGroup = new THREE.Group();
-  carouselGroup.position.set(0.480, 1.55, 0.0); // Mounted directly on bedroom right wall beside desk
+  // Mounted directly on the open white wall past the workstation screens (zero occlusion)
+  carouselGroup.position.set(0.485, 1.45, 1.65);
   carouselGroup.rotation.set(0, -Math.PI / 2, 0); // Mounted facing into the room
 
   const cardWidth = 0.46;
@@ -879,11 +889,15 @@ function activateFPOV() {
   if (controls) controls.enabled = false;
   if (fpovHud) fpovHud.hidden = false;
 
-  // Initialize orientation from current camera position
+  // Initialize orientation from current camera look vector with NaN protection
+  camera.rotation.order = 'YXZ';
   const dir = new THREE.Vector3();
   camera.getWorldDirection(dir);
   fpov.yaw = Math.atan2(-dir.x, -dir.z);
-  fpov.pitch = Math.asin(dir.y);
+  fpov.pitch = Math.asin(THREE.MathUtils.clamp(dir.y, -0.999, 0.999));
+  camera.rotation.y = fpov.yaw;
+  camera.rotation.x = fpov.pitch;
+  camera.rotation.z = 0;
 
   // Request pointer lock
   requestPointerLock();
@@ -912,18 +926,21 @@ document.addEventListener('pointerlockchange', () => {
   state.pointerLocked = (document.pointerLockElement === canvas);
 });
 
-// Mouse Look Handling
+// Mouse Look Handling (Clean raw mouse input with PointerLock screen-wrap glitch filter)
 window.addEventListener('mousemove', (e) => {
   if (!state.fpovMode || !state.pointerLocked || state.focused || state.inspecting) return;
 
   const dx = e.movementX || 0;
   const dy = e.movementY || 0;
 
+  // Filter out massive PointerLock cursor wrapping spikes that cause sudden 180° flips
+  if (Math.abs(dx) > 220 || Math.abs(dy) > 220) return;
+
   fpov.yaw -= dx * fpov.lookSensitivity;
   fpov.pitch -= dy * fpov.lookSensitivity;
 
   // Clamp vertical look to -85° and +85°
-  fpov.pitch = THREE.MathUtils.clamp(fpov.pitch, -1.48, 1.48);
+  fpov.pitch = THREE.MathUtils.clamp(fpov.pitch, -1.45, 1.45);
 });
 
 // Keyboard Movement Handling (WASD + Space + Shift)
@@ -954,14 +971,16 @@ window.addEventListener('keyup', (e) => {
 });
 
 // =============================================================================
-// FPOV RAYCASTING, MAGNETIC SNAPPING, & CONTEXTUAL INTERACTION
+// FPOV RAYCASTING & CONTINUOUS SLIDING COLLISION (ZERO SNAPPING / TELEPORTS)
 // =============================================================================
 function updateFPOVMovement(delta) {
   if (!state.fpovMode || state.focused || state.inspecting) return;
 
-  // 1. Calculate camera rotation from yaw & pitch
-  const euler = new THREE.Euler(fpov.pitch, fpov.yaw, 0, 'YXZ');
-  camera.quaternion.setFromEuler(euler);
+  // 1. Direct camera rotation using 'YXZ' order (no quaternion conversion flips)
+  camera.rotation.order = 'YXZ';
+  camera.rotation.y = fpov.yaw;
+  camera.rotation.x = fpov.pitch;
+  camera.rotation.z = 0;
 
   // 2. Calculate movement direction relative to camera yaw
   const forward = new THREE.Vector3(-Math.sin(fpov.yaw), 0, -Math.cos(fpov.yaw)).normalize();
@@ -973,49 +992,51 @@ function updateFPOVMovement(delta) {
   if (fpov.moveRight) moveDir.add(right);
   if (fpov.moveLeft) moveDir.sub(right);
 
+  const prevX = camera.position.x;
+  const prevZ = camera.position.z;
+
   if (moveDir.lengthSq() > 0) {
     moveDir.normalize();
     camera.position.addScaledVector(moveDir, fpov.speed * delta);
   }
 
-  // Vertical movement (Space = Fly Up, Shift = Crouch)
+  // Vertical movement
   if (fpov.moveUp) camera.position.y += fpov.verticalSpeed * delta;
   if (fpov.moveDown) camera.position.y -= fpov.verticalSpeed * delta;
+  camera.position.y = THREE.MathUtils.clamp(camera.position.y, 0.85, 1.85);
 
-  // 3. Strict Room Boundary Collision Box (Prevent phasing through walls/furniture)
-  clampRoomCollision(camera.position);
+  // 3. Smooth, continuous obstacle collision (prevents phasing without teleport glitches)
+  // Overall room perimeter
+  camera.position.x = THREE.MathUtils.clamp(camera.position.x, -3.75, 0.85);
+  camera.position.z = THREE.MathUtils.clamp(camera.position.z, -2.95, 2.10);
+
+  // Bedroom right wall & desk collision: if in bedroom area (z < 0.65), right limit is x = 0.05
+  if (camera.position.z < 0.65 && camera.position.x > 0.05) {
+    if (prevX <= 0.05) camera.position.x = 0.05;
+    else if (prevZ >= 0.65) camera.position.z = 0.65;
+    else camera.position.x = 0.05;
+  }
+
+  // Bed obstacle: bed box is x in [-1.65, 0.50] and z in [-3.14, -1.25]
+  if (camera.position.x > -1.65 && camera.position.z < -1.25) {
+    if (prevZ >= -1.25) {
+      camera.position.z = -1.25; // Block walking forward into bed footboard
+    } else if (prevX <= -1.65) {
+      camera.position.x = -1.65; // Block moving right into side of bed from yellow door alley
+    } else {
+      camera.position.z = -1.25;
+    }
+  }
+
+  // Desk obstacle: x in [-0.35, 0.50] and z in [-1.05, 0.45]
+  if (camera.position.x > -0.35 && camera.position.z >= -1.05 && camera.position.z <= 0.45) {
+    if (prevX <= -0.35) camera.position.x = -0.35;
+    else if (prevZ < -1.05) camera.position.z = -1.05;
+    else if (prevZ > 0.45) camera.position.z = 0.45;
+  }
 
   // 4. Raycast from center crosshair (Raw line-of-sight, zero aim snapping)
   raycastCrosshair();
-}
-
-function clampRoomCollision(pos) {
-  // Height limits (crouch to standing)
-  pos.y = THREE.MathUtils.clamp(pos.y, 0.85, 1.85);
-
-  // Front boundary (entrance)
-  pos.z = Math.min(pos.z, 2.10);
-
-  // Left boundary (in front of sofa cushions)
-  pos.x = Math.max(pos.x, -3.75);
-
-  // Bedroom vs Hallway bounds:
-  // Desk is on the right from x = -0.35 to 0.495, right wall is at 0.50
-  if (pos.z < 0.6) {
-    // In bedroom area: right boundary prevents walking through desk and right wall
-    pos.x = Math.min(pos.x, 0.05);
-
-    // Bed collision: bed extends from x = -1.55 to 0.49, from z = -1.25 back to -3.14
-    if (pos.x > -1.55) {
-      pos.z = Math.max(pos.z, -1.20); // Stopped at bed footboard
-    } else {
-      pos.z = Math.max(pos.z, -2.95); // Can walk right up in front of the yellow door!
-    }
-  } else {
-    // In front hallway: stops safely before right hallway wall
-    pos.x = Math.min(pos.x, 0.85);
-    pos.z = Math.max(pos.z, 0.6);
-  }
 }
 
 function raycastCrosshair() {
