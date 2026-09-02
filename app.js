@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { sound } from './js/audio.js';
 import { modelManager, HARDWARE_DEFINITIONS } from './js/cadLoader.js?v=3';
 import { PROJECTS } from './js/portfolioData.js?v=3';
@@ -95,7 +94,7 @@ const fpov = {
 };
 
 // Three.js Scene Setup with WebGL Safety Check
-let renderer, scene, camera, controls, pmremGenerator;
+let renderer, scene, camera, controls;
 let isWebGLAvailable = true;
 
 try {
@@ -111,15 +110,10 @@ try {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.15;
+  renderer.toneMappingExposure = 0.88;
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color('#07090b');
-
-  // Realistic PBR Environment Map eliminating flat plastic look
-  pmremGenerator = new THREE.PMREMGenerator(renderer);
-  pmremGenerator.compileEquirectangularShader();
-  scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.background = new THREE.Color('#030507');
 
   camera = new THREE.PerspectiveCamera(48, window.innerWidth / window.innerHeight, 0.01, 100);
 
@@ -252,13 +246,13 @@ function easeCamera(toPos, toTarget, duration = 0.95, onComplete) {
 function createStudioLighting() {
   if (!scene) return;
 
-  // 1. Atmospheric Ambient Fill
-  world.lights.ambient = new THREE.AmbientLight('#0f172a', 0.85);
+  // 1. Deep Atmospheric Ambient (Dark bunker interior)
+  world.lights.ambient = new THREE.AmbientLight('#05080c', 0.20);
   scene.add(world.lights.ambient);
 
   // 2. Bed Overhead Giant Rectangular LED Light Panel
-  // Placed right on the underside of the upper bunk structure
-  world.lights.bedLed = new THREE.SpotLight('#e0f2fe', 3.4, 5.5, Math.PI * 0.45, 0.35, 1.2);
+  // Soft downward wash from under the upper bunk
+  world.lights.bedLed = new THREE.SpotLight('#a5f3fc', 2.0, 4.2, Math.PI * 0.4, 0.35, 1.5);
   world.lights.bedLed.position.set(-0.85, 1.62, -2.15);
   world.lights.bedLed.target.position.set(-0.85, 0.4, -2.15);
   world.lights.bedLed.castShadow = true;
@@ -269,7 +263,7 @@ function createStudioLighting() {
   scene.add(world.lights.bedLed.target);
 
   // 3. Fluorescent Ceiling Tubelight 1 (Above Sofa / Coffee Table)
-  world.lights.tube1 = new THREE.PointLight('#ffeedb', 2.4, 6.5, 1.2);
+  world.lights.tube1 = new THREE.PointLight('#ffddaa', 1.1, 5.0, 1.5);
   world.lights.tube1.position.set(-3.27, 2.75, -2.15);
   world.lights.tube1.castShadow = true;
   world.lights.tube1.shadow.mapSize.width = 1024;
@@ -277,12 +271,12 @@ function createStudioLighting() {
   scene.add(world.lights.tube1);
 
   // 4. Fluorescent Ceiling Tubelight 2 (Overhead Hallway Center)
-  world.lights.tube2 = new THREE.PointLight('#e2e8f0', 2.1, 6.0, 1.2);
+  world.lights.tube2 = new THREE.PointLight('#94a3b8', 0.85, 4.5, 1.5);
   world.lights.tube2.position.set(-0.5, 2.75, 0.2);
   scene.add(world.lights.tube2);
 
-  // 5. Desk HUD Monitors Cyan Emission Glow
-  world.lights.deskHud = new THREE.PointLight('#00f0ff', 2.5, 3.5, 1.4);
+  // 5. Desk HUD Monitors Cyan Emission Glow (Only illuminates desk & keyboard)
+  world.lights.deskHud = new THREE.PointLight('#00f0ff', 1.8, 2.6, 1.6);
   world.lights.deskHud.position.set(0.10, 1.05, -0.35);
   scene.add(world.lights.deskHud);
 }
@@ -440,7 +434,7 @@ function createMonitorDirectingChevrons(roomRoot) {
 // =============================================================================
 function createInteractiveSwitchboard() {
   const switchGroup = new THREE.Group();
-  switchGroup.position.set(-1.75, 1.25, -2.62); // Mounted on wall near bed
+  switchGroup.position.set(-1.75, 1.25, -3.13); // Mounted directly flush on back wall beside yellow door
   switchGroup.rotation.set(0, 0, 0);
 
   // Brushed steel mounting plate
@@ -559,18 +553,18 @@ function updateSwitchLed(key, isActive) {
 }
 
 // =============================================================================
-// 3D PROJECT MEDIA CAROUSEL ON RIGHT PARTITION WALL
+// 3D PROJECT MEDIA CAROUSEL ON RIGHT ROOM WALL (BESIDE DESK)
 // =============================================================================
 function createPanoramicMediaWall() {
   const projectList = Object.values(PROJECTS);
   if (!projectList.length) return;
 
   const carouselGroup = new THREE.Group();
-  carouselGroup.position.set(2.45, 1.40, -0.2);
-  carouselGroup.rotation.set(0, -Math.PI / 2, 0); // Mounted facing into room
+  carouselGroup.position.set(0.480, 1.55, 0.0); // Mounted directly on bedroom right wall beside desk
+  carouselGroup.rotation.set(0, -Math.PI / 2, 0); // Mounted facing into the room
 
-  const cardWidth = 0.55;
-  const cardHeight = 0.38;
+  const cardWidth = 0.46;
+  const cardHeight = 0.32;
   const spacing = 0.08;
   const totalCount = projectList.length;
 
@@ -988,20 +982,47 @@ function updateFPOVMovement(delta) {
   if (fpov.moveUp) camera.position.y += fpov.verticalSpeed * delta;
   if (fpov.moveDown) camera.position.y -= fpov.verticalSpeed * delta;
 
-  // 3. Strict Room Boundary Collision Box (Zero escaping room)
-  camera.position.x = THREE.MathUtils.clamp(camera.position.x, fpov.bounds.minX, fpov.bounds.maxX);
-  camera.position.y = THREE.MathUtils.clamp(camera.position.y, fpov.bounds.minY, fpov.bounds.maxY);
-  camera.position.z = THREE.MathUtils.clamp(camera.position.z, fpov.bounds.minZ, fpov.bounds.maxZ);
+  // 3. Strict Room Boundary Collision Box (Prevent phasing through walls/furniture)
+  clampRoomCollision(camera.position);
 
-  // 4. Raycast from center crosshair
+  // 4. Raycast from center crosshair (Raw line-of-sight, zero aim snapping)
   raycastCrosshair();
+}
+
+function clampRoomCollision(pos) {
+  // Height limits (crouch to standing)
+  pos.y = THREE.MathUtils.clamp(pos.y, 0.85, 1.85);
+
+  // Front boundary (entrance)
+  pos.z = Math.min(pos.z, 2.10);
+
+  // Left boundary (in front of sofa cushions)
+  pos.x = Math.max(pos.x, -3.75);
+
+  // Bedroom vs Hallway bounds:
+  // Desk is on the right from x = -0.35 to 0.495, right wall is at 0.50
+  if (pos.z < 0.6) {
+    // In bedroom area: right boundary prevents walking through desk and right wall
+    pos.x = Math.min(pos.x, 0.05);
+
+    // Bed collision: bed extends from x = -1.55 to 0.49, from z = -1.25 back to -3.14
+    if (pos.x > -1.55) {
+      pos.z = Math.max(pos.z, -1.20); // Stopped at bed footboard
+    } else {
+      pos.z = Math.max(pos.z, -2.95); // Can walk right up in front of the yellow door!
+    }
+  } else {
+    // In front hallway: stops safely before right hallway wall
+    pos.x = Math.min(pos.x, 0.85);
+    pos.z = Math.max(pos.z, 0.6);
+  }
 }
 
 function raycastCrosshair() {
   raycaster.setFromCamera(pointer, camera);
   const hits = raycaster.intersectObjects(world.clickable, true);
 
-  if (!hits.length || hits[0].distance > 3.8) {
+  if (!hits.length || hits[0].distance > 3.2) {
     fpov.activeInteractable = null;
     if (crosshair) crosshair.classList.remove('is-hovering');
     if (fpovPrompt) fpovPrompt.hidden = true;
@@ -1013,6 +1034,11 @@ function raycastCrosshair() {
     obj = obj.parent;
   }
 
+  // Yellow door is only interactable when standing close to it (< 1.8m)
+  if (obj?.userData?.isYellowDoor && hits[0].distance > 1.8) {
+    obj = null;
+  }
+
   if (obj) {
     fpov.activeInteractable = obj;
     if (crosshair) crosshair.classList.add('is-hovering');
@@ -1022,31 +1048,10 @@ function raycastCrosshair() {
         || (obj.userData?.hardwareKey ? `INSPECT ${HARDWARE_DEFINITIONS[obj.userData.hardwareKey]?.title || 'HARDWARE'}` : 'INTERACT');
       fpovPromptText.textContent = label;
     }
-
-    // Subtle Magnetic Aim Snapping towards key targets
-    applyMagneticSnapping(obj);
   } else {
     fpov.activeInteractable = null;
     if (crosshair) crosshair.classList.remove('is-hovering');
     if (fpovPrompt) fpovPrompt.hidden = true;
-  }
-}
-
-function applyMagneticSnapping(obj) {
-  const targetPos = new THREE.Vector3();
-  obj.getWorldPosition(targetPos);
-
-  const camToObj = targetPos.clone().sub(camera.position).normalize();
-  const camDir = new THREE.Vector3();
-  camera.getWorldDirection(camDir);
-
-  const angle = camDir.angleTo(camToObj);
-  // Only magnetically snap if within ~12 degrees cone
-  if (angle > 0.02 && angle < 0.22) {
-    const targetYaw = Math.atan2(-camToObj.x, -camToObj.z);
-    const targetPitch = Math.asin(camToObj.y);
-    fpov.yaw = THREE.MathUtils.lerp(fpov.yaw, targetYaw, 0.04);
-    fpov.pitch = THREE.MathUtils.lerp(fpov.pitch, targetPitch, 0.04);
   }
 }
 
@@ -1081,7 +1086,7 @@ function handleFPOVInteract() {
 }
 
 // =============================================================================
-// CYBERPUNK DOOR ACCESS DENIED & PUSHBACK IMPULSE
+// CYBERPUNK DOOR ACCESS DENIED (NO DISORIENTING CAMERA PUSHBACK)
 // =============================================================================
 function triggerDoorAccessDenied() {
   sound.click(240, 0.08);
@@ -1092,15 +1097,7 @@ function triggerDoorAccessDenied() {
       doorAlert.hidden = true;
     }, 3200);
   }
-
-  // Physical pushback impulse away from the vault door
-  const pushBack = new THREE.Vector3(0, 0, 0.65);
-  motion.to(camera.position, {
-    z: camera.position.z + 0.65,
-    duration: 0.45,
-    ease: 'power2.out'
-  });
-  showToast('ACCESS DENIED // CLEARANCE INSUFFICIENT');
+  showToast('ACCESS DENIED // CLEARANCE LEVEL 1 REQUIRED');
 }
 
 // =============================================================================
