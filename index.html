@@ -28,6 +28,8 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="stylesheet" href="style.css" />
     
+    <!-- OGL.js for WebGL Fluid Simulation & Liquid Distortion Typography -->
+    <script src="https://cdn.jsdelivr.net/npm/ogl@0.0.116/dist/ogl.umd.js"></script>
     <!-- GSAP for choreographed camera transitions and UI motion -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
     <!-- occt-import-js WebAssembly for direct in-browser STEP CAD tessellation -->
@@ -50,21 +52,6 @@
       
       <!-- Tactile film grain overlay -->
       <div class="grain" aria-hidden="true"></div>
-      
-      <!-- Tactical HUD High-Precision Cursor System -->
-      <div class="hud-cursor" id="hudCursor" aria-hidden="true">
-        <div class="hud-cursor__dot" id="cursorDot"></div>
-        <div class="hud-cursor__ring" id="cursorRing">
-          <span class="hud-cursor__bracket hud-cursor__bracket--tl"></span>
-          <span class="hud-cursor__bracket hud-cursor__bracket--tr"></span>
-          <span class="hud-cursor__bracket hud-cursor__bracket--bl"></span>
-          <span class="hud-cursor__bracket hud-cursor__bracket--br"></span>
-        </div>
-        <div class="hud-cursor__tag" id="cursorTag">
-          <span class="hud-cursor__mode" id="cursorMode">SYS</span>
-          <span class="hud-cursor__label" id="cursorLabel">READY</span>
-        </div>
-      </div>
 
       <!-- Layer 1: Ultra-Minimalist Surface Entry -->
       <section class="intro" id="intro" aria-label="Welcome">
@@ -74,8 +61,17 @@
         </div>
 
         <div class="intro__centre">
-          <p>ENGINEERING / AI / SYSTEMS / EXPERIMENTS</p>
-          <h1>JAIJITESH<br />SURYAPRAKASH</h1>
+          <p class="intro__eyebrow">ENGINEERING / AI / SYSTEMS / EXPERIMENTS</p>
+          
+          <!-- WebGL Liquid Distortion Typography Focal Point -->
+          <div class="intro__title-container" id="introTitleContainer">
+            <canvas class="intro__liquid-canvas" id="introLiquidCanvas"></canvas>
+            <h1 class="intro__title" id="introTitle" aria-label="JAIJITESH SURYAPRAKASH">
+              <span class="intro__title-line">JAIJITESH</span>
+              <span class="intro__title-line">SURYAPRAKASH</span>
+            </h1>
+          </div>
+
           <div class="intro__diagnostics" aria-hidden="true" style="margin-top: 20px; display: grid; gap: 4px; font-family: var(--font-mono); font-size: 10px; color: #64748b; text-align: left; max-width: 320px;">
             <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #1c222b; padding-bottom: 2px;"><span>SYSTEM STATUS</span><b style="color: #38ef7d;">READY</b></div>
             <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #1c222b; padding-bottom: 2px;"><span>GRAPHICS ENGINE</span><b style="color: #38bdf8;">WEBGL2</b></div>

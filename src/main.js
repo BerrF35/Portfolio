@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { sound } from './js/audio.js';
 import { modelManager, HARDWARE_DEFINITIONS } from './js/cadLoader.js';
 import { DesktopManager } from './js/desktop.js';
+import { LiquidTypography } from './js/liquidTypography.js';
 
 // DOM Selectors
 const $ = (selector, parent = document) => parent.querySelector(selector);
@@ -648,6 +649,11 @@ function enterLab() {
   state.entered = true;
   sound.click(520, 0.03);
 
+  // Smoothly pause intro WebGL liquid simulation to free GPU resources
+  if (window.liquidTypographyInstance) {
+    window.liquidTypographyInstance.pause();
+  }
+
   intro.style.transform = 'translateY(-100%)';
   intro.style.opacity = '0';
   worldUi.classList.add('is-visible');
@@ -798,16 +804,15 @@ function inspectHardware(key) {
 }
 window.inspectHardware = inspectHardware;
 
-// High-Precision Tactical HUD Cursor Elements
-const hudCursor = $('#hudCursor');
-const cursorDot = $('#cursorDot');
-const cursorRing = $('#cursorRing');
-const cursorTag = $('#cursorTag');
-const cursorMode = $('#cursorMode');
-const cursorLabel = $('#cursorLabel');
+// Initialize Liquid Distortion Typography on the Hero Surface
+let liquidTypographyInstance = null;
+try {
+  liquidTypographyInstance = new LiquidTypography();
+  window.liquidTypographyInstance = liquidTypographyInstance;
+} catch (e) {
+  console.warn('LiquidTypography initialization deferred:', e);
+}
 
-let mouseX = -100, mouseY = -100;
-let ringX = -100, ringY = -100;
 let isMouseDown = false;
 
 function showInspectorOverlay(def) {
@@ -852,12 +857,12 @@ function handlePointerDown(e) {
   pointerDownPos = { x: e.clientX, y: e.clientY };
   pointerDownTime = Date.now();
   isMouseDown = true;
-  hudCursor?.classList.add('is-active');
+  if (canvas) canvas.style.cursor = 'grabbing';
 }
 
 function handlePointerUp(e) {
   isMouseDown = false;
-  hudCursor?.classList.remove('is-active');
+  if (canvas) canvas.style.cursor = 'grab';
 
   const dx = e.clientX - pointerDownPos.x;
   const dy = e.clientY - pointerDownPos.y;
@@ -899,59 +904,19 @@ function pick3DObject(e) {
 }
 
 function updateCursor(e) {
-  mouseX = e.clientX;
-  mouseY = e.clientY;
-
-  if (hudCursor) {
-    hudCursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-  }
-
-  const target = e.target;
-  const isButton = target && target.closest && target.closest('button, a, [role="button"], input, select, .enter');
-  const isInput = target && target.closest && target.closest('input, textarea');
-
-  if (isInput) {
-    if (hudCursor) hudCursor.className = 'hud-cursor is-text';
-    if (cursorMode) cursorMode.textContent = 'CLI';
-    if (cursorLabel) cursorLabel.textContent = 'INPUT';
-    return;
-  }
-
-  if (isButton) {
-    if (hudCursor) hudCursor.className = 'hud-cursor is-action';
-    if (cursorMode) cursorMode.textContent = 'ACT';
-    const label = target.getAttribute('aria-label') || target.textContent || 'SELECT';
-    if (cursorLabel) cursorLabel.textContent = label.trim().slice(0, 14).toUpperCase();
-    return;
-  }
-
   if (state.ready && !screenUi.classList.contains('is-open')) {
     pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
     pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
     raycaster.setFromCamera(pointer, camera);
 
     const hits = raycaster.intersectObjects(world.clickable, true);
-    if (hits.length > 0) {
-      let obj = hits[0].object;
-      while (obj && !obj.userData.hardwareKey && obj !== world.laptop) {
-        obj = obj.parent;
-      }
-      const hwKey = obj?.userData?.hardwareKey;
-      if (hudCursor) hudCursor.className = 'hud-cursor is-locked';
-      if (hwKey) {
-        const def = HARDWARE_DEFINITIONS[hwKey];
-        if (cursorMode) cursorMode.textContent = 'CAD';
-        if (cursorLabel) cursorLabel.textContent = def ? def.title.split('//')[0].trim() : 'HARDWARE';
+    if (canvas) {
+      if (hits.length > 0) {
+        canvas.style.cursor = 'pointer';
       } else {
-        if (cursorMode) cursorMode.textContent = 'HOST';
-        if (cursorLabel) cursorLabel.textContent = 'WORKSTATION';
+        canvas.style.cursor = isMouseDown ? 'grabbing' : 'grab';
       }
-      return;
     }
-  }
-
-  if (hudCursor) {
-    hudCursor.className = isMouseDown ? 'hud-cursor is-active' : 'hud-cursor';
   }
 }
 
@@ -1024,15 +989,7 @@ function bindEvents() {
 
   window.addEventListener('pointerdown', handlePointerDown);
   window.addEventListener('pointerup', handlePointerUp);
-  window.addEventListener('pointermove', updateCursor);
-
-  document.addEventListener('mouseleave', () => {
-    if (hudCursor) hudCursor.style.opacity = '0';
-  });
-
-  document.addEventListener('mouseenter', () => {
-    if (hudCursor) hudCursor.style.opacity = '1';
-  });
+  window.addEventListener('pointermove', updateCursor, { passive: true });
 
   window.addEventListener('resize', () => {
     if (!renderer || !camera) return;
