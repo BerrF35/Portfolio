@@ -495,6 +495,11 @@ function drawLaptopScreen() {
   const ctx = world.screenCtx;
   if (!ctx) return;
 
+  ctx.save();
+  // Flip horizontally across the canvas width to correct mirrored UV mapping
+  ctx.translate(1024, 0);
+  ctx.scale(-1, 1);
+
   ctx.fillStyle = '#060a0f';
   ctx.fillRect(0, 0, 1024, 640);
 
@@ -549,6 +554,8 @@ function drawLaptopScreen() {
   ctx.fillStyle = '#05080c';
   ctx.font = 'bold 18px monospace';
   ctx.fillText('[E] BOOT DESKTOP', 140, 442);
+
+  ctx.restore();
 
   if (world.screenTexture) {
     world.screenTexture.needsUpdate = true;
