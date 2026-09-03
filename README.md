@@ -16,48 +16,19 @@ JAIJITESH.OS/
 │
 ├── src/                        # Clean application source code
 │   ├── main.js                 # Bootstrapper & lifecycle coordinator
-│   │
 │   ├── core/                   # 3D Graphics & Engine Foundation
 │   │   ├── scene.js            # Three.js setup, studio lighting, camera choreography, orbit constraints
-│   │   ├── desk.js             # Chamfered oak workbench & topographic elevation contour desk mat
 │   │   ├── audio.js            # Web Audio API procedural synthesizer
 │   │   └── state.js            # Reactive application state & GPU offload management
-│   │
-│   ├── hardware/               # 3D Hardware CAD & Telemetry
-│   │   ├── cadLoader.js        # GLTF loader, PBR materials, centering wrappers, and positioning
-│   │   └── definitions.js      # Technical telemetry definitions (Robot, Pi, ESP32, Camera, Telescope)
-│   │
 │   ├── os/                     # JAIJITESH.OS Operating Environment
 │   │   ├── desktop.js          # Window manager, dock, taskbar, theme system, application routing
 │   │   ├── terminal.js         # Interactive UNIX CLI shell with real facts & commands
 │   │   └── pixelGame.js        # High-DPI retro pixel memory timeline world
-│   │
-│   ├── apps/                   # Interactive Simulation & Engineering Apps
-│   │   ├── simRobot.js         # BerryBot autonomous robotics telemetry & S-curve kinematics sandbox
-│   │   ├── simWind.js          # WindSim aerodynamics LBM CFD simulation sandbox
-│   │   └── simAgent.js         # Berry local-first desktop AI assistant architecture visualizer
-│   │
 │   └── styles/                 # Modular CSS Architecture
-│       ├── main.css            # Root tokens, Swiss typography, minimal entry surface, HUD
-│       ├── desktop.css         # JAIJITESH.OS window manager, dock, taskbar, theme variables
-│       └── apps.css            # Simulators, telemetry cards, inspector overlay, pixel timeline
-│
+│       └── main.css            # Root tokens, Swiss typography, minimal entry surface, HUD
 ├── assets/                     # 3D CAD & binary models
-│   ├── chassis.glb             # BerryBot tracked robotics platform
-│   ├── raspberry.glb           # Raspberry Pi 4 Model B
-│   ├── esp32.glb               # ESP32-WROOM microcontroller
-│   ├── hp_omen_laptop.glb      # Engineering Workstation 16
-│   ├── ice_claw_mouse.glb      # Precision CAD mouse
-│   ├── full_body_shepherd_dog_meshy.glb # Berry the Dog
-│   ├── 3d_modelling_my_cat_fripouille.glb # Crispy the Cat
-│   ├── canon_at-1_retro_camera.glb # Canon AT-1 retro optics
-│   ├── telescope.glb           # Refractor telescope
-│   └── cad/                    # Technical engineering STEP CAD archives
-│
+│   └── jaijitesh_room.glb      # Authoritative 3D world scene
 └── tools/                      # CLI Inspection & Diagnostic Utilities
-    ├── inspect_models.py       # GLB node and mesh accessor inspector
-    ├── check_dimensions.py     # Bounding box & dimension calculator
-    └── start-preview.ps1       # Local PowerShell dev preview server
 ```
 
 ---
@@ -65,8 +36,8 @@ JAIJITESH.OS/
 ## ⚡ Key Systems & Features
 
 1. **3D Engineering Lab Bench (Three.js & WebGL)**:
-   - Photorealistic illumination with dark architectural slat acoustic walls.
-   - High-resolution Black & White Topographic Contour Line desk mat.
+   - Photorealistic illumination with authentic room fixtures and area/bar lighting.
+   - Single authoritative 3D world scene with authentic workstation, furniture, and exterior cyberpunk city.
    - Real 3D CAD models: **BerryBot Tracked Chassis**, **Raspberry Pi 4**, **ESP32-WROOM**, **Canon AT-1 Camera**, and **Refractor Telescope**.
    - Camera orbit constraints preventing out-of-bounds viewing.
 

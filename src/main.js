@@ -1326,6 +1326,13 @@ async function start() {
     loadingDetail.textContent = 'Check console logs.';
     showToast('ASSET LOAD FAILED');
   }
+// Initialize 3D Glowing Tubes Cursor on the Landing Screen
+let tubesCursorInstance = null;
+try {
+  tubesCursorInstance = new HomeTubesCursor('tubesCanvas');
+  window.tubesCursorInstance = tubesCursorInstance;
+} catch (e) {
+  console.warn('HomeTubesCursor initialization error:', e);
 }
 
 start();
