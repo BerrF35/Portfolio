@@ -97,24 +97,9 @@
           </div>
         </header>
 
-        <div class="world-ui__instruction" id="worldInstruction">
-          <span>01</span>
-          <p>Click the workstation or physical hardware objects on the bench to inspect.</p>
-          <i>&#8600;</i>
-        </div>
-
-        <nav class="world-ui__actions" aria-label="Camera shortcuts">
-          <button data-action="focus-laptop" type="button">
-            <span>OPEN WORKSTATION</span><i>&#8599;</i>
-          </button>
-          <button data-action="overview" type="button">
-            <span>BENCH OVERVIEW</span>
-          </button>
-        </nav>
-
-        <div class="world-ui__footer">
+        <!-- Minimal FPOV Status Header -->
+        <div class="world-ui__footer" style="display: none;">
           <span>VIT VELLORE / TAMIL NADU (+05:30 IST)</span>
-          <span>[WASD] WALK // [MOUSE] LOOK // [E] INTERACT</span>
         </div>
       </section>
 
@@ -132,6 +117,21 @@
           <span><b>SPACE / SHIFT</b> Up / Down</span>
           <span><b>E / F</b> Interact</span>
           <span><b>ESC</b> Release Mouse</span>
+        </div>
+
+        <!-- Phone Mobile Touch Controls -->
+        <div id="mobileControls" class="mobile-controls" hidden>
+          <div id="touchJoystick" class="touch-joystick">
+            <div id="touchKnob" class="touch-joystick__knob"></div>
+          </div>
+          <div class="mobile-controls__actions">
+            <button type="button" id="touchUpBtn" class="touch-btn touch-btn--small" aria-label="Move Up">▲</button>
+            <button type="button" id="touchDownBtn" class="touch-btn touch-btn--small" aria-label="Move Down">▼</button>
+            <button type="button" id="touchInteractBtn" class="touch-btn touch-btn--interact" aria-label="Interact">
+              <span>E</span>
+              <small id="touchInteractLabel">ACTION</small>
+            </button>
+          </div>
         </div>
       </div>
 
