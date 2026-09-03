@@ -264,12 +264,7 @@ function createStudioLighting() {
   world.lights.ceiling.position.set(-1.6, 2.4, -0.8);
   scene.add(world.lights.ceiling);
 
-  // 4. Workstation Desk Light: soft cyan glow from monitors/laptop
-  world.lights.desk = new THREE.PointLight(0x38bdf8, 1.5, 4.5, 1.5);
-  world.lights.desk.position.set(0.05, 1.15, -0.3);
-  scene.add(world.lights.desk);
-
-  // 5. Circular Window City Inflow: subtle atmospheric neon glow
+  // 4. Circular Window City Inflow: subtle atmospheric neon glow
   world.lights.window = new THREE.PointLight(0x818cf8, 1.2, 5.5, 1.4);
   world.lights.window.position.set(-3.5, 1.5, 0.4);
   scene.add(world.lights.window);
@@ -370,6 +365,11 @@ async function loadAuthoritativeScene() {
           if (child.isMesh && child.material && child.material.name === 'screen') {
             world.screenMesh = child;
             child.material.map = world.screenTexture;
+            child.material.emissiveMap = world.screenTexture;
+            child.material.emissive = new THREE.Color(0xffffff);
+            child.material.emissiveIntensity = 0.95;
+            child.material.roughness = 1.0;
+            child.material.metalness = 0.0;
             child.material.needsUpdate = true;
             child.userData.isLaptop = true;
             child.userData.actionPrompt = 'BOOT JAIJITESH.OS';
@@ -481,6 +481,11 @@ function createScreenCanvas() {
   const texture = new THREE.CanvasTexture(canvas);
   texture.colorSpace = THREE.SRGBColorSpace;
   texture.anisotropy = renderer ? renderer.capabilities.getMaxAnisotropy() : 1;
+
+  // Correct inverted/mirrored Blender screen UV mapping
+  texture.center.set(0.5, 0.5);
+  texture.rotation = Math.PI;
+
   world.screenTexture = texture;
 
   drawLaptopScreen();
@@ -1208,26 +1213,41 @@ function bootSystem() {
 
 function openScreen() {
   screenUi.classList.add('is-open');
-  if (world.desktopManager) {
-    world.desktopManager.open();
+  try {
+    world.desktopManager?.open?.();
+  } catch (err) {
+    console.warn('Desktop manager open error:', err);
   }
 }
 
 function exitLaptop() {
-  if (state.busy) return;
-  state.busy = true;
+  state.busy = false;
   state.focused = false;
+  state.screenState = 'sleep';
 
   screenUi.classList.remove('is-open');
-  if (world.desktopManager) {
-    world.desktopManager.close();
+
+  try {
+    world.desktopManager?.close?.();
+  } catch (err) {
+    console.warn('Desktop manager close error:', err);
   }
 
-  try { sound.powerDown?.(); } catch (_) {}
+  try {
+    sound.powerDown?.();
+  } catch (_) {}
 
-  camera.position.set(-1.5, 1.45, -0.5);
-  state.busy = false;
-  activateFPOV();
+  // Smoothly ease camera back from the laptop to standing room perspective
+  const standingPos = new THREE.Vector3(-1.5, 1.45, -0.5);
+  const lookTarget = new THREE.Vector3(-0.35, 1.15, -0.3);
+
+  easeCamera(standingPos, lookTarget, 0.75, () => {
+    state.busy = false;
+    fpov.yaw = -0.35;
+    fpov.pitch = 0.0;
+    activateFPOV();
+    showToast('WASD: MOVE • MOUSE: LOOK • E: INTERACT');
+  });
 }
 window.exitLaptop = exitLaptop;
 
@@ -1307,14 +1327,27 @@ function hideInspectorOverlay() {
 // =============================================================================
 function bindEvents() {
   $('#enter').addEventListener('click', enterLab);
-  $('#homeBtn').addEventListener('click', exitLaptop);
-  $('#inspectClose').addEventListener('click', () => {
+  $('#homeBtn')?.addEventListener('click', exitLaptop);
+  $('#screenExitBtn')?.addEventListener('click', exitLaptop);
+  $('#inspectClose')?.addEventListener('click', () => {
     hideInspectorOverlay();
     exitLaptop();
   });
-  $('#inspectBack').addEventListener('click', () => {
+  $('#inspectBack')?.addEventListener('click', () => {
     hideInspectorOverlay();
     exitLaptop();
+  });
+
+  // Global Escape Key to return from Workstation or Inspector to 3D room
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (state.inspecting) {
+        hideInspectorOverlay();
+        exitLaptop();
+      } else if (state.focused || screenUi.classList.contains('is-open')) {
+        exitLaptop();
+      }
+    }
   });
 
   const benchSound = $('#benchSoundBtn');

@@ -36,6 +36,18 @@ export class DesktopManager {
     this.startClock();
   }
 
+  open() {
+    if (this.container) {
+      this.container.style.display = 'block';
+    }
+  }
+
+  close() {
+    this.closeStartMenu();
+    const ctx = this.container?.querySelector('#winContextMenu');
+    if (ctx) ctx.style.display = 'none';
+  }
+
   getIconHtml(type) {
     switch (type) {
       case 'folder':
