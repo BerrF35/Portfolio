@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+window.THREE = THREE;
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
@@ -112,7 +113,7 @@ try {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.92;
+  renderer.toneMappingExposure = 1.0;
 
   // Initialize Three.js RectAreaLight uniform library
   RectAreaLightUniformsLib.init();
@@ -156,16 +157,20 @@ const world = {
   switchboard: null,
   doorNode: null,
   lights: {
-    bedLed: null,
-    tube1: null,
-    tube2: null,
-    deskHud: null,
-    ambient: null
+    ambient: null,
+    hemi: null,
+    ceiling: null,
+    upperCeiling: null,
+    desk: null,
+    bed: null,
+    window: null,
+    door: null,
+    backWall: null
   },
   switchStates: {
-    tubes: true,
+    ceiling: true,
     fan: true,
-    bedLed: true
+    ambient: true
   }
 };
 
@@ -234,36 +239,57 @@ function easeCamera(toPos, toTarget, duration = 0.95, onComplete) {
 }
 
 // =============================================================================
-// STUDIO LIGHTING: AREA & BAR EMITTERS MATCHING ROOM FIXTURES
+// SUBTLE REALISTIC LIGHTING SYSTEM (ALL WALLS, CORNERS & FIXTURES VISIBLE)
 // =============================================================================
 function createStudioLighting() {
-  // 1. Soft Cyberpunk Interior Fill
-  world.lights.ambient = new THREE.AmbientLight('#080d14', 0.40);
+  // Clear any existing lights in world.lights
+  Object.keys(world.lights).forEach((k) => {
+    if (world.lights[k] && world.lights[k].isObject3D) scene.remove(world.lights[k]);
+  });
+
+  // 1. Broad omnidirectional ambient fill: soft baseline so no wall or corner is in pitch black
+  world.lights.ambient = new THREE.AmbientLight(0x455566, 0.55);
   scene.add(world.lights.ambient);
 
-  // 2. Bed Overhead Giant LED Panel (RectAreaLight pointing down onto bed)
-  world.lights.bedLed = new THREE.RectAreaLight('#a5f3fc', 16.0, 1.8, 0.9);
-  world.lights.bedLed.position.set(-0.85, 1.72, -2.15);
-  world.lights.bedLed.rotation.set(-Math.PI / 2, 0, 0);
-  scene.add(world.lights.bedLed);
+  // 2. Dual-tone Hemisphere light: cool slate overhead, warm charcoal floor bounce
+  world.lights.hemi = new THREE.HemisphereLight(0x5a7088, 0x1e2733, 0.45);
+  world.lights.hemi.position.set(0, 3.2, 0);
+  scene.add(world.lights.hemi);
 
-  // 3. Ceiling Linear Fluorescent Tubelight 1 (Above sofa/middle)
-  world.lights.tube1 = new THREE.RectAreaLight('#ffeedb', 8.0, 1.6, 0.2);
-  world.lights.tube1.position.set(-3.27, 2.74, -2.15);
-  world.lights.tube1.rotation.set(-Math.PI / 2, 0, 0);
-  scene.add(world.lights.tube1);
+  // 3. Central Ceiling Fill: gentle warm diffusion across the middle room
+  world.lights.ceiling = new THREE.PointLight(0xe2e8f0, 1.25, 8.5, 1.3);
+  world.lights.ceiling.position.set(-1.6, 2.4, -0.8);
+  scene.add(world.lights.ceiling);
 
-  // 4. Ceiling Linear Fluorescent Tubelight 2 (Near hallway entrance)
-  world.lights.tube2 = new THREE.RectAreaLight('#e2e8f0', 8.0, 1.6, 0.2);
-  world.lights.tube2.position.set(-0.5, 2.74, 0.2);
-  world.lights.tube2.rotation.set(-Math.PI / 2, 0, 0);
-  scene.add(world.lights.tube2);
+  // 4. Upper Ceiling & Beams Uplight: illuminates ceiling panels and ducts gently
+  world.lights.upperCeiling = new THREE.PointLight(0x64748b, 0.75, 7.5, 1.3);
+  world.lights.upperCeiling.position.set(-1.0, 2.7, -1.5);
+  scene.add(world.lights.upperCeiling);
 
-  // 5. Workstation HUD Cyan Glow
-  world.lights.deskHud = new THREE.RectAreaLight('#00f0ff', 10.0, 1.3, 0.45);
-  world.lights.deskHud.position.set(0.12, 1.05, -0.28);
-  world.lights.deskHud.rotation.set(0, -Math.PI / 2, 0);
-  scene.add(world.lights.deskHud);
+  // 5. Workstation Desk & Screen Glow: soft cyan spill onto laptop, monitors, notes, and desk wall
+  world.lights.desk = new THREE.PointLight(0x38bdf8, 1.4, 4.5, 1.4);
+  world.lights.desk.position.set(0.05, 1.15, -0.3);
+  scene.add(world.lights.desk);
+
+  // 6. Bed & Quantum Companion Nook: soft cool white illuminating the bed, cat, and ladder
+  world.lights.bed = new THREE.PointLight(0xb8d2ec, 1.15, 4.5, 1.4);
+  world.lights.bed.position.set(-0.8, 1.8, -2.1);
+  scene.add(world.lights.bed);
+
+  // 7. Circular Window Neon City Inflow: subtle atmospheric glow onto sofa, canine unit, and entry wall
+  world.lights.window = new THREE.PointLight(0x818cf8, 1.3, 5.5, 1.3);
+  world.lights.window.position.set(-3.5, 1.5, 0.4);
+  scene.add(world.lights.window);
+
+  // 8. Yellow Vault Door & Hallway Corner: subtle warm amber illuminating the airlock and far walls
+  world.lights.door = new THREE.PointLight(0xfde68a, 1.1, 5.0, 1.4);
+  world.lights.door.position.set(1.9, 1.5, 0.9);
+  scene.add(world.lights.door);
+
+  // 9. Back Wall & Switchboard Area: soft slate illuminating the vertical slats and storage
+  world.lights.backWall = new THREE.PointLight(0x64748b, 0.95, 4.5, 1.4);
+  world.lights.backWall.position.set(-3.2, 1.6, -1.9);
+  scene.add(world.lights.backWall);
 }
 
 // =============================================================================
@@ -313,6 +339,16 @@ async function loadAuthoritativeScene() {
                 }
                 if (mat.emissiveMap) {
                   mat.emissiveMap.colorSpace = THREE.SRGBColorSpace;
+                }
+                // If a material has a texture map but its color tint was exported as black [0,0,0],
+                // restore its color multiplier to pure white so the underlying texture is visible
+                if (mat.map && mat.color && mat.color.r < 0.1 && mat.color.g < 0.1 && mat.color.b < 0.1) {
+                  mat.color.setHex(0xffffff);
+                  mat.needsUpdate = true;
+                }
+                if (/walls/i.test(mat.name) || /walls/i.test(child.name)) {
+                  mat.color.setHex(0xffffff);
+                  mat.needsUpdate = true;
                 }
               });
             }
@@ -536,20 +572,23 @@ function toggleSwitchButton(id) {
       showToast(world.fanAction.paused ? 'VENTILATION FAN: PAUSED' : 'VENTILATION FAN: SPINNING');
     }
   } else if (id === 2) {
-    // Button 2: Toggle Ceiling Tubelights
-    world.switchStates.tubes = !world.switchStates.tubes;
-    const tubeIntensity = world.switchStates.tubes ? 8.0 : 0.0;
-    if (world.lights.tube1) world.lights.tube1.intensity = tubeIntensity;
-    if (world.lights.tube2) world.lights.tube2.intensity = tubeIntensity;
-    showToast(world.switchStates.tubes ? 'CEILING TUBES: 100% ILLUMINATION' : 'CEILING TUBES: POWER OFF');
+    // Button 2: Toggle Ceiling / Main Lights
+    world.switchStates.ceiling = !world.switchStates.ceiling;
+    const ceilInt = world.switchStates.ceiling ? 2.2 : 0.5;
+    const upInt = world.switchStates.ceiling ? 1.5 : 0.3;
+    if (world.lights.ceiling) world.lights.ceiling.intensity = ceilInt;
+    if (world.lights.upperCeiling) world.lights.upperCeiling.intensity = upInt;
+    showToast(world.switchStates.ceiling ? 'CEILING ILLUMINATION: FULL' : 'CEILING ILLUMINATION: DIM');
   } else if (id === 3) {
-    // Button 3: Toggle Bed Overhead LED & Desk Glow
-    world.switchStates.bedLed = !world.switchStates.bedLed;
-    const ledIntensity = world.switchStates.bedLed ? 16.0 : 0.0;
-    const deskIntensity = world.switchStates.bedLed ? 10.0 : 0.0;
-    if (world.lights.bedLed) world.lights.bedLed.intensity = ledIntensity;
-    if (world.lights.deskHud) world.lights.deskHud.intensity = deskIntensity;
-    showToast(world.switchStates.bedLed ? 'AMBIENT GLOW: ACTIVE' : 'AMBIENT GLOW: STANDBY');
+    // Button 3: Toggle Ambient / Accent Lights (Desk, Bed, Window)
+    world.switchStates.ambient = !world.switchStates.ambient;
+    const deskInt = world.switchStates.ambient ? 2.0 : 0.4;
+    const bedInt = world.switchStates.ambient ? 1.8 : 0.4;
+    const winInt = world.switchStates.ambient ? 1.8 : 0.5;
+    if (world.lights.desk) world.lights.desk.intensity = deskInt;
+    if (world.lights.bed) world.lights.bed.intensity = bedInt;
+    if (world.lights.window) world.lights.window.intensity = winInt;
+    showToast(world.switchStates.ambient ? 'AMBIENT ACCENTS: ACTIVE' : 'AMBIENT ACCENTS: MINIMAL');
   } else {
     toggleRoomSystems();
   }
@@ -559,11 +598,12 @@ function toggleRoomSystems() {
   sound.click(750, 0.04);
   pulseSwitchEmissive(0x38bdf8);
   if (world.fanAction) world.fanAction.paused = !world.fanAction.paused;
-  world.switchStates.tubes = !world.switchStates.tubes;
-  const tubeIntensity = world.switchStates.tubes ? 8.0 : 0.0;
-  if (world.lights.tube1) world.lights.tube1.intensity = tubeIntensity;
-  if (world.lights.tube2) world.lights.tube2.intensity = tubeIntensity;
-  showToast(world.switchStates.tubes ? 'ROOM SYSTEMS // POWER: ACTIVE' : 'ROOM SYSTEMS // POWER: ECO-STANDBY');
+  world.switchStates.ceiling = !world.switchStates.ceiling;
+  const ceilInt = world.switchStates.ceiling ? 2.2 : 0.5;
+  const upInt = world.switchStates.ceiling ? 1.5 : 0.3;
+  if (world.lights.ceiling) world.lights.ceiling.intensity = ceilInt;
+  if (world.lights.upperCeiling) world.lights.upperCeiling.intensity = upInt;
+  showToast(world.switchStates.ceiling ? 'ROOM SYSTEMS // POWER: ACTIVE' : 'ROOM SYSTEMS // POWER: ECO-STANDBY');
 }
 
 // =============================================================================
