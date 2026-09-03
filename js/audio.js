@@ -57,6 +57,11 @@ class SoundEngine {
     } catch (_) {}
   }
 
+  // Keyboard key press tactile click
+  keyPress(freq = 750, duration = 0.025) {
+    this.click(freq, duration, 'triangle');
+  }
+
   // Subtle UI hover tick
   tick(freq = 1200) {
     if (this.muted) return;
@@ -138,6 +143,26 @@ class SoundEngine {
       whineGain.connect(this.masterGain);
       whine.start();
       whine.stop(this.ctx.currentTime + 0.7);
+    } catch (_) {}
+  }
+
+  // CRT power down coil discharge
+  powerDown(duration = 0.35) {
+    if (this.muted) return;
+    this.ensureContext();
+    if (!this.ctx) return;
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(360, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(50, this.ctx.currentTime + duration);
+      gain.gain.setValueAtTime(0.06, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+      osc.connect(gain);
+      gain.connect(this.masterGain);
+      osc.start();
+      osc.stop(this.ctx.currentTime + duration);
     } catch (_) {}
   }
 

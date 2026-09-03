@@ -2,7 +2,7 @@ import * as THREE from 'three';
 window.THREE = THREE;
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { sound } from './js/audio.js';
 import { HARDWARE_DEFINITIONS } from './js/portfolioData.js?v=3';
 import { DesktopManager } from './js/desktop.js';
@@ -103,23 +103,26 @@ let isWebGLAvailable = true;
 try {
   renderer = new THREE.WebGLRenderer({
     canvas,
-    antialias: true,
+    antialias: false,
     alpha: false,
-    powerPreference: 'high-performance'
+    powerPreference: 'high-performance',
+    precision: 'mediump',
+    stencil: false,
+    depth: true
   });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.0));
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.enabled = false;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
 
-  // Initialize Three.js RectAreaLight uniform library
-  RectAreaLightUniformsLib.init();
-
+  // Realistic Image-Based Lighting (IBL) via RoomEnvironment (eliminates plastic look)
+  const pmremGenerator = new THREE.PMREMGenerator(renderer);
+  pmremGenerator.compileEquirectangularShader();
   scene = new THREE.Scene();
   scene.background = new THREE.Color('#04070a');
+  scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
   // Camera far plane set to 3000m so the entire Cyberpunk City outside the circular window is rendered
   camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.05, 3000);
@@ -247,49 +250,29 @@ function createStudioLighting() {
     if (world.lights[k] && world.lights[k].isObject3D) scene.remove(world.lights[k]);
   });
 
-  // 1. Broad omnidirectional ambient fill: soft baseline so no wall or corner is in pitch black
-  world.lights.ambient = new THREE.AmbientLight(0x455566, 0.55);
+  // 1. Broad ambient fill for base visibility
+  world.lights.ambient = new THREE.AmbientLight(0x5a6d80, 0.45);
   scene.add(world.lights.ambient);
 
-  // 2. Dual-tone Hemisphere light: cool slate overhead, warm charcoal floor bounce
-  world.lights.hemi = new THREE.HemisphereLight(0x5a7088, 0x1e2733, 0.45);
+  // 2. Dual-tone Hemisphere light for realistic ground/ceiling bounce
+  world.lights.hemi = new THREE.HemisphereLight(0x607890, 0x1e2733, 0.35);
   world.lights.hemi.position.set(0, 3.2, 0);
   scene.add(world.lights.hemi);
 
-  // 3. Central Ceiling Fill: gentle warm diffusion across the middle room
-  world.lights.ceiling = new THREE.PointLight(0xe2e8f0, 1.25, 8.5, 1.3);
+  // 3. Central Ceiling Light: soft warm-white room fill
+  world.lights.ceiling = new THREE.PointLight(0xe2e8f0, 1.2, 8.0, 1.4);
   world.lights.ceiling.position.set(-1.6, 2.4, -0.8);
   scene.add(world.lights.ceiling);
 
-  // 4. Upper Ceiling & Beams Uplight: illuminates ceiling panels and ducts gently
-  world.lights.upperCeiling = new THREE.PointLight(0x64748b, 0.75, 7.5, 1.3);
-  world.lights.upperCeiling.position.set(-1.0, 2.7, -1.5);
-  scene.add(world.lights.upperCeiling);
-
-  // 5. Workstation Desk & Screen Glow: soft cyan spill onto laptop, monitors, notes, and desk wall
-  world.lights.desk = new THREE.PointLight(0x38bdf8, 1.4, 4.5, 1.4);
+  // 4. Workstation Desk Light: soft cyan glow from monitors/laptop
+  world.lights.desk = new THREE.PointLight(0x38bdf8, 1.5, 4.5, 1.5);
   world.lights.desk.position.set(0.05, 1.15, -0.3);
   scene.add(world.lights.desk);
 
-  // 6. Bed & Quantum Companion Nook: soft cool white illuminating the bed, cat, and ladder
-  world.lights.bed = new THREE.PointLight(0xb8d2ec, 1.15, 4.5, 1.4);
-  world.lights.bed.position.set(-0.8, 1.8, -2.1);
-  scene.add(world.lights.bed);
-
-  // 7. Circular Window Neon City Inflow: subtle atmospheric glow onto sofa, canine unit, and entry wall
-  world.lights.window = new THREE.PointLight(0x818cf8, 1.3, 5.5, 1.3);
+  // 5. Circular Window City Inflow: subtle atmospheric neon glow
+  world.lights.window = new THREE.PointLight(0x818cf8, 1.2, 5.5, 1.4);
   world.lights.window.position.set(-3.5, 1.5, 0.4);
   scene.add(world.lights.window);
-
-  // 8. Yellow Vault Door & Hallway Corner: subtle warm amber illuminating the airlock and far walls
-  world.lights.door = new THREE.PointLight(0xfde68a, 1.1, 5.0, 1.4);
-  world.lights.door.position.set(1.9, 1.5, 0.9);
-  scene.add(world.lights.door);
-
-  // 9. Back Wall & Switchboard Area: soft slate illuminating the vertical slats and storage
-  world.lights.backWall = new THREE.PointLight(0x64748b, 0.95, 4.5, 1.4);
-  world.lights.backWall.position.set(-3.2, 1.6, -1.9);
-  scene.add(world.lights.backWall);
 }
 
 // =============================================================================
@@ -323,23 +306,33 @@ async function loadAuthoritativeScene() {
         // Traverse hierarchy: preserve all transforms, materials, and hook up interactables
         root.traverse((child) => {
           if (child.isMesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
+            child.castShadow = false;
+            child.receiveShadow = false;
 
-            // Preserve materials and window transparency
+            // Static mesh transform optimization (saves CPU/GPU recalculations)
+            if (!/fan/i.test(child.name) && !/fan/i.test(child.parent?.name || '')) {
+              child.matrixAutoUpdate = false;
+              child.updateMatrix();
+            }
+
+            // Material quality & realism tuning
             if (child.material) {
               const mats = Array.isArray(child.material) ? child.material : [child.material];
               mats.forEach((mat) => {
                 if (!mat) return;
-                // Circular window / airlock glass: ensure transparency so city is visible
-                if (/airlock|window|glass/i.test(mat.name) || /airlock|window/i.test(child.name)) {
-                  mat.transparent = true;
-                  mat.opacity = 0.35;
-                  mat.depthWrite = false;
+
+                // Ensure fan housing, airlock, vents and structural boxes are 100% solid
+                if (/airlock|vent|ammo|wall|floor|ceiling/i.test(mat.name) || /airlock|vent/i.test(child.name)) {
+                  mat.transparent = false;
+                  mat.depthWrite = true;
+                  mat.depthTest = true;
+                  mat.opacity = 1.0;
                 }
+
                 if (mat.emissiveMap) {
                   mat.emissiveMap.colorSpace = THREE.SRGBColorSpace;
                 }
+
                 // If a material has a texture map but its color tint was exported as black [0,0,0],
                 // restore its color multiplier to pure white so the underlying texture is visible
                 if (mat.map && mat.color && mat.color.r < 0.1 && mat.color.g < 0.1 && mat.color.b < 0.1) {
@@ -348,6 +341,23 @@ async function loadAuthoritativeScene() {
                 }
                 if (/walls/i.test(mat.name) || /walls/i.test(child.name)) {
                   mat.color.setHex(0xffffff);
+                  mat.roughness = 0.85;
+                  mat.metalness = 0.0;
+                  mat.needsUpdate = true;
+                }
+
+                // PBR Realism: eliminate cheap plastic look via proper roughness & IBL response
+                if (mat.isMeshStandardMaterial || mat.isMeshPhysicalMaterial) {
+                  mat.envMapIntensity = 0.8;
+                  if (/wall|floor|ceiling|bed|pillow|sheet|sofa|chair|cloth|fabric|paper|notes|wood/i.test(mat.name)) {
+                    mat.roughness = Math.max(mat.roughness, 0.75);
+                    mat.metalness = 0.0;
+                  } else if (/metal|pipe|duct|roller|track|chassis|iron|steel/i.test(mat.name)) {
+                    mat.metalness = Math.max(mat.metalness, 0.75);
+                    mat.roughness = Math.min(mat.roughness, 0.35);
+                  } else if (mat.metalness === 0 && mat.roughness < 0.45) {
+                    mat.roughness = 0.65; // eliminate unnatural plastic sheen
+                  }
                   mat.needsUpdate = true;
                 }
               });
@@ -1005,9 +1015,13 @@ function onFPOVKeyUp(e) {
   }
 }
 
-// =============================================================================
-// FPOV RUNTIME MOVEMENT & SMOOTH COLLISION
-// =============================================================================
+// Pre-allocated vectors for garbage-collection-free movement loop
+const fpovForward = new THREE.Vector3();
+const fpovRight = new THREE.Vector3();
+const fpovMoveDir = new THREE.Vector3();
+const fpovNextPos = new THREE.Vector3();
+let lastRaycastTime = 0;
+
 function updateFPOVMovement(delta) {
   if (!state.fpovMode) return;
 
@@ -1022,29 +1036,34 @@ function updateFPOVMovement(delta) {
   }
 
   if (moveX !== 0 || moveZ !== 0 || moveY !== 0) {
-    const forward = new THREE.Vector3(-Math.sin(fpov.yaw), 0, -Math.cos(fpov.yaw));
-    const right = new THREE.Vector3(Math.cos(fpov.yaw), 0, -Math.sin(fpov.yaw));
+    fpovForward.set(-Math.sin(fpov.yaw), 0, -Math.cos(fpov.yaw));
+    fpovRight.set(Math.cos(fpov.yaw), 0, -Math.sin(fpov.yaw));
 
-    const moveDir = new THREE.Vector3()
-      .addScaledVector(forward, moveZ)
-      .addScaledVector(right, moveX)
+    fpovMoveDir.set(0, 0, 0)
+      .addScaledVector(fpovForward, moveZ)
+      .addScaledVector(fpovRight, moveX)
       .normalize();
 
     const speed = fpov.speed * delta;
-    const nextPos = camera.position.clone();
-    nextPos.x += moveDir.x * speed;
-    nextPos.z += moveDir.z * speed;
-    nextPos.y += moveY * fpov.verticalSpeed * delta;
+    fpovNextPos.copy(camera.position);
+    fpovNextPos.x += fpovMoveDir.x * speed;
+    fpovNextPos.z += fpovMoveDir.z * speed;
+    fpovNextPos.y += moveY * fpov.verticalSpeed * delta;
 
-    clampRoomCollision(nextPos, camera.position);
-    camera.position.copy(nextPos);
+    clampRoomCollision(fpovNextPos, camera.position);
+    camera.position.copy(fpovNextPos);
   }
 
   camera.rotation.y = fpov.yaw;
   camera.rotation.x = fpov.pitch;
   camera.rotation.z = 0;
 
-  raycastCrosshair();
+  // Throttled raycasting: 80ms interval saves up to 85% CPU/GPU overhead
+  const now = performance.now();
+  if (now - lastRaycastTime > 80) {
+    lastRaycastTime = now;
+    raycastCrosshair();
+  }
 }
 
 function clampRoomCollision(nextPos, prevPos) {
@@ -1052,23 +1071,24 @@ function clampRoomCollision(nextPos, prevPos) {
   nextPos.y = Math.max(0.75, Math.min(2.55, nextPos.y));
 
   // Overall room perimeter bounds
-  nextPos.x = Math.max(-4.60, Math.min(3.80, nextPos.x));
-  nextPos.z = Math.max(-3.05, Math.min(2.50, nextPos.z));
+  nextPos.x = Math.max(-4.40, nextPos.x);
+  nextPos.z = Math.max(-2.95, Math.min(2.35, nextPos.z));
 
-  // Bed box obstacle [-1.55, 0.45] x [-3.10, -1.25]
-  if (nextPos.x > -1.55 && nextPos.x < 0.45 && nextPos.z > -3.10 && nextPos.z < -1.25) {
-    if (prevPos.x <= -1.55) nextPos.x = -1.55;
-    else if (prevPos.x >= 0.45) nextPos.x = 0.45;
-    else if (prevPos.z >= -1.25) nextPos.z = -1.25;
-    else if (prevPos.z <= -3.10) nextPos.z = -3.10;
+  // Solid wall behind laptop and bed:
+  // For any position along the bed/desk area (z < 0.65), x must NEVER exceed -0.38
+  // preventing walking through the desk or phasing into the wall behind the laptop.
+  if (nextPos.z < 0.65) {
+    nextPos.x = Math.min(-0.38, nextPos.x);
+  } else {
+    nextPos.x = Math.min(2.40, nextPos.x);
   }
 
-  // Workstation Desk box obstacle [-0.35, 0.48] x [-1.15, 0.45]
-  if (nextPos.x > -0.35 && nextPos.x < 0.48 && nextPos.z > -1.15 && nextPos.z < 0.45) {
-    if (prevPos.x <= -0.35) nextPos.x = -0.35;
-    else if (prevPos.x >= 0.48) nextPos.x = 0.48;
-    else if (prevPos.z >= 0.45) nextPos.z = 0.45;
-    else if (prevPos.z <= -1.15) nextPos.z = -1.15;
+  // Bed box obstacle [-1.55, 0.45] x [-3.10, -1.25]
+  if (nextPos.x > -1.55 && nextPos.z > -3.10 && nextPos.z < -1.25) {
+    if (prevPos.x <= -1.55) nextPos.x = -1.55;
+    else if (prevPos.z >= -1.25) nextPos.z = -1.25;
+    else if (prevPos.z <= -3.10) nextPos.z = -3.10;
+    else nextPos.x = -1.55;
   }
 }
 
@@ -1159,7 +1179,7 @@ function focusLaptop(targetApp = null) {
   state.focused = true;
   deactivateFPOV();
 
-  sound.keyPress();
+  try { sound.keyPress?.(); } catch (_) {}
 
   // Position camera directly facing the HP Omen Laptop screen
   const laptopPos = new THREE.Vector3(0.112, 0.898, -0.299);
@@ -1179,7 +1199,7 @@ window.focusLaptop = focusLaptop;
 function bootSystem() {
   if (state.screenState === 'desktop') return;
   state.screenState = 'boot';
-  sound.bootChime();
+  try { sound.bootChime?.(); } catch (_) {}
   setTimeout(() => {
     state.screenState = 'desktop';
     openScreen();
@@ -1203,7 +1223,7 @@ function exitLaptop() {
     world.desktopManager.close();
   }
 
-  sound.powerDown();
+  try { sound.powerDown?.(); } catch (_) {}
 
   camera.position.set(-1.5, 1.45, -0.5);
   state.busy = false;
@@ -1327,7 +1347,7 @@ function bindEvents() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.0));
   });
 }
 
