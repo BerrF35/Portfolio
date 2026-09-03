@@ -192,10 +192,10 @@ export function set3DTheme(themeName) {
 }
 window.set3DTheme = set3DTheme;
 
-function setLoading(percent, text) {
-  if (loadingBar) loadingBar.style.width = `${percent}%`;
-  if (loadingText) loadingText.textContent = text;
-  if (loadingDetail) loadingDetail.textContent = `${percent}%`;
+function setLoading(percent) {
+  const p = Math.min(100, Math.max(0, Math.round(percent)));
+  if (loadingBar) loadingBar.style.width = `${p}%`;
+  if (loadingDetail) loadingDetail.textContent = `${p}%`;
 }
 
 function showToast(msg) {
@@ -405,12 +405,11 @@ async function loadAuthoritativeScene() {
         resolve();
       },
       (xhr) => {
-        if (xhr.lengthComputable) {
+        if (xhr.lengthComputable && xhr.total > 0) {
           const pct = Math.round((xhr.loaded / xhr.total) * 100);
-          setLoading(Math.min(99, Math.max(10, pct)), `CALIBRATING 3D ENVIRONMENT (${pct}%)`);
+          setLoading(Math.min(99, Math.max(10, pct)));
         } else {
-          const mb = (xhr.loaded / (1024 * 1024)).toFixed(1);
-          setLoading(Math.min(95, 10 + Math.round(xhr.loaded / 1400000)), `STREAMING WORLD DATA (${mb} MB)`);
+          setLoading(Math.min(95, 10 + Math.round((xhr.loaded / 128140208) * 85)));
         }
       },
       (err) => {
@@ -586,19 +585,19 @@ function triggerDoorAccessDenied() {
 // =============================================================================
 async function buildWorld() {
   if (!isWebGLAvailable) return;
-  setLoading(5, 'INITIALIZING LIGHTING FIXTURES');
+  setLoading(5);
   createStudioLighting();
 
-  setLoading(10, 'PREPARING WORKSTATION DISPLAY');
+  setLoading(10);
   createScreenCanvas();
 
-  setLoading(15, 'STREAMING AUTHORITATIVE 3D WORLD (jaijitesh_room.glb)');
+  setLoading(15);
   await loadAuthoritativeScene();
 
   camera.position.set(-1.5, 1.45, -0.5);
   camera.rotation.set(0, -0.35, 0);
 
-  setLoading(100, 'ROOM CALIBRATED // READY');
+  setLoading(100);
   setTimeout(() => {
     state.ready = true;
     sound.powerOn();
@@ -625,7 +624,7 @@ function enterLab() {
   const checkReadyInterval = setInterval(() => {
     if (state.ready) {
       clearInterval(checkReadyInterval);
-      setLoading(100, 'REVEALING FIRST-PERSON VIEW');
+      setLoading(100);
 
       setTimeout(() => {
         if (loading) loading.classList.add('is-vaporizing');
@@ -1318,14 +1317,15 @@ async function start() {
   bindEvents();
   animate();
   try {
-    setLoading(5, 'PREPARING ENVIRONMENT');
+    setLoading(5);
     await buildWorld();
   } catch (err) {
     console.error('Initialization error:', err);
-    loadingText.textContent = 'INITIALIZATION FAILED';
-    loadingDetail.textContent = 'Check console logs.';
+    if (loadingDetail) loadingDetail.textContent = 'ERR';
     showToast('ASSET LOAD FAILED');
   }
+}
+
 // Initialize 3D Glowing Tubes Cursor on the Landing Screen
 let tubesCursorInstance = null;
 try {

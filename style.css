@@ -214,21 +214,21 @@ input, textarea, [contenteditable="true"] {
   border-color: var(--text);
 }
 
-/* Loading Screen with Vaporize Transition */
+/* Loading Screen with Pure Solid Black Background (Not Translucent) */
 .loading {
   position: fixed;
   inset: 0;
-  z-index: 85;
+  z-index: 999;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(7, 9, 11, 0.98);
-  color: var(--text);
+  background: #000000 !important;
+  color: #ffffff;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), filter 0.75s ease, transform 0.75s ease;
+  transition: opacity 0.4s ease;
 }
 
 .loading.is-visible {
@@ -240,45 +240,28 @@ input, textarea, [contenteditable="true"] {
 .loading.is-vaporizing {
   opacity: 0 !important;
   visibility: hidden !important;
-  filter: blur(20px) brightness(1.5);
-  transform: scale(1.06);
   pointer-events: none !important;
 }
 
-.loading__mark {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 1px solid rgba(56, 189, 248, 0.4);
-  color: #38bdf8;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  margin-bottom: 20px;
-  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+.loading__mark,
+#loadingText {
+  display: none !important;
 }
 
 .loading__copy {
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: min(360px, 85vw);
-  gap: 12px;
+  width: min(280px, 80vw);
+  gap: 14px;
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
   text-align: center;
-}
-
-.loading__copy span {
-  color: #94a3b8;
 }
 
 .loading__copy b {
   width: 100%;
   height: 3px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 2px;
   overflow: hidden;
   position: relative;
@@ -292,34 +275,16 @@ input, textarea, [contenteditable="true"] {
   height: 100%;
   width: 0%;
   background: #38bdf8;
-  box-shadow: 0 0 14px #38bdf8;
-  transition: width 0.2s ease;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.8);
+  transition: width 0.15s ease-out;
   display: block;
 }
 
 .loading__copy small {
-  color: #38bdf8;
-  font-weight: 700;
-  font-size: 11px;
-}
-
-.loading__copy b {
-  display: block;
-  height: 2px;
-  background: var(--border);
-}
-
-.loading__copy b i {
-  display: block;
-  width: 0%;
-  height: 100%;
-  background: var(--accent);
-  transition: width 0.35s ease;
-}
-
-.loading__copy small {
-  color: var(--text-muted);
-  font-size: 8px;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
 }
 
 /* Layer 2: 3D Engineering Lab Bench HUD */
