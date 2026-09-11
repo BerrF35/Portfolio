@@ -1,21 +1,20 @@
 {
-  "name": "jaijitesh-os",
-  "version": "2.6.0",
-  "description": "Jaijitesh Suryaprakash - Personal Operating Environment disguised as a minimalist engineering portfolio.",
+  "name": "jaijitesh-portfolio",
+  "version": "3.0.0",
+  "description": "Jaijitesh Suryaprakash — Minimalist Portfolio & Interactive 3D Cursor Tubes",
   "type": "module",
   "scripts": {
-    "dev": "python -m http.server 4173",
-    "preview": "python -m http.server 4173"
+    "dev": "python -m http.server 8088",
+    "preview": "python -m http.server 8088"
   },
   "keywords": [
     "portfolio",
     "threejs",
+    "tubes-cursor",
     "webgl",
-    "operating-system",
-    "robotics",
-    "simulation",
-    "cad"
+    "minimalist",
+    "jaijitesh"
   ],
   "author": "Jaijitesh Suryaprakash <jaijiteshsp@gmail.com>",
-  "license": "AGPL-3.0"
+  "license": "MIT"
 }

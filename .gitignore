@@ -9,3 +9,6 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Saved copy backup of original Room OS codebase
+_saved_room_os_backup/

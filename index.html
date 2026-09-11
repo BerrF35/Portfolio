@@ -1,220 +1,71 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#090b0d" />
-    <meta name="color-scheme" content="dark light" />
+    <meta name="color-scheme" content="dark" />
     
     <!-- Primary Meta Tags -->
-    <title>JAIJITESH SURYAPRAKASH — Systems &amp; Robotics Portfolio | JAIJITESH.OS</title>
-    <meta name="title" content="JAIJITESH SURYAPRAKASH — Systems &amp; Robotics Portfolio | JAIJITESH.OS" />
-    <meta name="description" content="Personal Operating Environment &amp; 3D Engineering Workbench of Jaijitesh Suryaprakash. Computational fluid dynamics (LBM D2Q9), autonomous robotics (SolidWorks/ESP32), local-first AI agents, and academic research." />
+    <title>JAIJITESH SURYAPRAKASH</title>
+    <meta name="title" content="JAIJITESH SURYAPRAKASH" />
+    <meta name="description" content="Jaijitesh Suryaprakash — Systems, Autonomous Robotics, and Computational Engineering." />
     <meta name="author" content="Jaijitesh Suryaprakash" />
-    <meta name="keywords" content="Jaijitesh Suryaprakash, BerrF35, Portfolio, Lattice Boltzmann Method, CFD, Robotics, ESP32, SolidWorks, AI Agents, VIT Vellore" />
     <link rel="canonical" href="https://berrf35.github.io/Portfolio/" />
 
-    <!-- Open Graph / Facebook / LinkedIn -->
+    <!-- Open Graph / Social -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://berrf35.github.io/Portfolio/" />
-    <meta property="og:title" content="JAIJITESH SURYAPRAKASH — Systems &amp; Robotics Portfolio | JAIJITESH.OS" />
-    <meta property="og:description" content="Personal Operating Environment disguised as a minimalist engineering portfolio. Lattice Boltzmann CFD, Autonomous Tracked Robotics, Local AI Agents." />
-    <meta property="og:image" content="assets/images/profile/portrait_full_body.jpg" />
-    <meta property="og:site_name" content="JAIJITESH.OS" />
+    <meta property="og:title" content="JAIJITESH SURYAPRAKASH" />
+    <meta property="og:description" content="Systems, Autonomous Robotics, and Computational Engineering." />
 
-    <!-- Favicon: High-precision SVG Terminal Prompt -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23090b0d'/%3E%3Cpath d='M8 10l6 6-6 6M16 22h8' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" />
+    <!-- Favicon: High-Precision Terminal Prompt -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23090b0d'/%3E%3Cpath d='M8 10l6 6-6 6M16 22h8' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" />
 
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
     <link rel="stylesheet" href="style.css" />
-    
-    <!-- GSAP for choreographed camera transitions and UI motion -->
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
-    <!-- occt-import-js WebAssembly for direct in-browser STEP CAD tessellation -->
-    <script src="https://cdn.jsdelivr.net/npm/occt-import-js@0.0.23/dist/occt-import-js.js" defer></script>
-    
-    <!-- Three.js ES Modules -->
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.js",
-          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.162.0/examples/jsm/"
-        }
-      }
-    </script>
   </head>
   <body>
-    <main id="app">
-      <!-- 3D WebGL Canvas for the Engineering Lab Bench -->
-      <canvas id="scene" role="region" aria-label="Interactive 3D Engineering Workspace"></canvas>
-      
-      <!-- Tactile film grain overlay -->
-      <div class="grain" aria-hidden="true"></div>
+    <!-- 3D Glowing Neon Tubes Cursor Canvas -->
+    <canvas id="tubesCanvas" class="tubes-canvas" aria-hidden="true"></canvas>
+    
+    <!-- Tactile Film Grain Overlay -->
+    <div class="grain" aria-hidden="true"></div>
 
-      <!-- Layer 1: Ultra-Minimalist Surface Entry -->
-      <section class="intro" id="intro" aria-label="Welcome">
-        <!-- 3D Glowing Tubes Cursor Canvas for Home/Intro Screen -->
-        <canvas id="tubesCanvas" class="intro__tubes-canvas" aria-hidden="true"></canvas>
-
-        <div class="intro__centre">
-          <div class="intro__title-container" id="introTitleContainer">
-            <h1 class="intro__title" id="introTitle" aria-label="JAIJITESH SURYAPRAKASH">
-              <span>JAIJITESH</span>
-              <span>SURYAPRAKASH</span>
-            </h1>
-          </div>
+    <!-- Minimalist Surface Layer -->
+    <main class="entry-layout">
+      <header class="entry-header">
+        <div class="brand">
+          <span class="brand-dot"></span>
+          <span>JAIJITESH</span>
+          <span class="brand-badge">SYS // 01</span>
         </div>
+        <div class="header-links">
+          <span class="brand-badge">VIT VELLORE [12.9692° N, 79.1559° E]</span>
+        </div>
+      </header>
 
-        <button class="enter" id="enter" type="button" aria-label="Enter Operating Environment" onclick="window.enterLab ? window.enterLab() : (document.getElementById('intro').style.transform='translateY(-100%)', document.getElementById('intro').style.opacity='0', document.getElementById('worldUi').classList.add('is-visible'))">
-          <span>ENTER SYSTEM</span>
-          <i>&rarr;</i>
-        </button>
+      <section class="entry-hero" aria-label="Jaijitesh Suryaprakash">
+        <h1 class="entry-title">
+          <span>JAIJITESH</span>
+          <span>SURYAPRAKASH</span>
+        </h1>
+        <p class="entry-subtitle">SYSTEMS &bull; ROBOTICS &bull; COMPUTATIONAL ENGINEERING</p>
       </section>
 
-      <!-- Loading Indicator -->
-      <section class="loading" id="loading" aria-live="polite">
-        <div class="loading__copy">
-          <b><i id="loadingBar"></i></b>
-          <small id="loadingDetail">0%</small>
+      <footer class="entry-footer">
+        <div class="footer-hint">
+          <span class="hint-icon">&#10022;</span>
+          <span>MOVE CURSOR &bull; CLICK ANYWHERE TO CYCLE PALETTES</span>
         </div>
-      </section>
-
-      <!-- Layer 2: 3D Engineering Lab Bench HUD Controls -->
-      <section class="world-ui" id="worldUi" aria-label="Lab bench HUD controls">
-        <header class="world-ui__header">
-          <button class="wordmark" id="homeBtn" type="button" aria-label="Bench Home">
-            JAIJITESH<span>SYS_01 // WORKBENCH</span>
-          </button>
-          <div style="display: flex; align-items: center; gap: 10px;">
-            <button class="bench-control-btn" id="benchSoundBtn" type="button" title="Toggle Sound" aria-label="Toggle Sound">🔊</button>
-            <button class="bench-control-btn" id="benchThemeBtn" type="button" title="Toggle Theme" aria-label="Toggle Display Theme">◐</button>
-            <div class="world-ui__status">
-              <i class="status-indicator"></i>
-              <span>SYSTEM READY</span>
-            </div>
-          </div>
-        </header>
-
-        <!-- Minimal FPOV Status Header -->
-        <div class="world-ui__footer" style="display: none;">
-          <span>VIT VELLORE / TAMIL NADU (+05:30 IST)</span>
-        </div>
-      </section>
-
-      <!-- First Person Gaming HUD: Crosshair & Interaction Prompt -->
-      <div id="fpovHud" class="fpov-hud" hidden>
-        <div class="fpov-crosshair" id="crosshair">
-          <span class="fpov-crosshair__dot"></span>
-        </div>
-        <div class="fpov-prompt" id="fpovPrompt" hidden>
-          <span class="fpov-prompt__key">E</span>
-          <span class="fpov-prompt__text" id="fpovPromptText">INTERACT</span>
-        </div>
-        <div class="fpov-controls-hint" id="fpovControlsHint">
-          <span><b>WASD</b> Walk</span>
-          <span><b>SPACE / SHIFT</b> Up / Down</span>
-          <span><b>E / F</b> Interact</span>
-          <span><b>ESC</b> Release Mouse</span>
-        </div>
-
-        <!-- Phone Mobile Touch Controls -->
-        <div id="mobileControls" class="mobile-controls" hidden>
-          <div id="touchJoystick" class="touch-joystick">
-            <div id="touchKnob" class="touch-joystick__knob"></div>
-          </div>
-          <div class="mobile-controls__actions">
-            <button type="button" id="touchUpBtn" class="touch-btn touch-btn--small" aria-label="Move Up">▲</button>
-            <button type="button" id="touchDownBtn" class="touch-btn touch-btn--small" aria-label="Move Down">▼</button>
-            <button type="button" id="touchInteractBtn" class="touch-btn touch-btn--interact" aria-label="Interact">
-              <span>E</span>
-              <small id="touchInteractLabel">ACTION</small>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cyberpunk Door Access Denied Warning Modal -->
-      <div class="door-alert" id="doorAlert" hidden>
-        <div class="door-alert__box">
-          <div class="door-alert__badge">ACCESS RESTRICTED // PROTOCOL 451</div>
-          <h3>DECONTAMINATION LOCKDOWN ACTIVE</h3>
-          <p>Vault bulkhead security protocol engaged. Terminal authorization required from the workstation desk.</p>
-          <div class="door-alert__bar"></div>
-        </div>
-      </div>
-
-      <!-- Layer 3: JAIJITESH.OS Interface on the Omen Screen -->
-      <section class="screen-ui" id="screenUi" aria-label="JAIJITESH.OS Workstation">
-        <button class="screen-ui__exit-btn" id="screenExitBtn" type="button" title="Exit to 3D Bench (Escape)">
-          &larr; EXIT TO ROOM [ESC]
-        </button>
-        <div class="screen-ui__frame" id="screenFrame">
-          <div class="screen-ui__body" id="screenBody"></div>
-        </div>
-      </section>
-
-      <!-- 3D Hardware Telemetry Inspector Overlay -->
-      <aside class="inspect" id="inspect" aria-live="polite">
-        <button class="inspect__close" id="inspectClose" type="button" aria-label="Close Inspector">&times;</button>
-        <p class="inspect__eyebrow" id="inspectEyebrow">PHYSICAL 3D MODEL</p>
-        <h2 id="inspectTitle">—</h2>
-        <p class="inspect__desc" id="inspectCopy">—</p>
-        <div class="inspect__section-title">HARDWARE TELEMETRY &amp; SPECIFICATIONS</div>
-        <dl id="inspectData"></dl>
-        
-        <div class="inspect__actions" id="inspectActions">
-          <button class="inspect__btn inspect__btn--project" id="inspectOpenProject" type="button" style="display: none; margin-bottom: 8px; width: 100%; padding: 8px 12px; background: #38bdf8; color: #090b0d; font-weight: 700; font-size: 11px; font-family: var(--font-mono); border: 0; cursor: pointer; letter-spacing: 0.06em;">
-            OPEN PROJECT CASE FILE ↗
-          </button>
-          <button class="inspect__btn inspect__btn--primary" id="inspectBack" type="button" style="width: 100%; padding: 8px 12px; background: #1c222b; border: 1px solid #384252; color: #e2e8f0; font-size: 11px; font-family: var(--font-mono); cursor: pointer;">
-            &larr; RETURN TO BENCH OVERVIEW
-          </button>
-        </div>
-      </aside>
-
-      <!-- WebGL Fallback Notification Container -->
-      <div class="webgl-fallback" id="webglFallback" hidden>
-        <div class="webgl-fallback__box">
-          <div style="font-family: var(--font-mono); font-size: 11px; color: #38bdf8; letter-spacing: 0.1em; margin-bottom: 8px;">HARDWARE ACCELERATION NOTICE</div>
-          <h2 style="font-size: 16px; margin: 0 0 10px 0; color: #ffffff;">3D WebGL Context Unavailable</h2>
-          <p style="font-size: 12px; color: #94a3b8; margin: 0 0 16px 0; line-height: 1.5;">Your browser is running without 3D WebGL acceleration. JAIJITESH.OS has automatically initialized the desktop environment for full access to all projects, case files, and research papers.</p>
-          <button id="webglFallbackBtn" type="button" style="padding: 9px 18px; background: #38bdf8; color: #090b0d; font-weight: 700; font-family: var(--font-mono); border: 0; cursor: pointer;">ENTER JAIJITESH.OS DESKTOP &rarr;</button>
-        </div>
-      </div>
-
-      <!-- Toast Feedback Message -->
-      <div class="toast" id="toast" role="status"></div>
-      
-      <!-- Performance / CAD Loading Note -->
-      <div class="performance-note" id="performanceNote" hidden>
-        <span class="pulse-dot"></span>
-        <span id="performanceNoteText">Tessellating CAD geometry locally...</span>
-      </div>
-
-      <!-- Semantic Crawlable Fallback for Search Engines & Accessibility -->
-      <section class="sr-only" aria-label="Portfolio Content Index">
-        <h1>Jaijitesh Suryaprakash - Systems &amp; Robotics Portfolio</h1>
-        <p>B.Tech Information Technology student at Vellore Institute of Technology (VIT Vellore, 2025-2029). Focus areas include Computational Fluid Dynamics (LBM D2Q9), Autonomous Robotics (SolidWorks CAD &amp; ESP32 FreeRTOS), Local-First AI Agents, and Academic Research.</p>
-        <h2>Major Engineering Projects</h2>
-        <ul>
-          <li><strong>WindSim:</strong> Real-time browser-native 2D LBM D2Q9 computational fluid dynamics aerodynamics platform. Solves discrete BGK collision equations with Zou-He boundary conditions at 60 FPS.</li>
-          <li><strong>Berry AI:</strong> Local-first air-gapped desktop assistant with computer-use automation and on-device LLMs.</li>
-          <li><strong>BerryBot:</strong> Tracked autonomous robotics platform built with SolidWorks CAD, dual-core ESP32 20kHz PWM, optical encoders, S-curve profiling, and closed-loop PID control.</li>
-          <li><strong>ImpactX 3.0:</strong> 3rd Place Overall Winner hackathon project for real-time logistics routing.</li>
-          <li><strong>FarmAssist AI:</strong> Edge computer vision crop diagnostics built for Yantra 26 hackathon.</li>
-          <li><strong>VinHack 25:</strong> Decentralized peer-to-peer academic resource exchange.</li>
-        </ul>
-        <h2>Academic Research Focus</h2>
-        <ul>
-          <li>Spectral Color Splitter: Optical image decomposition and color-space filtering.</li>
-          <li>Synthetic Training Data Generation: Parametric domain randomization pipelines.</li>
-          <li>Edge Vision Systems on Constrained Microcontrollers.</li>
-        </ul>
-        <h2>Contact</h2>
-        <p>Email: jaijiteshsp@gmail.com | Phone: +91 9940970749 | GitHub: https://github.com/BerrF35 | LinkedIn: https://linkedin.com/in/jaijitesh-suryaprakash-j</p>
-      </section>
+        <nav class="social-links" aria-label="Social and professional links">
+          <a href="https://github.com/BerrF35" class="social-link" target="_blank" rel="noopener noreferrer">GITHUB &rarr;</a>
+          <a href="https://www.linkedin.com/in/jaijitesh/" class="social-link" target="_blank" rel="noopener noreferrer">LINKEDIN &rarr;</a>
+          <a href="mailto:jaijiteshsp@gmail.com" class="social-link">CONTACT &rarr;</a>
+        </nav>
+      </footer>
     </main>
 
-    <script type="module" src="app.js"></script>
+    <!-- Interactive 3D Cursor Tubes Engine -->
+    <script type="module" src="js/tubesCursor.js"></script>
   </body>
 </html>
