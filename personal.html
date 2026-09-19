@@ -409,7 +409,6 @@
 
     <div id="toast" class="toast-msg" role="status" aria-live="polite"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script type="module" src="js/tubesCursor.js"></script>
@@ -419,27 +418,12 @@
 
       window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
 
-      if (typeof Lenis !== 'undefined') {
-        const lenis = new Lenis({
-          duration: 1.15,
-          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-          smoothWheel: true,
-          touchMultiplier: 1.5,
-        });
-
-        lenis.on('scroll', (e) => {
-          if (window.__webglBackgroundInstance) {
-            const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-            window.__webglBackgroundInstance.setScrollProgress(e.scroll / maxScroll);
-          }
-        });
-
-        function raf(time) {
-          lenis.raf(time);
-          requestAnimationFrame(raf);
+      window.addEventListener('scroll', () => {
+        if (window.__webglBackgroundInstance) {
+          const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+          window.__webglBackgroundInstance.setScrollProgress(window.scrollY / maxScroll);
         }
-        requestAnimationFrame(raf);
-      }
+      }, { passive: true });
 
       const engine = new PortfolioEngine();
     </script>

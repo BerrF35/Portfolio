@@ -367,7 +367,10 @@ export class PortfolioEngine {
       }
 
       const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-      const cleanHref = href.split('#')[0].split('?')[0].replace(/^\.\//, '');
+      let cleanHref = href.split('#')[0].split('?')[0];
+      if (cleanHref.startsWith('./')) {
+        cleanHref = cleanHref.substring(2);
+      }
 
       if (cleanHref === currentFile || (cleanHref === '' && currentFile === 'index.html')) {
         return;

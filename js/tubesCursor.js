@@ -6,8 +6,8 @@ export class HomeTubesCursor {
     this.instance = null;
     this.isActive = true;
     this.paletteIndex = 0;
-    
-        this.palettes = [
+
+    this.palettes = [
       {
         tubes: ["#38ef7d", "#38bdf8", "#818cf8"],
         lights: ["#38ef7d", "#00ff88", "#38bdf8", "#e0e7ff"]
@@ -43,6 +43,7 @@ export class HomeTubesCursor {
     try {
       const initialPalette = this.palettes[0];
       this.instance = TubesCursor(this.canvas, {
+        maxPixelRatio: 1,
         tubes: {
           colors: initialPalette.tubes,
           lights: {
@@ -64,8 +65,8 @@ export class HomeTubesCursor {
     const p = this.palettes[this.paletteIndex];
     this.instance.tubes.setColors(p.tubes);
     this.instance.tubes.setLightsColors(p.lights);
-    
-        window.dispatchEvent(new CustomEvent('tubesPaletteChange', { detail: p }));
+
+    window.dispatchEvent(new CustomEvent('tubesPaletteChange', { detail: p }));
   }
 
   randomColors(count) {
@@ -77,37 +78,16 @@ export class HomeTubesCursor {
   bindEvents() {
     this.clickHandler = (e) => {
       if (!this.isActive) return;
-            if (e.target && e.target.closest && e.target.closest('a, button, input, textarea, select')) return;
+      if (e.target && e.target.closest && e.target.closest('a, button, input, textarea, select')) return;
       this.nextPalette();
     };
 
     window.addEventListener('click', this.clickHandler);
 
-        window.addEventListener('resize', () => {
+    window.addEventListener('resize', () => {
       if (this.canvas) {
         this.canvas.width = window.innerWidth;
         this.canvas.height = window.innerHeight;
-      }
-    }, { passive: true });
-
-        const forwardPointer = (clientX, clientY) => {
-      if (!this.isActive || !this.instance) return;
-      const pointerEvt = new PointerEvent('pointermove', {
-        clientX,
-        clientY,
-        bubbles: true,
-        cancelable: true
-      });
-      document.body.dispatchEvent(pointerEvt);
-    };
-
-    window.addEventListener('mousemove', (e) => {
-      forwardPointer(e.clientX, e.clientY);
-    }, { passive: true });
-
-    window.addEventListener('pointermove', (e) => {
-      if (e.target === window || e.target === document.documentElement) {
-        forwardPointer(e.clientX, e.clientY);
       }
     }, { passive: true });
   }

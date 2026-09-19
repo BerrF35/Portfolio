@@ -1,6 +1,5 @@
 export class ScrollParallaxEngine {
   constructor() {
-    this.lenis = null;
     this.heroTrack = document.getElementById('heroTrack');
     this.heroPin = document.getElementById('heroPin');
     this.titleJai = document.getElementById('titleJaijitesh');
@@ -26,7 +25,7 @@ export class ScrollParallaxEngine {
   }
 
   init() {
-    this.initLenis();
+    this.initScrollListener();
 
     if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
       gsap.registerPlugin(ScrollTrigger);
@@ -36,47 +35,14 @@ export class ScrollParallaxEngine {
     }
   }
 
-  initLenis() {
-    if (typeof Lenis === 'undefined') return;
-
-    try {
-      this.lenis = new Lenis({
-        duration: 1.15,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        orientation: 'vertical',
-        gestureOrientation: 'vertical',
-        smoothWheel: true,
-        wheelMultiplier: 0.95,
-        touchMultiplier: 1.5,
-      });
-
-      this.lenis.on('scroll', (e) => {
-        if (typeof ScrollTrigger !== 'undefined') {
-          ScrollTrigger.update();
-        }
-
-        if (window.__webglBackgroundInstance) {
-          const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-          const progress = Math.min(1, Math.max(0, e.scroll / maxScroll));
-          window.__webglBackgroundInstance.setScrollProgress(progress);
-        }
-      });
-
-      if (typeof gsap !== 'undefined') {
-        gsap.ticker.add((time) => {
-          this.lenis.raf(time * 1000);
-        });
-        gsap.ticker.lagSmoothing(0);
-      } else {
-        const raf = (time) => {
-          this.lenis.raf(time);
-          requestAnimationFrame(raf);
-        };
-        requestAnimationFrame(raf);
+  initScrollListener() {
+    window.addEventListener('scroll', () => {
+      if (window.__webglBackgroundInstance) {
+        const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+        const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+        window.__webglBackgroundInstance.setScrollProgress(progress);
       }
-    } catch (err) {
-      console.warn(err);
-    }
+    }, { passive: true });
   }
 
   initGSAPChoreography() {
@@ -86,9 +52,7 @@ export class ScrollParallaxEngine {
           trigger: this.heroTrack,
           start: 'top top',
           end: 'bottom top',
-          scrub: 0.5,
-          pin: this.heroPin,
-          pinSpacing: false
+          scrub: 0.1
         }
       });
 
@@ -119,7 +83,7 @@ export class ScrollParallaxEngine {
           ease: 'power1.in'
         }, 0.8)
         .to([this.subtitle, this.scrollHint], { 
-          y: -30, 
+          y: -25, 
           opacity: 0, 
           duration: 0.35, 
           ease: 'power1.out' 
@@ -145,96 +109,73 @@ export class ScrollParallaxEngine {
     }
 
     if (this.introCard && this.introContainer) {
-      const introTL = gsap.timeline({
-        scrollTrigger: {
-          trigger: this.introContainer,
-          start: 'top 85%',
-          end: 'bottom 15%',
-          scrub: 0.8
+      gsap.fromTo(this.introCard,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: this.introContainer,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
+          }
         }
-      });
-
-      introTL
-        .fromTo(this.introCard, 
-          { y: 75, opacity: 0, filter: 'blur(8px)' },
-          { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.4, ease: 'power2.out' }
-        )
-        .to(this.introCard, { y: 0, opacity: 1, duration: 0.4 })
-        .to(this.introCard, {
-          y: -75,
-          opacity: 0.1,
-          filter: 'blur(5px)',
-          duration: 0.35,
-          ease: 'power2.in'
-        });
+      );
     }
 
     if (this.statsScreen && this.statBoxes.length > 0) {
-      const statsTL = gsap.timeline({
-        scrollTrigger: {
-          trigger: this.statsScreen,
-          start: 'top 85%',
-          end: 'bottom 15%',
-          scrub: 0.8,
-          onEnter: () => this.animateDigitsSequence(),
+      gsap.fromTo(this.statBoxes,
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.08,
+          duration: 0.5,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: this.statsScreen,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse',
+            onEnter: () => this.animateDigitsSequence()
+          }
         }
-      });
-
-      statsTL
-        .fromTo(this.statBoxes, 
-          { y: 55, opacity: 0, scale: 0.96 },
-          { y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.35, ease: 'power2.out' }
-        )
-        .to(this.statBoxes, { y: 0, opacity: 1, duration: 0.4 })
-        .to(this.statBoxes, {
-          y: -65,
-          opacity: 0.15,
-          stagger: 0.05,
-          duration: 0.35,
-          ease: 'power2.in'
-        });
+      );
     }
 
     if (this.eduSection && this.eduSchool && this.eduCollege) {
-      const eduTL = gsap.timeline({
-        scrollTrigger: {
-          trigger: this.eduSection,
-          start: 'top 80%',
-          end: 'bottom 15%',
-          scrub: 0.8,
-          onEnter: () => {
-            if (!this.hasShotStar) {
-              this.hasShotStar = true;
-              this.launchShootingStar();
+      gsap.fromTo([this.eduSchool, this.eduCollege],
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.1,
+          duration: 0.5,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: this.eduSection,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+            onEnter: () => {
+              if (!this.hasShotStar) {
+                this.hasShotStar = true;
+                this.launchShootingStar();
+              }
             }
           }
         }
-      });
-
-      eduTL
-        .fromTo([this.eduSchool, this.eduCollege],
-          { y: 60, opacity: 0 },
-          { y: 0, opacity: 1, stagger: 0.12, duration: 0.4, ease: 'power2.out' }
-        )
-        .to([this.eduSchool, this.eduCollege], { y: 0, opacity: 1, duration: 0.4 })
-        .to([this.eduSchool, this.eduCollege], {
-          y: -55,
-          opacity: 0.15,
-          stagger: 0.06,
-          duration: 0.35,
-          ease: 'power2.in'
-        });
+      );
     }
 
     if (this.projectsSection && this.projectItems.length > 0) {
       gsap.fromTo(this.projectItems,
-        { y: 45, opacity: 0, scale: 0.98 },
+        { y: 40, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          scale: 1,
-          stagger: 0.12,
-          duration: 0.65,
+          stagger: 0.08,
+          duration: 0.5,
           ease: 'power2.out',
           scrollTrigger: {
             trigger: this.projectsSection,
@@ -255,7 +196,7 @@ export class ScrollParallaxEngine {
     this.statDigits.forEach((el) => {
       const targetText = el.textContent.trim();
       let step = 0;
-      const totalSteps = 12;
+      const totalSteps = 10;
 
       const timer = setInterval(() => {
         step++;
@@ -300,7 +241,7 @@ export class ScrollParallaxEngine {
     const trail = [];
 
     const animateStar = () => {
-      progress += 0.038;
+      progress += 0.045;
       const t = Math.min(1, progress);
 
       const curX = Math.pow(1 - t, 2) * startX + 2 * (1 - t) * t * ctrlX + Math.pow(t, 2) * endX;
@@ -312,24 +253,19 @@ export class ScrollParallaxEngine {
 
       for (let i = 0; i < trail.length; i++) {
         const pt = trail[i];
-        pt.alpha -= 0.04;
+        pt.alpha -= 0.05;
         if (pt.alpha > 0) {
           ctx.beginPath();
-          ctx.arc(pt.x, pt.y, 2.8 * pt.alpha, 0, Math.PI * 2);
+          ctx.arc(pt.x, pt.y, 2.5 * pt.alpha, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(45, 212, 191, ${pt.alpha * 0.85})`;
-          ctx.shadowColor = '#2dd4bf';
-          ctx.shadowBlur = 12;
           ctx.fill();
         }
       }
 
       ctx.beginPath();
-      ctx.arc(curX, curY, 4.5, 0, Math.PI * 2);
+      ctx.arc(curX, curY, 4, 0, Math.PI * 2);
       ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = '#2dd4bf';
-      ctx.shadowBlur = 20;
       ctx.fill();
-      ctx.shadowBlur = 0;
 
       if (progress < 1) {
         requestAnimationFrame(animateStar);
@@ -356,7 +292,6 @@ export class ScrollParallaxEngine {
         if (rect.top < window.innerHeight * 0.8) {
           this.introCard.style.opacity = '1';
           this.introCard.style.transform = 'translateY(0)';
-          this.introCard.style.filter = 'none';
         }
       }
     }, { passive: true });
