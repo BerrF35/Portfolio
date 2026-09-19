@@ -3,54 +3,546 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#090b0d" />
+    <meta name="theme-color" content="#090b0e" />
     <meta name="color-scheme" content="dark" />
-    
-    <!-- Primary Meta Tags -->
-    <title>JAIJITESH SURYAPRAKASH</title>
-    <meta name="title" content="JAIJITESH SURYAPRAKASH" />
-    <meta name="description" content="Jaijitesh Suryaprakash — Systems, Autonomous Robotics, and Computational Engineering." />
+
+    <title>Jaijitesh Suryaprakash — Systems &amp; Autonomous Engineering</title>
+    <meta name="title" content="Jaijitesh Suryaprakash" />
+    <meta name="description" content="Systems, Autonomous Robotics, and Computational Engineering Portfolio." />
     <meta name="author" content="Jaijitesh Suryaprakash" />
     <link rel="canonical" href="https://berrf35.github.io/Portfolio/" />
 
-    <!-- Open Graph / Social -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://berrf35.github.io/Portfolio/" />
-    <meta property="og:title" content="JAIJITESH SURYAPRAKASH" />
-    <meta property="og:description" content="Systems, Autonomous Robotics, and Computational Engineering." />
-
-    <!-- Favicon: High-Precision Terminal Prompt -->
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23090b0d'/%3E%3Cpath d='M8 10l6 6-6 6M16 22h8' stroke='%2338bdf8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
 
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- 3D Glowing Neon Tubes Cursor Canvas -->
-    <canvas id="tubesCanvas" class="tubes-canvas" aria-hidden="true"></canvas>
     
-    <!-- Tactile Film Grain Overlay -->
+    <div id="pageTransition" class="page-transition-curtain" aria-hidden="true">
+      <div class="page-transition-line"></div>
+      <div class="page-transition-brand">JAIJITESH SURYAPRAKASH • SYSTEMS ARCHITECTURE</div>
+    </div>
+
+    <div id="tubesContainer" class="tubes-container" aria-hidden="true">
+      <canvas id="tubesCanvas" class="tubes-canvas"></canvas>
+    </div>
+
+    <canvas id="webglBackgroundCanvas" class="webgl-background-canvas" aria-hidden="true"></canvas>
+
+    <div class="architectural-grid" aria-hidden="true"></div>
+
     <div class="grain" aria-hidden="true"></div>
 
-    <!-- Minimalist Surface Layer -->
-    <main class="entry-layout">
-      <section class="entry-hero" aria-label="Jaijitesh Suryaprakash">
-        <h1 class="entry-title">
-          <span>JAIJITESH</span>
-          <span>SURYAPRAKASH</span>
-        </h1>
-        <p class="entry-subtitle">SYSTEMS &bull; ROBOTICS &bull; COMPUTATIONAL ENGINEERING</p>
+    <div class="hero-track" id="heroTrack">
+      <section class="hero-pin" id="heroPin" aria-label="Jaijitesh Suryaprakash Hero Entrance">
+        
+        <header class="hero-header">
+          <div class="hero-brand">JAIJITESH SURYAPRAKASH</div>
+          <div class="hero-discipline">SYSTEMS ARCHITECTURE &bull; AUTONOMOUS SYSTEMS</div>
+        </header>
+
+        <div class="hero-typography-container">
+          <h1 class="hero-title" id="heroTitle">
+            <span class="title-word" id="titleJaijitesh">JAIJITESH</span>
+            <span class="title-word" id="titleSuryaprakash">SURYAPRAKASH</span>
+          </h1>
+          <p class="hero-subtitle" id="entrySubtitle">SYSTEMS &bull; ROBOTICS &bull; COMPUTATIONAL ENGINEERING</p>
+        </div>
+
+        <footer class="hero-bottom-bar" id="scrollHint">
+          <div class="scroll-cue">
+            <span>[ SCROLL TO EXPLORE ]</span>
+            <span class="cue-arrow">&darr;</span>
+          </div>
+          <nav class="hero-socials" aria-label="Social links">
+            <a href="https://github.com/BerrF35" class="hero-social-link" target="_blank" rel="noopener noreferrer">[GITHUB] &rarr;</a>
+            <a href="https://www.linkedin.com/in/jaijitesh/" class="hero-social-link" target="_blank" rel="noopener noreferrer">[LINKEDIN] &rarr;</a>
+            <a href="contact.html" class="hero-social-link">[CONTACT] &rarr;</a>
+          </nav>
+        </footer>
+      </section>
+    </div>
+
+    <nav class="top-nav" id="topNav" aria-label="Primary Navigation">
+      <a href="index.html" class="nav-brand">JITESH<span class="dot">.</span> <span style="font-family: var(--micro-font); font-size: 10px; color: var(--micro-text-dim); margin-left: 6px;">[01]</span></a>
+      <div class="nav-tabs">
+        <a href="index.html" class="nav-tab-link active">[ 01 &bull; PROFESSIONAL ]</a>
+        <a href="personal.html" class="nav-tab-link">[ 02 &bull; ARCHIVE ]</a>
+        <a href="contact.html" class="nav-tab-link">[ 03 &bull; CONTACT ]</a>
+      </div>
+      <div class="nav-actions">
+        
+        <button class="audio-toggle-btn" id="audioToggle" data-action="toggle-audio" title="Toggle Ambient Chords">
+          <span class="audio-eq-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span>[ SOUND &bull; NUJABES ]</span>
+        </button>
+      </div>
+    </nav>
+
+    <main class="content-wrapper" id="mainContent">
+
+      <div class="intro-card-container" id="introContainer">
+        <article class="intro-card reg-corners" id="introCard">
+          <div class="corner-ticks"></div>
+          
+          <div class="micro-header-bar" style="grid-column: 1 / -1; margin-bottom: 8px;">
+            <span class="tag-id">PROFILE SPECIFICATION</span>
+            <span class="telemetry-val">SYSTEMS &bull; AUTONOMOUS ENGINEERING</span>
+          </div>
+
+          <div class="intro-content">
+            <div class="intro-tag">CORE PROFILE &bull; SYSTEMS ARCHITECTURE</div>
+            <h2 class="intro-heading">
+              Hello, I'm <br />
+              Jaijitesh Suryaprakash
+            </h2>
+            <div class="micro-ruler"></div>
+            <p class="intro-bio">
+              Software engineer and systems builder focused on autonomous robotics, high-throughput computational engineering, and distributed microservices.
+            </p>
+
+            <div class="micro-spec-grid" style="max-width: 480px; margin-bottom: 24px;">
+              <div class="micro-spec-cell">
+                <span class="micro-spec-label">DOMAIN</span>
+                <span class="micro-spec-value">AUTONOMOUS ROBOTICS</span>
+              </div>
+              <div class="micro-spec-cell">
+                <span class="micro-spec-label">CORE STACK</span>
+                <span class="micro-spec-value">C++, ROS 2, WEBSOCKETS</span>
+              </div>
+              <div class="micro-spec-cell">
+                <span class="micro-spec-label">PHYSICS SOLVER</span>
+                <span class="micro-spec-value">NAVIER-STOKES, GLSL</span>
+              </div>
+              <div class="micro-spec-cell">
+                <span class="micro-spec-label">AVAILABILITY</span>
+                <span class="micro-spec-value" style="color: var(--accent);">OPEN FOR ENGINEERING ROLES</span>
+              </div>
+            </div>
+
+            <div class="intro-actions">
+              <a href="contact.html" class="btn-sharp solid">
+                <span>[ GET IN TOUCH ]</span>
+                <span>&rarr;</span>
+              </a>
+              <a href="#projectsSection" class="btn-sharp">
+                <span>[ EXPLORE PROJECTS ]</span>
+                <span>&darr;</span>
+              </a>
+            </div>
+          </div>
+          <div class="intro-visual">
+            <div class="avatar-simple-box reg-corners">
+              <div class="corner-ticks"></div>
+              <img src="assets/images/profile/portrait_full_body.jpg" alt="Jaijitesh Suryaprakash" />
+            </div>
+            <div class="micro-header-bar" style="margin-top: 8px; font-size: 9px;">
+              <span>PORTRAIT FRAME</span>
+              <span>AUTHENTIC</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <section class="stats-screen-section" id="statsScreen" aria-label="Impact and Metrics">
+        <span class="section-label">KEY METRICS &bull; QUANTITATIVE OVERVIEW</span>
+        <div class="stats-screen-grid" id="statsGrid">
+          <div class="stat-box reg-corners" data-index="0">
+            <div class="corner-ticks"></div>
+            <div class="micro-header-bar" style="padding: 2px 0 6px 0; margin-bottom: 12px; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08);">
+              <span class="tag-id">METRIC 01</span>
+              <span>EXPERIENCE</span>
+            </div>
+            <div class="stat-digits" data-target="04" data-original="04">04</div>
+            <div class="micro-ruler"></div>
+            <div class="stat-caption">Years Engineering Experience</div>
+          </div>
+          <div class="stat-box reg-corners" data-index="1">
+            <div class="corner-ticks"></div>
+            <div class="micro-header-bar" style="padding: 2px 0 6px 0; margin-bottom: 12px; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08);">
+              <span class="tag-id">METRIC 02</span>
+              <span>PORTFOLIO</span>
+            </div>
+            <div class="stat-digits" data-target="24+" data-original="24+">24+</div>
+            <div class="micro-ruler"></div>
+            <div class="stat-caption">Projects Constructed</div>
+          </div>
+          <div class="stat-box reg-corners" data-index="2">
+            <div class="corner-ticks"></div>
+            <div class="micro-header-bar" style="padding: 2px 0 6px 0; margin-bottom: 12px; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08);">
+              <span class="tag-id">METRIC 03</span>
+              <span>DEPLOYMENTS</span>
+            </div>
+            <div class="stat-digits" data-target="12+" data-original="12+">12+</div>
+            <div class="micro-ruler"></div>
+            <div class="stat-caption">Deployed Systems &amp; Nodes</div>
+          </div>
+          <div class="stat-box reg-corners" data-index="3">
+            <div class="corner-ticks"></div>
+            <div class="micro-header-bar" style="padding: 2px 0 6px 0; margin-bottom: 12px; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08);">
+              <span class="tag-id">METRIC 04</span>
+              <span>CAPABILITIES</span>
+            </div>
+            <div class="stat-digits" data-target="30+" data-original="30+">30+</div>
+            <div class="micro-ruler"></div>
+            <div class="stat-caption">Core Engineering Skills</div>
+          </div>
+        </div>
       </section>
 
-      <footer class="entry-footer">
-        <nav class="social-links" aria-label="Social and professional links">
-          <a href="https://github.com/BerrF35" class="social-link" target="_blank" rel="noopener noreferrer">GITHUB &rarr;</a>
-          <a href="https://www.linkedin.com/in/jaijitesh/" class="social-link" target="_blank" rel="noopener noreferrer">LINKEDIN &rarr;</a>
-          <a href="mailto:jaijiteshsp@gmail.com" class="social-link">CONTACT &rarr;</a>
-        </nav>
+      <section class="education-section" id="educationSection" aria-label="Academic Trajectory">
+        <span class="section-label">ACADEMIC FOUNDATIONS &bull; TRAJECTORY</span>
+        <h3 class="section-title">Institutional Trajectory</h3>
+        
+        <div class="education-stage" style="position: relative;">
+          
+          <canvas id="starCanvas" class="star-trajectory-canvas"></canvas>
+
+          <div class="edu-card reg-corners" id="eduSchool">
+            <div class="corner-ticks"></div>
+            <div class="micro-header-bar">
+              <span class="tag-id">SECONDARY CERTIFICATION</span>
+              <span>ACCREDITED</span>
+            </div>
+            <div style="padding: 20px 0 0 0;">
+              <div class="edu-card-tag">FOUNDATIONS &bull; STEM</div>
+              <h4 class="edu-card-title">Higher Secondary Education</h4>
+              <div class="edu-card-inst">Advanced Mathematics &bull; Classical Physics &bull; Computing</div>
+              <div class="micro-ruler"></div>
+              <p class="edu-card-body">
+                Rigorous analytical foundation in differential calculus, vector kinematics, electromagnetism, and algorithmic problem solving.
+              </p>
+            </div>
+          </div>
+
+          <div class="edu-card reg-corners" id="eduCollege">
+            <div class="corner-ticks"></div>
+            <div class="micro-header-bar">
+              <span class="tag-id">UNDERGRADUATE DEGREE</span>
+              <span>VIT VELLORE</span>
+            </div>
+            <div style="padding: 20px 0 0 0;">
+              <div class="edu-card-tag">UNDERGRADUATE &bull; B.TECH</div>
+              <h4 class="edu-card-title">Bachelor of Technology</h4>
+              <div class="edu-card-inst">Vellore Institute of Technology (VIT Vellore)</div>
+              <div class="micro-ruler"></div>
+              <p class="edu-card-body">
+                Information Technology specializing in Autonomous Systems, Distributed Edge Microservices, ROS 2 Kinematics, and Computational Fluid Dynamics.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-container" id="projectsSection" aria-label="Featured Works">
+        <span class="section-label">FEATURED WORKS &bull; ENGINEERING PROJECTS</span>
+        <h3 class="section-title">Production Systems &amp; Kernels</h3>
+
+        <div class="projects-list">
+          
+          <article class="project-item evaporate-card reg-corners">
+            <div class="corner-ticks"></div>
+            <div class="micro-header-bar">
+              <span class="tag-id">PROJECT 01 &bull; FLUID DYNAMICS</span>
+              <span class="telemetry-val">YEAR 2024</span>
+            </div>
+            <div style="padding: 18px 0 0 0;">
+              <h4 class="project-name">WindSim — Computational Aerodynamics</h4>
+              <div class="micro-ruler"></div>
+              <p class="project-overview">
+                GPU-accelerated Navier-Stokes fluid approximations with interactive browser-based vector field rendering, vorticity dynamics, and airfoil lift and drag estimation.
+              </p>
+              
+              <div class="micro-spec-grid">
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">KERNEL</span>
+                  <span class="micro-spec-value">NAVIER-STOKES</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">SHADERS</span>
+                  <span class="micro-spec-value">GLSL COMPUTE</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">PRECISION</span>
+                  <span class="micro-spec-value">FP32 VECTOR</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">RUNTIME</span>
+                  <span class="micro-spec-value">C++, WEBGL</span>
+                </div>
+              </div>
+
+              <div class="project-tech">
+                <span class="micro-badge">C++</span>
+                <span class="micro-badge">WebGL</span>
+                <span class="micro-badge">GLSL</span>
+                <span class="micro-badge">Fluid Solvers</span>
+              </div>
+            </div>
+            <a href="https://github.com/BerrF35" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
+              <span>[ VIEW SOURCE CODE ]</span>
+              <span>&rarr;</span>
+            </a>
+          </article>
+
+          <article class="project-item evaporate-card reg-corners">
+            <div class="corner-ticks"></div>
+            <div class="micro-header-bar">
+              <span class="tag-id">PROJECT 02 &bull; AGENT RUNTIME</span>
+              <span class="telemetry-val">YEAR 2024</span>
+            </div>
+            <div style="padding: 18px 0 0 0;">
+              <h4 class="project-name">Autonomous Agent Execution Platform</h4>
+              <div class="micro-ruler"></div>
+              <p class="project-overview">
+                Multi-modal agent execution engine featuring local execution sandboxes, persistent knowledge indexing, high-throughput tool calling, and contextual telemetry.
+              </p>
+
+              <div class="micro-spec-grid">
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">ORCHESTRATION</span>
+                  <span class="micro-spec-value">ASYNC RUNTIME</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">SANDBOX</span>
+                  <span class="micro-spec-value">ISOLATED PROCESS</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">DATA LAYER</span>
+                  <span class="micro-spec-value">VECTOR EMBED</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">PROTOCOL</span>
+                  <span class="micro-spec-value">FASTAPI, REST</span>
+                </div>
+              </div>
+
+              <div class="project-tech">
+                <span class="micro-badge">Python</span>
+                <span class="micro-badge">FastAPI</span>
+                <span class="micro-badge">Vector DB</span>
+                <span class="micro-badge">Agent Tooling</span>
+              </div>
+            </div>
+            <a href="https://github.com/BerrF35" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
+              <span>[ VIEW SOURCE CODE ]</span>
+              <span>&rarr;</span>
+            </a>
+          </article>
+
+          <article class="project-item evaporate-card reg-corners">
+            <div class="corner-ticks"></div>
+            <div class="micro-header-bar">
+              <span class="tag-id">PROJECT 03 &bull; HIGH THROUGHPUT</span>
+              <span class="telemetry-val">YEAR 2024</span>
+            </div>
+            <div style="padding: 18px 0 0 0;">
+              <h4 class="project-name">Low-Latency Financial Trading Engine</h4>
+              <div class="micro-ruler"></div>
+              <p class="project-overview">
+                Order matching and market data streaming pipeline constructed in Go with WebSocket event multiplexing, lock-free memory buffers, and real-time risk assessment.
+              </p>
+
+              <div class="micro-spec-grid">
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">THROUGHPUT</span>
+                  <span class="micro-spec-value">&gt; 100K OPS PER SEC</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">MEMORY</span>
+                  <span class="micro-spec-value">LOCK-FREE RING BUFFER</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">STREAMING</span>
+                  <span class="micro-spec-value">WEBSOCKET MULTIPLEX</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">CACHE</span>
+                  <span class="micro-spec-value">REDIS, IPC</span>
+                </div>
+              </div>
+
+              <div class="project-tech">
+                <span class="micro-badge">Go</span>
+                <span class="micro-badge">WebSockets</span>
+                <span class="micro-badge">Redis</span>
+                <span class="micro-badge">Next.js</span>
+              </div>
+            </div>
+            <a href="https://github.com/BerrF35" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
+              <span>[ VIEW SOURCE CODE ]</span>
+              <span>&rarr;</span>
+            </a>
+          </article>
+
+          <article class="project-item evaporate-card reg-corners">
+            <div class="corner-ticks"></div>
+            <div class="micro-header-bar">
+              <span class="tag-id">PROJECT 04 &bull; AUTONOMOUS ROBOTICS</span>
+              <span class="telemetry-val">YEAR 2025</span>
+            </div>
+            <div style="padding: 18px 0 0 0;">
+              <h4 class="project-name">Autonomous Robotics Microservice</h4>
+              <div class="micro-ruler"></div>
+              <p class="project-overview">
+                Decoupled ROS 2 node architecture handling 2D and 3D LiDAR SLAM, EKF sensor fusion, real-time trajectory optimization, and motor driver telemetry.
+              </p>
+
+              <div class="micro-spec-grid">
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">LOCALIZATION</span>
+                  <span class="micro-spec-value">EKF, SLAM</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">SENSOR BUS</span>
+                  <span class="micro-spec-value">LIDAR, IMU</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">CONTROL</span>
+                  <span class="micro-spec-value">NAV2, C++</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">FREQUENCY</span>
+                  <span class="micro-spec-value">50Hz CONTROL LOOP</span>
+                </div>
+              </div>
+
+              <div class="project-tech">
+                <span class="micro-badge">ROS 2</span>
+                <span class="micro-badge">C++</span>
+                <span class="micro-badge">Nav2</span>
+                <span class="micro-badge">Kinematics</span>
+              </div>
+            </div>
+            <a href="https://github.com/BerrF35" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
+              <span>[ VIEW SOURCE CODE ]</span>
+              <span>&rarr;</span>
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <section class="section-container" aria-label="Experience and Roles">
+        <span class="section-label">DEPLOYMENT TRAJECTORY &bull; ROLES</span>
+        <h3 class="section-title">Practical Engineering Experience</h3>
+
+        <div class="journey-grid">
+          <div class="journey-entry reg-corners">
+            <div class="corner-ticks"></div>
+            <div class="journey-year">[CURRENT]</div>
+            <div>
+              <div class="micro-header-bar" style="padding: 0 0 6px 0; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px;">
+                <span class="tag-id">ROLE 01</span>
+                <span>EDGE HARDWARE</span>
+              </div>
+              <h4 class="journey-heading">Autonomous Robotics Systems Developer</h4>
+              <p class="journey-desc">
+                Engineering autonomous robot navigation stacks, sensor calibration routines, and real-time kinematic solvers for mobile edge hardware.
+              </p>
+            </div>
+          </div>
+          <div class="journey-entry reg-corners">
+            <div class="corner-ticks"></div>
+            <div class="journey-year">[2024]</div>
+            <div>
+              <div class="micro-header-bar" style="padding: 0 0 6px 0; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px;">
+                <span class="tag-id">ROLE 02</span>
+                <span>PHYSICS COMPUTE</span>
+              </div>
+              <h4 class="journey-heading">Computational Fluid &amp; Numerical Physics Developer</h4>
+              <p class="journey-desc">
+                Designed fluid dynamic solver pipelines and interactive graphics kernels in C++ and WebGL with numerical stability guarantees.
+              </p>
+            </div>
+          </div>
+          <div class="journey-entry reg-corners">
+            <div class="corner-ticks"></div>
+            <div class="journey-year">[2023]</div>
+            <div>
+              <div class="micro-header-bar" style="padding: 0 0 6px 0; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px;">
+                <span class="tag-id">ROLE 03</span>
+                <span>DISTRIBUTED SYSTEMS</span>
+              </div>
+              <h4 class="journey-heading">Distributed Systems &amp; Full-Stack Architect</h4>
+              <p class="journey-desc">
+                Constructed resilient microservice APIs, containerized deployment workflows, and event-driven data streaming pipelines.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="personal-suggestion-card evaporate-card reg-corners" id="suggestionCard">
+        <div class="corner-ticks"></div>
+        <div class="micro-header-bar" style="margin-bottom: 16px;">
+          <span class="tag-id">EXPLORATION</span>
+          <span>CHAPTER 02 &bull; PERSPECTIVES</span>
+        </div>
+        <span class="suggestion-tag">ARCHIVE &bull; RESEARCH &bull; SYSTEMS</span>
+        <h3 class="suggestion-title">Do you want to explore the technical research archive?</h3>
+        <p class="suggestion-desc">
+          Inspect technical research notes, reading indices in cybernetics and distributed systems, synthesized lo-fi audio soundscapes, and personal engineering philosophies.
+        </p>
+        <a href="personal.html" class="btn-sharp solid">
+          <span>[ ENTER RESEARCH ARCHIVE ]</span>
+          <span>&rarr;</span>
+        </a>
+      </div>
+
+      <div class="title-block-container reg-corners">
+        <div class="corner-ticks"></div>
+        <div class="title-block-row">
+          <div class="title-block-cell">
+            <span class="title-block-label">PORTFOLIO</span>
+            <span class="title-block-val">JAIJITESH SURYAPRAKASH</span>
+          </div>
+          <div class="title-block-cell">
+            <span class="title-block-label">DISCIPLINE</span>
+            <span class="title-block-val">SYSTEMS &bull; ROBOTICS</span>
+          </div>
+          <div class="title-block-cell">
+            <span class="title-block-label">LOCATION</span>
+            <span class="title-block-val">VELLORE, INDIA</span>
+          </div>
+          <div class="title-block-cell">
+            <span class="title-block-label">AVAILABILITY</span>
+            <span class="title-block-val" style="color: var(--accent);">OPEN FOR ROLES</span>
+          </div>
+        </div>
+      </div>
+
+      <footer class="site-footer">
+        <div>&copy; 2026 JAIJITESH SURYAPRAKASH. ALL RIGHTS RESERVED.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="https://github.com/BerrF35" class="hero-social-link" target="_blank" rel="noopener">[GITHUB]</a>
+          <a href="https://www.linkedin.com/in/jaijitesh/" class="hero-social-link" target="_blank" rel="noopener">[LINKEDIN]</a>
+          <a href="contact.html" class="hero-social-link">[CONTACT]</a>
+        </div>
       </footer>
     </main>
 
-    <!-- Interactive 3D Cursor Tubes Engine -->
+    <div id="toast" class="toast-msg" role="status" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <script type="module" src="js/tubesCursor.js"></script>
+    <script type="module">import { WebGLBackgroundEngine } from './js/webglBackground.js';
+      import { ScrollParallaxEngine } from './js/scrollParallax.js';
+      import { PortfolioEngine } from './js/portfolioEngine.js';
+
+            window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
+
+            window.__scrollParallaxInstance = new ScrollParallaxEngine();
+
+            const engine = new PortfolioEngine();
+</script>
   </body>
 </html>

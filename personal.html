@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#090b0e" />
+    <meta name="color-scheme" content="dark" />
+
+    <title>Archive — Jaijitesh Suryaprakash</title>
+    <meta name="title" content="Jaijitesh Suryaprakash — Research Archive" />
+    <meta name="description" content="Technical research notes, literature foundations, and engineering perspectives." />
+
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    
+    <div id="pageTransition" class="page-transition-curtain" aria-hidden="true">
+      <div class="page-transition-line"></div>
+      <div class="page-transition-brand">JAIJITESH SURYAPRAKASH &bull; RESEARCH ARCHIVE</div>
+    </div>
+
+    <div id="tubesContainer" class="tubes-container" aria-hidden="true">
+      <canvas id="tubesCanvas" class="tubes-canvas"></canvas>
+    </div>
+
+    <canvas id="webglBackgroundCanvas" class="webgl-background-canvas" aria-hidden="true"></canvas>
+
+    <div class="architectural-grid" aria-hidden="true"></div>
+
+    <div class="grain" aria-hidden="true"></div>
+
+    <nav class="top-nav" style="opacity: 1; transform: none; pointer-events: auto;">
+      <a href="index.html" class="nav-brand">JITESH<span class="dot">.</span> <span style="font-family: var(--micro-font); font-size: 10px; color: var(--micro-text-dim); margin-left: 6px;">[02]</span></a>
+      <div class="nav-tabs">
+        <a href="index.html" class="nav-tab-link">[ 01 &bull; PROFESSIONAL ]</a>
+        <a href="personal.html" class="nav-tab-link active">[ 02 &bull; ARCHIVE ]</a>
+        <a href="contact.html" class="nav-tab-link">[ 03 &bull; CONTACT ]</a>
+      </div>
+      <div class="nav-actions">
+        <button class="audio-toggle-btn" id="audioToggle" data-action="toggle-audio" title="Toggle Lo-Fi Jazz Ambient Chords (Nujabes)">
+          <span class="audio-eq-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span>[ SOUND &bull; NUJABES ]</span>
+        </button>
+      </div>
+    </nav>
+
+    <main class="content-wrapper" style="padding-top: 100px;">
+
+      <div style="margin-bottom: 40px;">
+        <span class="section-label">TECHNICAL ARCHIVE &bull; PERSPECTIVES</span>
+        <h1 class="section-title" style="margin-bottom: 16px;">Systems Philosophy &amp; Research</h1>
+        <div class="micro-ruler" style="margin-bottom: 16px;"></div>
+        <p style="color: var(--text-muted); max-width: 680px; font-size: 16px; line-height: 1.7; margin-bottom: 24px;">
+          Investigations into deterministic robotics, mathematical fluid kinematics, foundational computing literature, and acoustic architecture.
+        </p>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <button class="btn-sharp solid" data-action="open-letter">
+            <span>[ TRANSMIT DIRECT MESSAGE ]</span>
+            <span>&rarr;</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="personal-grid">
+
+        <article class="personal-box reg-corners">
+          <div class="corner-ticks"></div>
+          <div class="micro-header-bar">
+            <span class="tag-id">LOG 01 &bull; DISCIPLINES</span>
+            <span>CORE FOCUS</span>
+          </div>
+          <div style="padding: 16px 0 0 0;">
+            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
+              <span style="color: var(--accent);">PRIMARY FIELDS</span>
+              <span style="color: var(--micro-text-dim);">DOMAINS</span>
+            </div>
+            <div class="micro-ruler"></div>
+            <div class="spec-row" style="margin-top: 12px;">
+              <span class="spec-key">[ROBOTICS]</span>
+              <span class="spec-val">LiDAR SLAM, EKF Fusion, Nav2 Stacks</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">[PHYSICS]</span>
+              <span class="spec-val">Navier-Stokes Approximations, WebGL Solvers</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">[NETWORKING]</span>
+              <span class="spec-val">Low-Latency WebSockets, Go Concurrency</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">[SYSTEMS]</span>
+              <span class="spec-val">Deterministic State Engines, Linux Edge</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">[THEORY]</span>
+              <span class="spec-val">Algorithmic Complexity &amp; Numerical Stability</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="personal-box reg-corners">
+          <div class="corner-ticks"></div>
+          <div class="micro-header-bar">
+            <span class="tag-id">LOG 02 &bull; VISUAL LAB</span>
+            <span>SPECIMENS</span>
+          </div>
+          <div style="padding: 16px 0 0 0;">
+            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
+              <span style="color: var(--accent);">VISUAL LABORATORY</span>
+              <span style="color: var(--micro-text-dim);">SIMULATIONS</span>
+            </div>
+            <div class="micro-ruler"></div>
+            <div class="media-preview-grid">
+              <div class="media-thumb"><img src="retro/sp.gif" alt="Specimen SP" class="media-thumb-img"></div>
+              <div class="media-thumb"><img src="retro/space.gif" alt="Specimen Orbital" class="media-thumb-img"></div>
+              <div class="media-thumb"><img src="retro/eva.gif" alt="Specimen Eva" class="media-thumb-img"></div>
+              <div class="media-thumb"><img src="retro/a1.gif" alt="Specimen Cyberpunk" class="media-thumb-img"></div>
+              <div class="media-thumb"><img src="retro/rick_64.gif" alt="Specimen Rick" class="media-thumb-img"></div>
+              <div class="media-thumb"><img src="retro/nirvana.gif" alt="Specimen Nirvana" class="media-thumb-img"></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="personal-box reg-corners">
+          <div class="corner-ticks"></div>
+          <div class="micro-header-bar">
+            <span class="tag-id">LOG 03 &bull; INITIATIVES</span>
+            <span>ACTIVE</span>
+          </div>
+          <div style="padding: 16px 0 0 0;">
+            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
+              <span style="color: var(--accent);">RESEARCH INITIATIVES</span>
+              <span style="color: var(--micro-text-dim);">IN PROGRESS</span>
+            </div>
+            <div class="micro-ruler"></div>
+            <div class="reading-list-entry" style="margin-top: 14px;">
+              <div class="reading-title">Autonomous Quadruped Dynamic Gait Controller</div>
+              <div class="reading-author">ROS 2 &bull; Inverse Kinematics &bull; C++</div>
+            </div>
+            <div class="reading-list-entry">
+              <div class="reading-title">GPU Lattice Boltzmann Method (LBM) Simulator</div>
+              <div class="reading-author">WebGL &bull; Compute Shaders &bull; Fluid Dynamics</div>
+            </div>
+            <div class="reading-list-entry">
+              <div class="reading-title">Zero-Copy Lock-Free Ring Buffer Engine</div>
+              <div class="reading-author">Go &bull; Microsecond Event Streaming</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="personal-box reg-corners">
+          <div class="corner-ticks"></div>
+          <div class="micro-header-bar">
+            <span class="tag-id">LOG 04 &bull; ACOUSTIC SPACE</span>
+            <span>AUDIO NODE: 440Hz</span>
+          </div>
+          <div style="padding: 16px 0 0 0;">
+            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
+              <span style="color: var(--accent);">ACOUSTIC SPACE</span>
+              <span style="color: var(--micro-text-dim);">SYNTHESIS</span>
+            </div>
+            <div class="micro-ruler"></div>
+            <div style="display: flex; align-items: center; gap: 16px; margin-top: 14px;">
+              <div class="sound-visualizer-bars">
+                <span></span><span></span><span></span><span></span><span></span>
+              </div>
+              <div>
+                <div style="font-weight: 700; color: #fff; font-size: 15px;">Aruarian Dance</div>
+                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);">
+                  Nujabes &bull; Web Audio API Synthesizer
+                </div>
+              </div>
+            </div>
+            <button class="btn-sharp" data-action="toggle-audio" style="margin-top: 16px; width: 100%; justify-content: center;">
+              [ TOGGLE SOUND ]
+            </button>
+          </div>
+        </article>
+
+        <article class="personal-box reg-corners">
+          <div class="corner-ticks"></div>
+          <div class="micro-header-bar">
+            <span class="tag-id">LOG 05 &bull; METRICS</span>
+            <span>SYSTEM TELEMETRY</span>
+          </div>
+          <div style="padding: 16px 0 0 0;">
+            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
+              <span style="color: var(--accent);">SYSTEM METRICS</span>
+              <span style="color: var(--micro-text-dim);">INDICES</span>
+            </div>
+            <div class="micro-ruler"></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px;">
+              <div>
+                <div style="font-size: 28px; font-weight: 800; color: var(--accent);">04+</div>
+                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 2px;">Years Engineering</div>
+              </div>
+              <div>
+                <div style="font-size: 28px; font-weight: 800; color: #fff;">24+</div>
+                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 2px;">Projects Built</div>
+              </div>
+              <div>
+                <div style="font-size: 28px; font-weight: 800; color: #fff;">12+</div>
+                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 2px;">Deployed Systems</div>
+              </div>
+              <div>
+                <div style="font-size: 28px; font-weight: 800; color: var(--accent);">30+</div>
+                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 2px;">Core Skills</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="personal-box reg-corners">
+          <div class="corner-ticks"></div>
+          <div class="micro-header-bar">
+            <span class="tag-id">LOG 06 &bull; LITERATURE</span>
+            <span>BIBLIOGRAPHY</span>
+          </div>
+          <div style="padding: 16px 0 0 0;">
+            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
+              <span style="color: var(--accent);">LITERATURE ARCHIVE</span>
+              <span style="color: var(--micro-text-dim);">THEORY</span>
+            </div>
+            <div class="micro-ruler"></div>
+            <div class="reading-list-entry" style="margin-top: 14px;">
+              <div class="reading-title">Cybernetics: Control and Communication</div>
+              <div class="reading-author">Norbert Wiener &bull; MIT Press</div>
+            </div>
+            <div class="reading-list-entry">
+              <div class="reading-title">Mathematical Theory of Communication</div>
+              <div class="reading-author">Claude E. Shannon &bull; Bell System Technical Journal</div>
+            </div>
+            <div class="reading-list-entry">
+              <div class="reading-title">Feynman Lectures on Computation</div>
+              <div class="reading-author">Richard P. Feynman &bull; Quantum &amp; Physical Limits</div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <section class="section-container" style="padding-top: 60px;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
+          <div>
+            <span class="section-label">RESEARCH DOMAINS &bull; ARCHITECTURAL FOCUS</span>
+            <h3 class="section-title" style="margin-bottom: 0;">Architectural Focus</h3>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-sharp" id="sliderPrev" aria-label="Previous slide">&larr; [PREV]</button>
+            <button class="btn-sharp" id="sliderNext" aria-label="Next slide">[NEXT] &rarr;</button>
+          </div>
+        </div>
+        
+        <div class="personal-slider-container">
+          <div class="personal-slider-track" id="lifeSliderTrack">
+            <div class="personal-slider-item reg-corners">
+              <div class="corner-ticks"></div>
+              <div class="slider-tag">01 &bull; KINEMATICS</div>
+              <div class="slider-title">Fluid &amp; Numerical Physics</div>
+              <div class="micro-ruler" style="margin-bottom: 10px;"></div>
+              <div class="slider-desc">Navier-Stokes solvers, finite volume methods, computational aerodynamics, and GLSL vector shaders.</div>
+            </div>
+            <div class="personal-slider-item reg-corners">
+              <div class="corner-ticks"></div>
+              <div class="slider-tag">02 &bull; HARDWARE</div>
+              <div class="slider-title">Autonomous Robotics</div>
+              <div class="micro-ruler" style="margin-bottom: 10px;"></div>
+              <div class="slider-desc">ROS 2 architecture, LiDAR SLAM, EKF sensor fusion, inverse kinematics, and edge microcontrollers.</div>
+            </div>
+            <div class="personal-slider-item reg-corners">
+              <div class="corner-ticks"></div>
+              <div class="slider-tag">03 &bull; COMPUTING</div>
+              <div class="slider-title">Distributed Concurrency</div>
+              <div class="micro-ruler" style="margin-bottom: 10px;"></div>
+              <div class="slider-desc">Lock-free memory architectures, high-throughput WebSocket pipelines, and resilient distributed microservices.</div>
+            </div>
+            <div class="personal-slider-item reg-corners">
+              <div class="corner-ticks"></div>
+              <div class="slider-tag">04 &bull; REASONING</div>
+              <div class="slider-title">Autonomous Agent Runtimes</div>
+              <div class="micro-ruler" style="margin-bottom: 10px;"></div>
+              <div class="slider-desc">Deterministic execution sandboxes, persistent knowledge graphs, and asynchronous tool invocation.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="personal-suggestion-card evaporate-card reg-corners" style="margin-top: 40px;">
+        <div class="corner-ticks"></div>
+        <div class="micro-header-bar" style="margin-bottom: 16px;">
+          <span class="tag-id">RETURN ROUTE</span>
+          <span>CHAPTER 01 &bull; PROFESSIONAL</span>
+        </div>
+        <span class="suggestion-tag">PRIMARY REPERTOIRE &bull; SYSTEMS</span>
+        <h3 class="suggestion-title">Inspect Production Systems &amp; Engineering Trajectory</h3>
+        <p class="suggestion-desc">
+          Return to the primary engineering portfolio to view active production systems, quantitative metrics, and technical project implementations.
+        </p>
+        <a href="index.html" class="btn-sharp solid">
+          <span>[ RETURN TO PORTFOLIO ]</span>
+          <span>&rarr;</span>
+        </a>
+      </div>
+
+      <div class="title-block-container reg-corners">
+        <div class="corner-ticks"></div>
+        <div class="title-block-row">
+          <div class="title-block-cell">
+            <span class="title-block-label">DOCUMENT</span>
+            <span class="title-block-val">RESEARCH ARCHIVE</span>
+          </div>
+          <div class="title-block-cell">
+            <span class="title-block-label">AUTHOR</span>
+            <span class="title-block-val">JAIJITESH SURYAPRAKASH</span>
+          </div>
+          <div class="title-block-cell">
+            <span class="title-block-label">FOCUS</span>
+            <span class="title-block-val">AUTONOMOUS SYSTEMS</span>
+          </div>
+          <div class="title-block-cell">
+            <span class="title-block-label">LOCATION</span>
+            <span class="title-block-val">VELLORE, INDIA</span>
+          </div>
+        </div>
+      </div>
+
+      <footer class="site-footer">
+        <div>&copy; 2026 JAIJITESH SURYAPRAKASH. ALL RIGHTS RESERVED.</div>
+        <div style="display: flex; gap: 20px;">
+          <a href="https://github.com/BerrF35" class="hero-social-link" target="_blank" rel="noopener">[GITHUB]</a>
+          <a href="https://www.linkedin.com/in/jaijitesh/" class="hero-social-link" target="_blank" rel="noopener">[LINKEDIN]</a>
+          <a href="contact.html" class="hero-social-link">[CONTACT]</a>
+        </div>
+      </footer>
+    </main>
+
+    <div id="letterModal" class="letter-modal" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="letter-box">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <div class="suggestion-tag" style="margin-bottom: 0;">DIRECT MESSAGE</div>
+          <button class="btn-sharp" data-action="close-letter" style="height: 32px; padding: 0 10px;">&times;</button>
+        </div>
+        <h3 style="font-family: var(--font-sans); font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 12px;">
+          Transmit Message to Jaijitesh
+        </h3>
+        <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6;">
+          For collaboration on autonomous robotics, high-throughput systems, or computational physics, send a message directly.
+        </p>
+        <form id="personalLetterForm" style="display: flex; flex-direction: column; gap: 16px;">
+          <input type="email" id="letterEmail" class="form-input" placeholder="Your Email Address" required />
+          <textarea id="letterMsg" class="form-input" rows="4" placeholder="Brief technical query or message..." required></textarea>
+          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 8px;">
+            <button type="button" class="btn-sharp" data-action="close-letter">Cancel</button>
+            <button type="submit" class="btn-sharp solid">Send Message &rarr;</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="toast" class="toast-msg" role="status" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script type="module" src="js/tubesCursor.js"></script>
+    <script type="module">import { WebGLBackgroundEngine } from './js/webglBackground.js';
+      import { PortfolioEngine } from './js/portfolioEngine.js';
+
+            window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
+
+            if (typeof Lenis !== 'undefined') {
+        const lenis = new Lenis({
+          duration: 1.15,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+          touchMultiplier: 1.5,
+        });
+
+        lenis.on('scroll', (e) => {
+          if (window.__webglBackgroundInstance) {
+            const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+            window.__webglBackgroundInstance.setScrollProgress(e.scroll / maxScroll);
+          }
+        });
+
+        function raf(time) {
+          lenis.raf(time);
+          requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+      }
+
+            const engine = new PortfolioEngine();
+
+            const track = document.getElementById('lifeSliderTrack');
+      const prevBtn = document.getElementById('sliderPrev');
+      const nextBtn = document.getElementById('sliderNext');
+      if (track && prevBtn && nextBtn) {
+        let currentIndex = 0;
+        const items = track.children;
+        const updateSlider = () => {
+          const itemWidth = items[0] ? items[0].offsetWidth + 20 : 300;
+          const visibleCount = window.innerWidth > 768 ? 2 : 1;
+          const maxIndex = Math.max(0, items.length - visibleCount);
+          currentIndex = Math.max(0, Math.min(currentIndex, maxIndex));
+          track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+        };
+        prevBtn.addEventListener('click', () => {
+          currentIndex = Math.max(0, currentIndex - 1);
+          updateSlider();
+        });
+        nextBtn.addEventListener('click', () => {
+          const visibleCount = window.innerWidth > 768 ? 2 : 1;
+          const maxIndex = Math.max(0, items.length - visibleCount);
+          currentIndex = Math.min(maxIndex, currentIndex + 1);
+          updateSlider();
+        });
+        window.addEventListener('resize', updateSlider, { passive: true });
+      }
+</script>
+  </body>
+</html>
