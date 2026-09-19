@@ -9,28 +9,28 @@ export class HomeTubesCursor {
 
     this.palettes = [
       {
-        tubes: ["#ffffff", "#e0a82e", "#d84536"],
-        lights: ["#ffffff", "#e0a82e", "#d84536", "#ffe49e"]
+        tubes: ["#38ef7d", "#38bdf8", "#818cf8"],
+        lights: ["#38ef7d", "#00ff88", "#38bdf8", "#e0e7ff"]
       },
       {
-        tubes: ["#e0a82e", "#ffffff", "#c84131"],
-        lights: ["#e0a82e", "#ffffff", "#c84131", "#ffeed0"]
+        tubes: ["#ff007f", "#7928ca", "#00f2fe"],
+        lights: ["#ff007f", "#ff416c", "#7928ca", "#00f2fe"]
       },
       {
-        tubes: ["#d84536", "#ffffff", "#dfa732"],
-        lights: ["#d84536", "#ffffff", "#dfa732", "#fcd580"]
+        tubes: ["#38bdf8", "#6366f1", "#ec4899"],
+        lights: ["#38bdf8", "#818cf8", "#c084fc", "#f43f5e"]
       },
       {
-        tubes: ["#ffffff", "#dca836", "#a83222"],
-        lights: ["#ffffff", "#dca836", "#a83222", "#fff5e0"]
+        tubes: ["#10b981", "#06b6d4", "#3b82f6"],
+        lights: ["#34d399", "#22d3ee", "#60a5fa", "#ffffff"]
       },
       {
-        tubes: ["#dfa732", "#c43c2c", "#ffffff"],
-        lights: ["#dfa732", "#c43c2c", "#ffffff", "#ffe082"]
+        tubes: ["#f59e0b", "#ef4444", "#ec4899"],
+        lights: ["#fbbf24", "#f87171", "#f472b6", "#ffffff"]
       },
       {
-        tubes: ["#c83a2a", "#f0be4a", "#ffffff"],
-        lights: ["#c83a2a", "#f0be4a", "#ffffff", "#ffd54f"]
+        tubes: ["#00ffcc", "#ff00aa", "#ffe600"],
+        lights: ["#00ffcc", "#ff00aa", "#ffe600", "#ffffff"]
       }
     ];
 
@@ -47,7 +47,7 @@ export class HomeTubesCursor {
         tubes: {
           colors: initialPalette.tubes,
           lights: {
-            intensity: 220,
+            intensity: 80,
             colors: initialPalette.lights
           }
         }

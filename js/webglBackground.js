@@ -10,10 +10,29 @@ export class WebGLBackgroundEngine {
     this.gyroGroup = null;
     this.coreMesh = null;
     this.wireMesh = null;
+    this.vertexNodes = null;
+    this.innerCore = null;
+    this.innerWire = null;
+    this.centerStar = null;
     this.ringX = null;
     this.ringY = null;
     this.ringZ = null;
+    this.ringTicks = null;
     this.satellites = null;
+
+    this.planetsGroup = null;
+    this.planet1Orbit = null;
+    this.planet1 = null;
+    this.planet1Moon = null;
+    this.planet2Orbit = null;
+    this.planet2 = null;
+    this.planet3Orbit = null;
+    this.planet3 = null;
+    this.planet4Orbit = null;
+    this.planet4 = null;
+
+    this.camPath = null;
+    this.lookPath = null;
 
     this.mouse = { x: 0, y: 0, targetX: 0, targetY: 0, isDragging: false, prevX: 0, prevY: 0 };
     this.rotationInertia = { x: 0, y: 0 };
@@ -21,29 +40,26 @@ export class WebGLBackgroundEngine {
     this.targetScrollProgress = 0;
     this.clock = null;
     this.rafId = null;
-    this.isVisible = true;
 
     this.themeColors = {
       primary: new THREE.Color(0xd84536),
       secondary: new THREE.Color(0xe0a82e),
       accent: new THREE.Color(0xffffff),
-      core: new THREE.Color(0x701b12)
+      core: new THREE.Color(0x6e1a12)
     };
 
     this.init();
   }
 
   init() {
-    if (typeof THREE === 'undefined') {
-      return;
-    }
+    if (typeof THREE === 'undefined') return;
 
     const width = window.innerWidth;
     const height = window.innerHeight;
 
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(50, width / height, 1, 2000);
-    this.camera.position.set(0, 0, 420);
+    this.camera = new THREE.PerspectiveCamera(50, width / height, 1, 2500);
+    this.camera.position.set(20, 0, 440);
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -56,20 +72,46 @@ export class WebGLBackgroundEngine {
 
     this.clock = new THREE.Clock();
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.55);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     this.scene.add(ambientLight);
 
-    const pointLight = new THREE.PointLight(0xe0a82e, 1.6, 800);
-    pointLight.position.set(120, 160, 200);
+    const pointLight = new THREE.PointLight(0xe0a82e, 1.8, 900);
+    pointLight.position.set(140, 180, 220);
     this.scene.add(pointLight);
 
-    const rimLight = new THREE.PointLight(0xd84536, 1.8, 700);
-    rimLight.position.set(-140, -100, 150);
+    const rimLight = new THREE.PointLight(0xd84536, 1.9, 850);
+    rimLight.position.set(-160, -120, 160);
     this.scene.add(rimLight);
 
+    this.buildCameraRails();
     this.buildGyroscope();
+    this.buildPlanetarySystem();
     this.bindEvents();
     this.animate();
+  }
+
+  buildCameraRails() {
+    this.camPath = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(20, 0, 440),
+      new THREE.Vector3(65, 14, 385),
+      new THREE.Vector3(135, 28, 310),
+      new THREE.Vector3(190, 24, 230),
+      new THREE.Vector3(150, 10, 145),
+      new THREE.Vector3(60, -14, 118),
+      new THREE.Vector3(-45, 18, 122),
+      new THREE.Vector3(-85, -6, 135)
+    ]);
+
+    this.lookPath = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Vector3(6, 2, 0),
+      new THREE.Vector3(16, 6, -5),
+      new THREE.Vector3(20, 8, -12),
+      new THREE.Vector3(12, 4, -8),
+      new THREE.Vector3(2, -2, 0),
+      new THREE.Vector3(-6, 4, 4),
+      new THREE.Vector3(-4, 0, 0)
+    ]);
   }
 
   buildGyroscope() {
@@ -78,11 +120,11 @@ export class WebGLBackgroundEngine {
     const coreGeo = new THREE.DodecahedronGeometry(82, 0);
     const coreMat = new THREE.MeshPhongMaterial({
       color: this.themeColors.core,
-      emissive: 0x5a150e,
+      emissive: 0x48100a,
       shininess: 45,
       flatShading: true,
       transparent: true,
-      opacity: 0.15
+      opacity: 0.16
     });
     this.coreMesh = new THREE.Mesh(coreGeo, coreMat);
     this.gyroGroup.add(this.coreMesh);
@@ -92,35 +134,116 @@ export class WebGLBackgroundEngine {
       color: 0xffffff,
       wireframe: true,
       transparent: true,
-      opacity: 0.24
+      opacity: 0.26
     });
     this.wireMesh = new THREE.Mesh(wireGeo, wireMat);
     this.gyroGroup.add(this.wireMesh);
 
-    const ringGeoX = new THREE.TorusGeometry(195, 1.3, 8, 54);
+    const posAttr = wireGeo.getAttribute('position');
+    const uniquePoints = [];
+    for (let i = 0; i < posAttr.count; i++) {
+      const v = new THREE.Vector3(posAttr.getX(i), posAttr.getY(i), posAttr.getZ(i));
+      if (!uniquePoints.some(p => p.distanceTo(v) < 1.0)) {
+        uniquePoints.push(v);
+      }
+    }
+
+    const nodeGeo = new THREE.SphereGeometry(2.6, 8, 8);
+    const nodeMat = new THREE.MeshStandardMaterial({
+      color: 0xf5c242,
+      emissive: 0x442800,
+      metalness: 0.8,
+      roughness: 0.2
+    });
+    this.vertexNodes = new THREE.InstancedMesh(nodeGeo, nodeMat, uniquePoints.length);
+    const dummy = new THREE.Object3D();
+    for (let i = 0; i < uniquePoints.length; i++) {
+      dummy.position.copy(uniquePoints[i]);
+      dummy.updateMatrix();
+      this.vertexNodes.setMatrixAt(i, dummy.matrix);
+    }
+    this.gyroGroup.add(this.vertexNodes);
+
+    const innerGeo = new THREE.IcosahedronGeometry(46, 0);
+    const innerMat = new THREE.MeshPhongMaterial({
+      color: 0xd84536,
+      emissive: 0x3a0d08,
+      flatShading: true,
+      transparent: true,
+      opacity: 0.22
+    });
+    this.innerCore = new THREE.Mesh(innerGeo, innerMat);
+    this.gyroGroup.add(this.innerCore);
+
+    const innerWireGeo = new THREE.IcosahedronGeometry(47, 0);
+    const innerWireMat = new THREE.MeshBasicMaterial({
+      color: 0xf5c242,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.32
+    });
+    this.innerWire = new THREE.Mesh(innerWireGeo, innerWireMat);
+    this.gyroGroup.add(this.innerWire);
+
+    const centerStarGeo = new THREE.SphereGeometry(10, 16, 16);
+    const centerStarMat = new THREE.MeshBasicMaterial({
+      color: 0xffe072
+    });
+    this.centerStar = new THREE.Mesh(centerStarGeo, centerStarMat);
+    this.gyroGroup.add(this.centerStar);
+
+    const centerLight = new THREE.PointLight(0xffbe42, 2.2, 350);
+    this.gyroGroup.add(centerLight);
+
+    const ringGeoX = new THREE.TorusGeometry(195, 1.4, 8, 64);
     const ringMatX = new THREE.MeshStandardMaterial({
       color: this.themeColors.primary,
       metalness: 0.5,
       roughness: 0.35,
       transparent: true,
-      opacity: 0.22
+      opacity: 0.24
     });
     this.ringX = new THREE.Mesh(ringGeoX, ringMatX);
     this.gyroGroup.add(this.ringX);
 
-    const ringGeoY = new THREE.TorusGeometry(245, 1.8, 12, 64);
+    const ringGeoY = new THREE.TorusGeometry(245, 2.2, 16, 80);
     const ringMatY = new THREE.MeshStandardMaterial({
-      color: this.themeColors.secondary,
-      metalness: 0.6,
+      color: 0xf5c242,
+      metalness: 0.7,
       roughness: 0.25,
       transparent: true,
-      opacity: 0.32
+      opacity: 0.35
     });
     this.ringY = new THREE.Mesh(ringGeoY, ringMatY);
     this.ringY.rotation.x = Math.PI / 2;
+
+    const tickCount = 72;
+    const tickPositions = new Float32Array(tickCount * 2 * 3);
+    for (let i = 0; i < tickCount; i++) {
+      const angle = (i / tickCount) * Math.PI * 2;
+      const isMajor = i % 6 === 0;
+      const rInner = 245 - (isMajor ? 8 : 4);
+      const rOuter = 245 + (isMajor ? 8 : 4);
+      tickPositions[i * 6 + 0] = Math.cos(angle) * rInner;
+      tickPositions[i * 6 + 1] = 0;
+      tickPositions[i * 6 + 2] = Math.sin(angle) * rInner;
+      tickPositions[i * 6 + 3] = Math.cos(angle) * rOuter;
+      tickPositions[i * 6 + 4] = 0;
+      tickPositions[i * 6 + 5] = Math.sin(angle) * rOuter;
+    }
+    const tickGeo = new THREE.BufferGeometry();
+    tickGeo.setAttribute('position', new THREE.BufferAttribute(tickPositions, 3));
+    const tickMat = new THREE.LineBasicMaterial({
+      color: 0xf5c242,
+      transparent: true,
+      opacity: 0.32
+    });
+    this.ringTicks = new THREE.LineSegments(tickGeo, tickMat);
+    this.ringY.add(this.ringTicks);
+
     this.gyroGroup.add(this.ringY);
 
-    const ringGeoZ = new THREE.TorusGeometry(295, 1.3, 8, 64);
+    const ringGeoZ = new THREE.TorusGeometry(295, 1.4, 8, 64);
     const ringMatZ = new THREE.MeshStandardMaterial({
       color: this.themeColors.accent,
       metalness: 0.5,
@@ -132,7 +255,7 @@ export class WebGLBackgroundEngine {
     this.ringZ.rotation.y = Math.PI / 2;
     this.gyroGroup.add(this.ringZ);
 
-    const satCount = 48;
+    const satCount = 56;
     const satGeo = new THREE.BufferGeometry();
     const satPos = new Float32Array(satCount * 3);
     for (let i = 0; i < satCount; i++) {
@@ -149,7 +272,7 @@ export class WebGLBackgroundEngine {
       size: 6,
       map: satTexture,
       transparent: true,
-      opacity: 0.28,
+      opacity: 0.3,
       color: 0xf5c242,
       blending: THREE.AdditiveBlending,
       depthWrite: false
@@ -162,6 +285,170 @@ export class WebGLBackgroundEngine {
     this.gyroGroup.rotation.set(0.2, 0.3, 0);
 
     this.scene.add(this.gyroGroup);
+  }
+
+  buildPlanetarySystem() {
+    this.planetsGroup = new THREE.Group();
+
+    this.planet1Orbit = new THREE.Group();
+    this.planet1Orbit.rotation.x = 0.32;
+    this.planet1Orbit.rotation.z = 0.15;
+
+    const r1 = 510;
+    const orbit1Geo = new THREE.BufferGeometry();
+    const orbit1Pts = [];
+    for (let i = 0; i <= 64; i++) {
+      const a = (i / 64) * Math.PI * 2;
+      orbit1Pts.push(Math.cos(a) * r1, 0, Math.sin(a) * r1);
+    }
+    orbit1Geo.setAttribute('position', new THREE.Float32BufferAttribute(orbit1Pts, 3));
+    const orbitLineMat1 = new THREE.LineBasicMaterial({
+      color: 0xd84536,
+      transparent: true,
+      opacity: 0.14
+    });
+    const orbit1Line = new THREE.Line(orbit1Geo, orbitLineMat1);
+    this.planet1Orbit.add(orbit1Line);
+
+    this.planet1 = new THREE.Group();
+    const p1Geo = new THREE.SphereGeometry(24, 24, 24);
+    const p1Mat = new THREE.MeshStandardMaterial({
+      color: 0xb53d2d,
+      roughness: 0.6,
+      metalness: 0.2
+    });
+    const p1Mesh = new THREE.Mesh(p1Geo, p1Mat);
+    this.planet1.add(p1Mesh);
+
+    const p1RingGeo = new THREE.RingGeometry(32, 50, 48);
+    const p1RingMat = new THREE.MeshStandardMaterial({
+      color: 0xe0a82e,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.42,
+      roughness: 0.4
+    });
+    const p1RingMesh = new THREE.Mesh(p1RingGeo, p1RingMat);
+    p1RingMesh.rotation.x = Math.PI * 0.42;
+    this.planet1.add(p1RingMesh);
+
+    const p1MoonGeo = new THREE.SphereGeometry(3.6, 12, 12);
+    const p1MoonMat = new THREE.MeshStandardMaterial({
+      color: 0xffffff,
+      roughness: 0.5
+    });
+    this.planet1Moon = new THREE.Mesh(p1MoonGeo, p1MoonMat);
+    this.planet1.add(this.planet1Moon);
+
+    this.planet1.position.set(r1, 0, 0);
+    this.planet1Orbit.add(this.planet1);
+    this.planetsGroup.add(this.planet1Orbit);
+
+    this.planet2Orbit = new THREE.Group();
+    this.planet2Orbit.rotation.x = -0.45;
+    this.planet2Orbit.rotation.y = 0.25;
+
+    const r2 = 660;
+    const orbit2Geo = new THREE.BufferGeometry();
+    const orbit2Pts = [];
+    for (let i = 0; i <= 64; i++) {
+      const a = (i / 64) * Math.PI * 2;
+      orbit2Pts.push(Math.cos(a) * r2, 0, Math.sin(a) * r2);
+    }
+    orbit2Geo.setAttribute('position', new THREE.Float32BufferAttribute(orbit2Pts, 3));
+    const orbit2LineMat = new THREE.LineBasicMaterial({
+      color: 0x6e8ca8,
+      transparent: true,
+      opacity: 0.12
+    });
+    const orbit2Line = new THREE.Line(orbit2Geo, orbit2LineMat);
+    this.planet2Orbit.add(orbit2Line);
+
+    this.planet2 = new THREE.Group();
+    const p2Geo = new THREE.IcosahedronGeometry(18, 1);
+    const p2Mat = new THREE.MeshStandardMaterial({
+      color: 0x687e96,
+      roughness: 0.35,
+      metalness: 0.5,
+      flatShading: true
+    });
+    const p2Mesh = new THREE.Mesh(p2Geo, p2Mat);
+    this.planet2.add(p2Mesh);
+
+    const p2Wire = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(18.5, 1),
+      new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.18 })
+    );
+    this.planet2.add(p2Wire);
+
+    this.planet2.position.set(r2, 0, 0);
+    this.planet2Orbit.add(this.planet2);
+    this.planetsGroup.add(this.planet2Orbit);
+
+    this.planet3Orbit = new THREE.Group();
+    this.planet3Orbit.rotation.x = 0.58;
+    this.planet3Orbit.rotation.y = -0.35;
+
+    const r3 = 390;
+    const orbit3Geo = new THREE.BufferGeometry();
+    const orbit3Pts = [];
+    for (let i = 0; i <= 64; i++) {
+      const a = (i / 64) * Math.PI * 2;
+      orbit3Pts.push(Math.cos(a) * r3, 0, Math.sin(a) * r3);
+    }
+    orbit3Geo.setAttribute('position', new THREE.Float32BufferAttribute(orbit3Pts, 3));
+    const orbit3Line = new THREE.Line(orbit3Geo, new THREE.LineBasicMaterial({
+      color: 0xf5c242,
+      transparent: true,
+      opacity: 0.14
+    }));
+    this.planet3Orbit.add(orbit3Line);
+
+    this.planet3 = new THREE.Group();
+    const p3Geo = new THREE.SphereGeometry(12, 16, 16);
+    const p3Mat = new THREE.MeshStandardMaterial({
+      color: 0xf5c242,
+      emissive: 0x8a5500,
+      roughness: 0.3
+    });
+    const p3Mesh = new THREE.Mesh(p3Geo, p3Mat);
+    this.planet3.add(p3Mesh);
+
+    const p3HaloGeo = new THREE.TorusGeometry(18, 0.6, 6, 32);
+    const p3HaloMat = new THREE.MeshBasicMaterial({
+      color: 0xffe072,
+      transparent: true,
+      opacity: 0.35
+    });
+    const p3Halo = new THREE.Mesh(p3HaloGeo, p3HaloMat);
+    p3Halo.rotation.x = Math.PI / 2;
+    this.planet3.add(p3Halo);
+
+    this.planet3.position.set(r3, 0, 0);
+    this.planet3Orbit.add(this.planet3);
+    this.planetsGroup.add(this.planet3Orbit);
+
+    this.planet4Orbit = new THREE.Group();
+    this.planet4Orbit.rotation.x = -0.22;
+    this.planet4Orbit.rotation.z = -0.40;
+
+    const r4 = 820;
+    this.planet4 = new THREE.Group();
+    const p4Geo = new THREE.IcosahedronGeometry(15, 0);
+    const p4Mat = new THREE.MeshStandardMaterial({
+      color: 0x8a2418,
+      emissive: 0x3d0c06,
+      roughness: 0.5,
+      flatShading: true
+    });
+    const p4Mesh = new THREE.Mesh(p4Geo, p4Mat);
+    this.planet4.add(p4Mesh);
+
+    this.planet4.position.set(r4, 0, 0);
+    this.planet4Orbit.add(this.planet4);
+    this.planetsGroup.add(this.planet4Orbit);
+
+    this.scene.add(this.planetsGroup);
   }
 
   createDotTexture() {
@@ -208,29 +495,6 @@ export class WebGLBackgroundEngine {
     });
 
     window.addEventListener('resize', () => this.onResize(), { passive: true });
-
-    window.addEventListener('tubesPaletteChange', (e) => {
-      if (e.detail && e.detail.lights && e.detail.lights.length > 0) {
-        this.updatePalette(e.detail.lights);
-      }
-    });
-  }
-
-  updatePalette(hexColors) {
-    if (!hexColors || hexColors.length === 0) return;
-    try {
-      const c1 = new THREE.Color(hexColors[0]);
-      const c2 = new THREE.Color(hexColors[1 % hexColors.length]);
-      const c3 = new THREE.Color(hexColors[2 % hexColors.length]);
-
-      if (this.wireMesh) this.wireMesh.material.color = c1;
-      if (this.ringX) this.ringX.material.color = c1;
-      if (this.ringY) this.ringY.material.color = c2;
-      if (this.ringZ) this.ringZ.material.color = c3;
-      if (this.satellites) this.satellites.material.color = c2;
-    } catch (err) {
-      console.warn(err);
-    }
   }
 
   setScrollProgress(progress) {
@@ -299,60 +563,53 @@ export class WebGLBackgroundEngine {
         this.wireMesh.rotation.y = -time * 0.25 + p * 1.6;
         this.wireMesh.rotation.x = time * 0.18 + p * 1.1;
       }
+      if (this.vertexNodes) {
+        this.vertexNodes.rotation.y = -time * 0.25 + p * 1.6;
+        this.vertexNodes.rotation.x = time * 0.18 + p * 1.1;
+      }
+      if (this.innerCore) {
+        this.innerCore.rotation.y = time * 0.35;
+        this.innerCore.rotation.z = -time * 0.22;
+      }
+      if (this.innerWire) {
+        this.innerWire.rotation.y = time * 0.35;
+        this.innerWire.rotation.z = -time * 0.22;
+      }
+      if (this.centerStar) {
+        const starPulse = 1 + Math.sin(time * 2.4) * 0.08;
+        this.centerStar.scale.set(starPulse, starPulse, starPulse);
+      }
 
       if (this.satellites) {
         this.satellites.rotation.y = time * 0.3 + p * 2.5;
         this.satellites.rotation.z = Math.sin(time * 0.2) * 0.15;
       }
+    }
 
-      if (this.camera) {
-        let targetCamX = 20;
-        let targetCamY = 0;
-        let targetCamZ = 420;
-        let targetLookX = 0;
-        let targetLookY = 0;
-        let targetLookZ = 0;
-
-        if (p < 0.32) {
-          const t = p / 0.32;
-          const easeT = t * t * (3 - 2 * t);
-          targetCamX = 20 + easeT * 170;
-          targetCamY = easeT * 42;
-          targetCamZ = 420 - easeT * 185;
-          targetLookX = easeT * 20;
-          targetLookY = easeT * 10;
-          targetLookZ = 0;
-        } else if (p < 0.62) {
-          const u = (p - 0.32) / 0.30;
-          const easeU = u * u * (3 - 2 * u);
-          const orbitR = (235 - easeU * 118) * distScale;
-          const theta = easeU * 2.6 + 0.6;
-          targetCamX = Math.cos(theta) * orbitR;
-          targetCamY = 42 - easeU * 28 + Math.sin(easeU * Math.PI) * 24;
-          targetCamZ = Math.sin(theta) * orbitR;
-          targetLookX = Math.cos(theta + 0.7) * 45;
-          targetLookY = Math.sin(easeU * Math.PI) * 12;
-          targetLookZ = Math.sin(theta + 0.7) * 45;
-        } else {
-          const w = (p - 0.62) / 0.38;
-          const easeW = w * w * (3 - 2 * w);
-          const alpha = 3.2 + easeW * 3.6;
-          const surfDist = (117 + Math.sin(easeW * Math.PI) * 12) * distScale;
-          targetCamX = Math.cos(alpha) * surfDist;
-          targetCamY = 14 + Math.sin(alpha * 1.5) * 36;
-          targetCamZ = Math.sin(alpha) * surfDist;
-          targetLookX = Math.cos(alpha + 0.65) * 38;
-          targetLookY = Math.sin(alpha * 1.5) * 15;
-          targetLookZ = Math.sin(alpha + 0.65) * 38;
-        }
-
-        this.camera.position.x += (targetCamX + this.mouse.x * 20 - this.camera.position.x) * 0.08;
-        this.camera.position.y += (targetCamY + this.mouse.y * 16 - this.camera.position.y) * 0.08;
-        this.camera.position.z += (targetCamZ - this.camera.position.z) * 0.08;
-
-        const currentTarget = new THREE.Vector3(targetLookX, targetLookY, targetLookZ);
-        this.camera.lookAt(currentTarget);
+    if (this.planetsGroup) {
+      if (this.planet1Orbit) this.planet1Orbit.rotation.y = time * 0.045 + p * 0.4;
+      if (this.planet1Moon) {
+        const ma = time * 1.6;
+        this.planet1Moon.position.set(Math.cos(ma) * 52, Math.sin(ma * 0.8) * 12, Math.sin(ma) * 52);
       }
+      if (this.planet2Orbit) this.planet2Orbit.rotation.y = -time * 0.032 - p * 0.35;
+      if (this.planet3Orbit) this.planet3Orbit.rotation.y = time * 0.075 + p * 0.55;
+      if (this.planet4Orbit) this.planet4Orbit.rotation.y = time * 0.018 + p * 0.2;
+    }
+
+    if (this.camera && this.camPath && this.lookPath) {
+      const baseCam = this.camPath.getPoint(p);
+      const baseLook = this.lookPath.getPoint(p);
+
+      const targetCamX = baseCam.x * distScale;
+      const targetCamY = baseCam.y * distScale;
+      const targetCamZ = baseCam.z * distScale;
+
+      this.camera.position.x += (targetCamX + this.mouse.x * 20 - this.camera.position.x) * 0.08;
+      this.camera.position.y += (targetCamY + this.mouse.y * 16 - this.camera.position.y) * 0.08;
+      this.camera.position.z += (targetCamZ - this.camera.position.z) * 0.08;
+
+      this.camera.lookAt(baseLook);
     }
 
     this.renderer.render(this.scene, this.camera);

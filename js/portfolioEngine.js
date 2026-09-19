@@ -51,14 +51,6 @@ export class PortfolioEngine {
   }
 
   initThemeSync() {
-    window.addEventListener('tubesPaletteChange', (e) => {
-      const p = e.detail;
-      if (p && p.tubes && p.tubes.length > 0) {
-        document.documentElement.style.setProperty('--accent', p.tubes[0]);
-        document.documentElement.style.setProperty('--accent-secondary', p.tubes[1] || '#e0a82e');
-        document.documentElement.style.setProperty('--accent-line', p.tubes[1] || p.tubes[0]);
-      }
-    });
   }
 
   initAudioSynthesizer() {
