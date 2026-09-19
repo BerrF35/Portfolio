@@ -143,12 +143,12 @@
             </div>
           </div>
           <div class="intro-visual">
-            <div class="avatar-simple-box reg-corners">
-                            <img src="assets/images/profile/portrait_full_body.jpg" alt="Jaijitesh Suryaprakash" />
+            <div class="badge-3d-wrapper" id="badge3DWrapper">
+              <canvas id="badgeCanvas" class="badge-3d-canvas" title="Interactive 3D Event Badge &bull; Grab and Drag"></canvas>
             </div>
             <div class="micro-header-bar" style="margin-top: 8px; font-size: 9px;">
-              <span>PORTRAIT FRAME</span>
-              <span>AUTHENTIC</span>
+              <span>SPECTRUM UI &bull; 3D BADGE</span>
+              <span>GRAB &bull; DRAG</span>
             </div>
           </div>
         </article>
@@ -242,7 +242,7 @@
         <h3 class="section-title">Production Systems &amp; Kernels</h3>
 
         <div class="projects-list">
-          <article class="project-item evaporate-card reg-corners">
+          <article class="project-item evaporate-card reg-corners border-beam-card">
                         <div class="micro-header-bar">
               <span class="tag-id">FLUID DYNAMICS</span>
               <span class="telemetry-val">YEAR 2024 &bull; 2026</span>
@@ -251,7 +251,7 @@
               <h4 class="project-name">WindSim — Computational Aerodynamics Platform</h4>
               <div class="micro-ruler"></div>
               <p class="project-overview">
-                Real-time browser Lattice Boltzmann Method (LBM D2Q9) and Navier-Stokes aerodynamic simulation platform featuring interactive vector field rendering, vorticity dynamics, and NACA airfoil lift and drag analysis.
+                Real-time browser Lattice Boltzmann Method (LBM D2Q9)<sup class="citation-tag" data-citation="1">[1]<span class="citation-tooltip"><strong>LBM D2Q9 Simulation Framework</strong><br/>Chen &amp; Doolen (1998) &bull; Mesoscopic Navier-Stokes Solver</span></sup> and Navier-Stokes aerodynamic simulation platform featuring interactive vector field rendering, vorticity dynamics, and NACA airfoil lift and drag analysis.
               </p>
               
               <div class="micro-spec-grid">
@@ -296,7 +296,7 @@
               <h4 class="project-name">BerryBot — Tracked Autonomous Robotics Platform</h4>
               <div class="micro-ruler"></div>
               <p class="project-overview">
-                Custom fabricated tracked autonomous mobile robotics platform featuring SolidWorks CAD chassis, dual-core ESP32 20kHz motor control firmware, 2D LiDAR SLAM, and optical odometry tracking.
+                Custom fabricated tracked autonomous mobile robotics platform featuring SolidWorks CAD chassis, dual-core ESP32 20kHz motor control firmware<sup class="citation-tag" data-citation="2">[2]<span class="citation-tooltip"><strong>Hard Real-Time Motor Kinematics</strong><br/>FreeRTOS 20kHz S-Curve PWM &bull; Hardware Timer ISR</span></sup>, 2D LiDAR SLAM, and optical odometry tracking.
               </p>
 
               <div class="micro-spec-grid">
@@ -341,7 +341,7 @@
               <h4 class="project-name">Low-Latency Financial Trading &amp; Streaming Engine</h4>
               <div class="micro-ruler"></div>
               <p class="project-overview">
-                High-concurrency order matching and market data streaming pipeline constructed in Go with WebSocket event multiplexing, lock-free memory ring buffers, and microsecond risk assessment.
+                High-concurrency order matching and market data streaming pipeline constructed in Go with WebSocket event multiplexing, lock-free memory ring buffers<sup class="citation-tag" data-citation="3">[3]<span class="citation-tooltip"><strong>Disruptor Concurrency Pattern</strong><br/>Zero-Lock Atomic IPC Ring Buffers</span></sup>, and microsecond risk assessment.
               </p>
 
               <div class="micro-spec-grid">
@@ -422,6 +422,22 @@
             </a>
           </article>
         </div>
+
+        <div class="micro-header-bar" style="margin-top: 32px; background: transparent; border: none; font-size: 10px;">
+          <span>TECHNICAL REFERENCES &bull; FOOTNOTES</span>
+          <span>CITATIONS [1-3]</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);" class="contact-subgrid">
+          <div style="padding: 12px; background: rgba(14, 18, 26, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 4px;">
+            <span style="color: var(--accent-secondary); font-weight: 700;">[1]</span> Lattice Boltzmann Model for Fluid Dynamics (Chen &amp; Doolen, Ann. Rev. Fluid Mech).
+          </div>
+          <div style="padding: 12px; background: rgba(14, 18, 26, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 4px;">
+            <span style="color: var(--accent-secondary); font-weight: 700;">[2]</span> Deterministic Real-Time Motor Kinematics on Dual-Core RISC-V and Xtensa (FreeRTOS Core V10).
+          </div>
+          <div style="padding: 12px; background: rgba(14, 18, 26, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 4px;">
+            <span style="color: var(--accent-secondary); font-weight: 700;">[3]</span> High-Throughput Inter-Thread Messaging via Atomic Ring Buffers (Thompson &amp; Barker).
+          </div>
+        </div>
       </section>
 
       <section class="section-container timeline-section" id="timelineContainer" aria-label="Experience and Roles">
@@ -431,12 +447,36 @@
           Changelog and engineering milestones across autonomous robotics, numerical physics, distributed systems, and edge intelligence.
         </p>
 
+        <nav class="timeline-tree-nav" id="timelineTreeNav" aria-label="Timeline Quick Navigation">
+          <div class="tree-header">TIMELINE NAV</div>
+          <div class="tree-track-rail">
+            <div class="tree-line" aria-hidden="true"></div>
+            <div class="tree-spring-marker" id="treeSpringMarker" aria-hidden="true"></div>
+            <a href="#timeline-2026" class="tree-item-link active" data-target="timeline-2026">
+              <span class="tree-node-dot"></span>
+              <span>2026</span>
+            </a>
+            <a href="#timeline-2025" class="tree-item-link" data-target="timeline-2025">
+              <span class="tree-node-dot"></span>
+              <span>2025</span>
+            </a>
+            <a href="#timeline-2024" class="tree-item-link" data-target="timeline-2024">
+              <span class="tree-node-dot"></span>
+              <span>2024</span>
+            </a>
+            <a href="#timeline-foundations" class="tree-item-link" data-target="timeline-foundations">
+              <span class="tree-node-dot"></span>
+              <span>Foundations</span>
+            </a>
+          </div>
+        </nav>
+
         <div class="timeline-track-wrapper" id="timelineTrackWrapper">
           <div class="timeline-line-track" id="timelineLineTrack" aria-hidden="true">
             <div class="timeline-line-beam" id="timelineLineBeam"></div>
           </div>
 
-          <div class="timeline-item" data-index="0">
+          <div class="timeline-item border-beam-card" id="timeline-2026" data-index="0" style="padding: 24px 20px 48px 20px; border-radius: 6px; margin-bottom: 24px;">
             <div class="timeline-sticky-rail">
               <div class="timeline-dot-outer">
                 <div class="timeline-dot-inner"></div>
@@ -497,7 +537,7 @@
             </div>
           </div>
 
-          <div class="timeline-item" data-index="1">
+          <div class="timeline-item" id="timeline-2025" data-index="1">
             <div class="timeline-sticky-rail">
               <div class="timeline-dot-outer">
                 <div class="timeline-dot-inner"></div>
@@ -559,7 +599,7 @@
             </div>
           </div>
 
-          <div class="timeline-item" data-index="2">
+          <div class="timeline-item" id="timeline-2024" data-index="2">
             <div class="timeline-sticky-rail">
               <div class="timeline-dot-outer">
                 <div class="timeline-dot-inner"></div>
@@ -621,7 +661,7 @@
             </div>
           </div>
 
-          <div class="timeline-item" data-index="3">
+          <div class="timeline-item" id="timeline-foundations" data-index="3">
             <div class="timeline-sticky-rail">
               <div class="timeline-dot-outer">
                 <div class="timeline-dot-inner"></div>
@@ -694,14 +734,16 @@
         <p class="suggestion-desc">
           Inspect technical research notes, reading indices in cybernetics and distributed systems, synthesized lo-fi audio soundscapes, and personal engineering philosophies.
         </p>
-        <a href="personal.html" class="btn-sharp solid">
-          <span>[ ENTER RESEARCH ARCHIVE ]</span>
-          <span>&rarr;</span>
+        <a href="personal.html" class="btn-learn-more" style="margin-top: 18px;">
+          <span class="circle" aria-hidden="true">
+            <span class="icon arrow"></span>
+          </span>
+          <span class="button-text">Explore Archive</span>
         </a>
       </div>
 
       <div class="title-block-container reg-corners">
-                <div class="title-block-row">
+        <div class="title-block-row">
           <div class="title-block-cell">
             <span class="title-block-label">PORTFOLIO</span>
             <span class="title-block-val">JAIJITESH SURYAPRAKASH</span>
@@ -729,6 +771,55 @@
           <a href="contact.html" class="hero-social-link">[CONTACT]</a>
         </div>
       </footer>
+
+      <aside class="compact-action-dock" id="actionDock" aria-label="Quick Actions">
+        <div class="share-fanout-container" id="shareFanoutContainer">
+          <button type="button" class="compact-action-btn" id="shareTriggerBtn" aria-label="Share Portfolio" title="Share Portfolio">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+            <span class="compact-action-label">[ SHARE ]</span>
+          </button>
+          <div class="share-options-fan" id="shareOptionsFan">
+            <button type="button" class="share-option-btn" id="copyShareLink">
+              <span>&bull;</span>
+              <span>COPY LINK</span>
+            </button>
+            <a href="https://twitter.com/intent/tweet?text=Explore%20Jaijitesh%20Suryaprakash%20Systems%20%26%20Robotics%20Portfolio&url=https%3A%2F%2Fberrf35.github.io%2FPortfolio%2F" target="_blank" rel="noopener noreferrer" class="share-option-btn">
+              <span>&bull;</span>
+              <span>SHARE ON X</span>
+            </a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fberrf35.github.io%2FPortfolio%2F" target="_blank" rel="noopener noreferrer" class="share-option-btn">
+              <span>&bull;</span>
+              <span>LINKEDIN</span>
+            </a>
+            <a href="mailto:?subject=Jaijitesh%20Suryaprakash%20Portfolio&body=Check%20out%20Jaijitesh's%20Systems%20and%20Autonomous%20Engineering%20portfolio:%20https://berrf35.github.io/Portfolio/" class="share-option-btn">
+              <span>&bull;</span>
+              <span>EMAIL</span>
+            </a>
+          </div>
+        </div>
+
+        <a href="#heroTrack" class="compact-action-btn" id="dockScrollTop" aria-label="Scroll To Top" title="Back to Top">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="19" x2="12" y2="5"></line>
+            <polyline points="5 12 12 5 19 12"></polyline>
+          </svg>
+          <span class="compact-action-label">[ TOP ]</span>
+        </a>
+
+        <a href="contact.html" class="compact-action-btn" aria-label="Contact Uplink" title="Contact Uplink">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+          </svg>
+          <span class="compact-action-label">[ UPLINK ]</span>
+        </a>
+      </aside>
     </main>
 
     <div id="toast" class="toast-msg" role="status" aria-live="polite"></div>
@@ -742,10 +833,36 @@
       import { WebGLBackgroundEngine } from './js/webglBackground.js';
       import { ScrollParallaxEngine } from './js/scrollParallax.js';
       import { PortfolioEngine } from './js/portfolioEngine.js';
+      import { EventBadge3D } from './js/eventBadge3D.js';
 
       window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
       window.__scrollParallaxInstance = new ScrollParallaxEngine();
       const engine = new PortfolioEngine();
+      new EventBadge3D('badgeCanvas');
+
+      const shareTrigger = document.getElementById('shareTriggerBtn');
+      const shareFanout = document.getElementById('shareFanoutContainer');
+      const copyShareBtn = document.getElementById('copyShareLink');
+
+      if (shareTrigger && shareFanout) {
+        shareTrigger.addEventListener('click', (e) => {
+          e.stopPropagation();
+          shareFanout.classList.toggle('active');
+        });
+        document.addEventListener('click', (e) => {
+          if (!shareFanout.contains(e.target)) {
+            shareFanout.classList.remove('active');
+          }
+        });
+      }
+
+      if (copyShareBtn) {
+        copyShareBtn.addEventListener('click', () => {
+          navigator.clipboard.writeText('https://berrf35.github.io/Portfolio/');
+          window.showToast('Portfolio link copied to clipboard!');
+          if (shareFanout) shareFanout.classList.remove('active');
+        });
+      }
     </script>
   </body>
 </html>

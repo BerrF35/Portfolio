@@ -97,9 +97,16 @@
               <textarea id="senderMessage" class="form-input" rows="5" placeholder="Technical query or collaboration parameters..." required></textarea>
             </div>
 
-            <button type="submit" class="btn-sharp solid" style="justify-content: center; height: 46px;">
-              <span>[ TRANSMIT MESSAGE ]</span>
-              <span>&rarr;</span>
+            <button type="submit" class="btn-send-airplane" style="justify-content: center; height: 46px;">
+              <div class="svg-wrapper-1">
+                <div class="svg-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+                    <path fill="none" d="M0 0h24v24H0z"></path>
+                    <path fill="currentColor" d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
+                  </svg>
+                </div>
+              </div>
+              <span>TRANSMIT DISPATCH</span>
             </button>
           </form>
         </div>
@@ -179,8 +186,143 @@
         </div>
       </div>
 
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px;" class="contact-subgrid">
+        <div class="faq-card reg-corners" id="faqCard">
+          <div class="micro-header-bar">
+            <span class="tag-id">SYSTEM INQUIRIES</span>
+            <span>INDEX &bull; FAQ</span>
+          </div>
+
+          <div class="faq-tabs" id="faqTabs">
+            <button type="button" class="faq-tab-btn active" data-tab="tab-engineering">[ ENGINEERING ]</button>
+            <button type="button" class="faq-tab-btn" data-tab="tab-robotics">[ ROBOTICS &bull; HARDWARE ]</button>
+            <button type="button" class="faq-tab-btn" data-tab="tab-roles">[ AVAILABILITY ]</button>
+          </div>
+
+          <div class="faq-accordion-group" id="faqAccordion">
+            <div class="faq-panel active" id="tab-engineering">
+              <div class="faq-accordion-item open">
+                <button type="button" class="faq-question">
+                  <span>What core architecture patterns do you deploy?</span>
+                  <span class="faq-icon">&darr;</span>
+                </button>
+                <div class="faq-answer">
+                  I construct low-latency event multiplexing pipelines in Go, lock-free memory ring buffers, real-time GLSL compute kernels, and distributed microservices with rigorous determinism.
+                </div>
+              </div>
+              <div class="faq-accordion-item" style="margin-top: 8px;">
+                <button type="button" class="faq-question">
+                  <span>How do you handle real-time simulation?</span>
+                  <span class="faq-icon">&darr;</span>
+                </button>
+                <div class="faq-answer">
+                  Using numerical physics solvers such as Lattice Boltzmann Method (LBM D2Q9) and Navier-Stokes formulations executed on browser WebGL and C++ compute shaders.
+                </div>
+              </div>
+            </div>
+
+            <div class="faq-panel" id="tab-robotics" style="display: none;">
+              <div class="faq-accordion-item open">
+                <button type="button" class="faq-question">
+                  <span>Which robotics stacks and hardware do you use?</span>
+                  <span class="faq-icon">&darr;</span>
+                </button>
+                <div class="faq-answer">
+                  SolidWorks M4 CAD for custom chassis, dual-core ESP32 with FreeRTOS 20kHz PWM, 2D LiDAR SLAM, optical odometry, and ROS 2 Nav2 autonomous traversal pipelines.
+                </div>
+              </div>
+              <div class="faq-accordion-item" style="margin-top: 8px;">
+                <button type="button" class="faq-question">
+                  <span>Do you build physical embedded prototypes?</span>
+                  <span class="faq-icon">&darr;</span>
+                </button>
+                <div class="faq-answer">
+                  Yes. I design, calibrate, and solder full tactile hardware systems, from power distribution buses to motor drivers and real-time microcontroller firmware.
+                </div>
+              </div>
+            </div>
+
+            <div class="faq-panel" id="tab-roles" style="display: none;">
+              <div class="faq-accordion-item open">
+                <button type="button" class="faq-question">
+                  <span>What roles and collaborations are you seeking?</span>
+                  <span class="faq-icon">&darr;</span>
+                </button>
+                <div class="faq-answer">
+                  Autonomous Systems Engineer, Embedded Firmware Engineer, Robotics Software Developer, and High-Throughput Distributed Systems roles.
+                </div>
+              </div>
+              <div class="faq-accordion-item" style="margin-top: 8px;">
+                <button type="button" class="faq-question">
+                  <span>Are you open to global relocation?</span>
+                  <span class="faq-icon">&darr;</span>
+                </button>
+                <div class="faq-answer">
+                  Yes. Available globally for both remote roles and international on-site relocation with full commitment.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-support-footer">
+            <span>UNLISTED INQUIRY TELEMETRY</span>
+            <a href="mailto:jaijiteshsp@gmail.com" class="hero-social-link">[ INBOX DIRECT ] &rarr;</a>
+          </div>
+        </div>
+
+        <div class="feedback-card reg-corners" id="feedbackCard">
+          <div class="micro-header-bar">
+            <span class="tag-id">EXPERIENCE TELEMETRY</span>
+            <span>FEEDBACK</span>
+          </div>
+
+          <div style="color: #ffffff; font-size: 14px; font-weight: 600;">
+            Rate Your Interaction With This System
+          </div>
+          <div style="color: var(--text-muted); font-size: 12px; line-height: 1.5;">
+            Select a rating pulse and leave technical commentary to log your visit interaction.
+          </div>
+
+          <div class="emoji-options" id="emojiGroup">
+            <button type="button" class="emoji-btn" data-reaction="Fast">
+              ⚡
+              <span>FAST</span>
+            </button>
+            <button type="button" class="emoji-btn" data-reaction="Sharp">
+              🚀
+              <span>SHARP</span>
+            </button>
+            <button type="button" class="emoji-btn active" data-reaction="Innovative">
+              💡
+              <span>INNOVATIVE</span>
+            </button>
+            <button type="button" class="emoji-btn" data-reaction="Impactful">
+              🔥
+              <span>IMPACTFUL</span>
+            </button>
+            <button type="button" class="emoji-btn" data-reaction="Inspiring">
+              ❤️
+              <span>INSPIRING</span>
+            </button>
+          </div>
+
+          <div>
+            <label class="form-label" for="feedbackComment">Commentary or Impressions</label>
+            <textarea id="feedbackComment" class="form-input" rows="3" placeholder="Telemetry comments, suggestions, or impressions..."></textarea>
+          </div>
+
+          <button type="button" id="submitFeedbackBtn" class="btn-sharp solid" style="justify-content: center;">
+            <span>[ SUBMIT TELEMETRY FEEDBACK ]</span>
+            <span>&rarr;</span>
+          </button>
+          <div id="feedbackStatus" style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-secondary); display: none; text-align: center;">
+            [ FEEDBACK LOGGED &bull; THANK YOU ]
+          </div>
+        </div>
+      </div>
+
       <div class="title-block-container reg-corners" style="margin-top: 60px;">
-                <div class="title-block-row">
+        <div class="title-block-row">
           <div class="title-block-cell">
             <span class="title-block-label">COMMUNICATION</span>
             <span class="title-block-val">DIRECT TRANSMISSION</span>
@@ -236,6 +378,62 @@
           e.preventDefault();
           window.showToast('Thank you! Your message was sent.');
           form.reset();
+        });
+      }
+
+      const faqTabBtns = document.querySelectorAll('.faq-tab-btn');
+      const faqPanels = document.querySelectorAll('.faq-panel');
+      faqTabBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          faqTabBtns.forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+          const targetId = btn.getAttribute('data-tab');
+          faqPanels.forEach((panel) => {
+            if (panel.id === targetId) {
+              panel.style.display = 'block';
+            } else {
+              panel.style.display = 'none';
+            }
+          });
+        });
+      });
+
+      const faqQuestions = document.querySelectorAll('.faq-question');
+      faqQuestions.forEach((q) => {
+        q.addEventListener('click', () => {
+          const item = q.closest('.faq-accordion-item');
+          if (item) {
+            item.classList.toggle('open');
+          }
+        });
+      });
+
+      let selectedReaction = 'Innovative';
+      const emojiBtns = document.querySelectorAll('.emoji-btn');
+      emojiBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          emojiBtns.forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+          selectedReaction = btn.getAttribute('data-reaction') || 'Innovative';
+        });
+      });
+
+      const submitFeedbackBtn = document.getElementById('submitFeedbackBtn');
+      const feedbackComment = document.getElementById('feedbackComment');
+      const feedbackStatus = document.getElementById('feedbackStatus');
+      if (submitFeedbackBtn) {
+        submitFeedbackBtn.addEventListener('click', () => {
+          const comment = feedbackComment ? feedbackComment.value.trim() : '';
+          localStorage.setItem('jaijitesh_portfolio_feedback', JSON.stringify({
+            reaction: selectedReaction,
+            comment: comment,
+            timestamp: new Date().toISOString()
+          }));
+          if (feedbackStatus) {
+            feedbackStatus.style.display = 'block';
+          }
+          window.showToast('Telemetry feedback recorded. Thank you!');
+          if (feedbackComment) feedbackComment.value = '';
         });
       }
     </script>

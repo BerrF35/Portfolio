@@ -189,6 +189,41 @@ export class ScrollParallaxEngine {
     const timelineWrapper = document.getElementById('timelineTrackWrapper');
     const timelineBeam = document.getElementById('timelineLineBeam');
     const timelineItems = document.querySelectorAll('.timeline-item');
+    const treeNav = document.getElementById('timelineTreeNav');
+    const treeMarker = document.getElementById('treeSpringMarker');
+    const treeLinks = document.querySelectorAll('.tree-item-link');
+
+    const updateTreeMarker = (activeLink) => {
+      if (!treeMarker || !activeLink) return;
+      const offset = activeLink.offsetTop + (activeLink.offsetHeight / 2) - 4;
+      treeMarker.style.transform = `translateY(${offset}px)`;
+    };
+
+    if (treeLinks.length > 0) {
+      const initialActive = document.querySelector('.tree-item-link.active') || treeLinks[0];
+      if (initialActive) updateTreeMarker(initialActive);
+
+      treeLinks.forEach((link) => {
+        link.addEventListener('mouseenter', () => {
+          updateTreeMarker(link);
+        });
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = link.getAttribute('data-target');
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+      });
+
+      if (treeNav) {
+        treeNav.addEventListener('mouseleave', () => {
+          const currentActive = document.querySelector('.tree-item-link.active');
+          if (currentActive) updateTreeMarker(currentActive);
+        });
+      }
+    }
 
     if (timelineWrapper && timelineBeam) {
       ScrollTrigger.create({
@@ -204,6 +239,7 @@ export class ScrollParallaxEngine {
           const beamRect = timelineBeam.getBoundingClientRect();
           const beamTipY = beamRect.bottom;
 
+          let lastActiveId = null;
           timelineItems.forEach((item) => {
             const dot = item.querySelector('.timeline-dot-inner');
             if (dot) {
@@ -211,11 +247,24 @@ export class ScrollParallaxEngine {
               const dotCenterY = dotRect.top + dotRect.height / 2;
               if (beamTipY >= dotCenterY - 6) {
                 item.classList.add('timeline-active');
+                lastActiveId = item.id;
               } else {
                 item.classList.remove('timeline-active');
               }
             }
           });
+
+          if (lastActiveId && treeLinks.length > 0) {
+            treeLinks.forEach((link) => {
+              if (link.getAttribute('data-target') === lastActiveId) {
+                if (!link.classList.contains('active')) {
+                  treeLinks.forEach((l) => l.classList.remove('active'));
+                  link.classList.add('active');
+                  updateTreeMarker(link);
+                }
+              }
+            });
+          }
         }
       });
     }
