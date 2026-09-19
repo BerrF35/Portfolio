@@ -98,6 +98,20 @@ body {
     linear-gradient(to bottom, rgba(216, 69, 54, 0.08) 1px, transparent 1px);
 }
 
+.glassy-blur-layer {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  pointer-events: none;
+  background: radial-gradient(ellipse 80% 85% at 50% 50%, rgba(138, 30, 20, 0.28) 0%, rgba(156, 38, 27, 0.12) 65%, transparent 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  mask-image: radial-gradient(ellipse 85% 90% at 50% 50%, black 50%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 85% 90% at 50% 50%, black 50%, transparent 100%);
+}
+
 .grain {
   display: none;
 }
