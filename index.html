@@ -16,6 +16,11 @@
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
 
     <link rel="stylesheet" href="style.css" />
+    <script>
+      if (sessionStorage.getItem('nav_transition_active') === '1') {
+        document.documentElement.classList.add('nav-transitioning');
+      }
+    </script>
   </head>
   <body>
     <div id="pageTransition" class="page-transition-bars" aria-hidden="true">

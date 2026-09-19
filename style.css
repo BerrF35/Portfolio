@@ -101,6 +101,15 @@ body {
   display: none;
 }
 
+html.nav-transitioning .page-transition-bars {
+  pointer-events: auto;
+}
+
+html.nav-transitioning .page-transition-bars .pt-bar {
+  transform: translateY(0%) !important;
+  transition: none !important;
+}
+
 .page-transition-bars {
   position: fixed;
   inset: 0;
@@ -120,16 +129,9 @@ body {
   height: 100%;
   transform: translateY(-100%);
   will-change: transform;
-  box-shadow: inset -1px 0 0 rgba(224, 168, 46, 0.35);
+  background: #1b2330;
+  box-shadow: inset -1px 0 0 rgba(32, 44, 58, 0.4);
 }
-
-.pt-bar:nth-child(1) { background: #ffffff; }
-.pt-bar:nth-child(2) { background: #f5c242; }
-.pt-bar:nth-child(3) { background: #9c261b; }
-.pt-bar:nth-child(4) { background: #ffffff; }
-.pt-bar:nth-child(5) { background: #f5c242; }
-.pt-bar:nth-child(6) { background: #9c261b; }
-.pt-bar:nth-child(7) { background: #ffffff; }
 
 .page-transition-bars.entering {
   pointer-events: auto;

@@ -342,15 +342,14 @@ export class PortfolioEngine {
     if (sessionStorage.getItem('nav_transition_active') === '1') {
       sessionStorage.removeItem('nav_transition_active');
       curtain.classList.add('covered');
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          curtain.classList.remove('covered');
-          curtain.classList.add('leaving');
-          setTimeout(() => {
-            curtain.classList.remove('leaving');
-          }, 1100);
-        });
-      });
+      document.documentElement.classList.remove('nav-transitioning');
+      setTimeout(() => {
+        curtain.classList.remove('covered');
+        curtain.classList.add('leaving');
+        setTimeout(() => {
+          curtain.classList.remove('leaving');
+        }, 1100);
+      }, 140);
     }
 
     document.addEventListener('click', (e) => {
@@ -391,7 +390,7 @@ export class PortfolioEngine {
 
         setTimeout(() => {
           window.location.href = href;
-        }, 1280);
+        }, 1050);
       }
     });
   }

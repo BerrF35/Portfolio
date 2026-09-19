@@ -75,29 +75,29 @@ export class WebGLBackgroundEngine {
   buildGyroscope() {
     this.gyroGroup = new THREE.Group();
 
-    const coreGeo = new THREE.IcosahedronGeometry(75, 1);
+    const coreGeo = new THREE.DodecahedronGeometry(82, 0);
     const coreMat = new THREE.MeshPhongMaterial({
       color: this.themeColors.core,
       emissive: 0x5a150e,
-      shininess: 35,
+      shininess: 45,
       flatShading: true,
       transparent: true,
-      opacity: 0.08
+      opacity: 0.15
     });
     this.coreMesh = new THREE.Mesh(coreGeo, coreMat);
     this.gyroGroup.add(this.coreMesh);
 
-    const wireGeo = new THREE.IcosahedronGeometry(80, 1);
+    const wireGeo = new THREE.DodecahedronGeometry(85, 0);
     const wireMat = new THREE.MeshBasicMaterial({
       color: 0xffffff,
       wireframe: true,
       transparent: true,
-      opacity: 0.16
+      opacity: 0.24
     });
     this.wireMesh = new THREE.Mesh(wireGeo, wireMat);
     this.gyroGroup.add(this.wireMesh);
 
-    const ringGeoX = new THREE.TorusGeometry(200, 1.3, 8, 54);
+    const ringGeoX = new THREE.TorusGeometry(195, 1.3, 8, 54);
     const ringMatX = new THREE.MeshStandardMaterial({
       color: this.themeColors.primary,
       metalness: 0.5,
@@ -108,19 +108,19 @@ export class WebGLBackgroundEngine {
     this.ringX = new THREE.Mesh(ringGeoX, ringMatX);
     this.gyroGroup.add(this.ringX);
 
-    const ringGeoY = new THREE.TorusGeometry(245, 1.3, 8, 60);
+    const ringGeoY = new THREE.TorusGeometry(245, 1.8, 12, 64);
     const ringMatY = new THREE.MeshStandardMaterial({
       color: this.themeColors.secondary,
-      metalness: 0.5,
-      roughness: 0.35,
+      metalness: 0.6,
+      roughness: 0.25,
       transparent: true,
-      opacity: 0.25
+      opacity: 0.32
     });
     this.ringY = new THREE.Mesh(ringGeoY, ringMatY);
     this.ringY.rotation.x = Math.PI / 2;
     this.gyroGroup.add(this.ringY);
 
-    const ringGeoZ = new THREE.TorusGeometry(290, 1.3, 8, 64);
+    const ringGeoZ = new THREE.TorusGeometry(295, 1.3, 8, 64);
     const ringMatZ = new THREE.MeshStandardMaterial({
       color: this.themeColors.accent,
       metalness: 0.5,
@@ -132,25 +132,25 @@ export class WebGLBackgroundEngine {
     this.ringZ.rotation.y = Math.PI / 2;
     this.gyroGroup.add(this.ringZ);
 
-    const satCount = 36;
+    const satCount = 48;
     const satGeo = new THREE.BufferGeometry();
     const satPos = new Float32Array(satCount * 3);
     for (let i = 0; i < satCount; i++) {
-      const radius = 240 + (i % 4) * 20;
+      const radius = 245 + (i % 3 - 1) * 6;
       const angle = (i / satCount) * Math.PI * 2;
       satPos[i * 3] = Math.cos(angle) * radius;
-      satPos[i * 3 + 1] = Math.sin(angle) * radius;
-      satPos[i * 3 + 2] = (Math.sin(angle * 3)) * 35;
+      satPos[i * 3 + 1] = (Math.sin(angle * 4)) * 14;
+      satPos[i * 3 + 2] = Math.sin(angle) * radius;
     }
     satGeo.setAttribute('position', new THREE.BufferAttribute(satPos, 3));
 
     const satTexture = this.createDotTexture();
     const satMat = new THREE.PointsMaterial({
-      size: 5,
+      size: 6,
       map: satTexture,
       transparent: true,
-      opacity: 0.22,
-      color: 0xe0a82e,
+      opacity: 0.28,
+      color: 0xf5c242,
       blending: THREE.AdditiveBlending,
       depthWrite: false
     });
@@ -158,8 +158,8 @@ export class WebGLBackgroundEngine {
     this.gyroGroup.add(this.satellites);
 
     const isDesktop = window.innerWidth > 900;
-    this.gyroGroup.position.set(isDesktop ? 30 : 0, isDesktop ? 0 : -20, 0);
-    this.gyroGroup.rotation.set(0.25, 0.35, 0);
+    this.gyroGroup.position.set(isDesktop ? 20 : 0, isDesktop ? 0 : -20, 0);
+    this.gyroGroup.rotation.set(0.2, 0.3, 0);
 
     this.scene.add(this.gyroGroup);
   }
@@ -171,7 +171,7 @@ export class WebGLBackgroundEngine {
     const ctx = c.getContext('2d');
     const grad = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
     grad.addColorStop(0, '#ffffff');
-    grad.addColorStop(0.4, 'rgba(224, 168, 46, 0.9)');
+    grad.addColorStop(0.4, 'rgba(245, 194, 66, 0.9)');
     grad.addColorStop(1, 'transparent');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 16, 16);
@@ -248,7 +248,7 @@ export class WebGLBackgroundEngine {
 
     const isDesktop = w > 900;
     if (this.gyroGroup) {
-      this.gyroGroup.position.x = isDesktop ? 30 : 0;
+      this.gyroGroup.position.x = isDesktop ? 20 : 0;
       this.gyroGroup.position.y = isDesktop ? 0 : -20;
     }
   }
@@ -256,67 +256,102 @@ export class WebGLBackgroundEngine {
   animate() {
     this.rafId = requestAnimationFrame(() => this.animate());
 
-    if (this.targetScrollProgress > 0.45) {
-      if (this.isVisible) {
-        this.canvas.style.opacity = '0';
-        this.isVisible = false;
-      }
-      return;
-    } else {
-      if (!this.isVisible) {
-        this.canvas.style.opacity = '1';
-        this.isVisible = true;
-      }
-    }
-
     const time = this.clock.getElapsedTime();
 
     this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.08;
     this.mouse.y += (this.mouse.targetY - this.mouse.y) * 0.08;
-    this.scrollProgress += (this.targetScrollProgress - this.scrollProgress) * 0.06;
+    this.scrollProgress += (this.targetScrollProgress - this.scrollProgress) * 0.07;
 
     this.rotationInertia.x *= 0.92;
     this.rotationInertia.y *= 0.92;
 
-    if (this.gyroGroup) {
-      this.gyroGroup.rotation.x += this.rotationInertia.x + 0.002;
-      this.gyroGroup.rotation.y += this.rotationInertia.y + 0.003;
+    const p = Math.min(1, Math.max(0, this.scrollProgress));
+    const isMobile = window.innerWidth < 768;
+    const distScale = isMobile ? 1.25 : 1.0;
 
-      this.gyroGroup.rotation.x += (this.mouse.y * 0.3 - this.gyroGroup.rotation.x * 0.1) * 0.025;
-      this.gyroGroup.rotation.y += (this.mouse.x * 0.3 - this.gyroGroup.rotation.y * 0.1) * 0.025;
+    if (this.gyroGroup) {
+      this.gyroGroup.rotation.x += this.rotationInertia.x + 0.0015;
+      this.gyroGroup.rotation.y += this.rotationInertia.y + 0.002;
+
+      this.gyroGroup.rotation.x += (this.mouse.y * 0.2 - this.gyroGroup.rotation.x * 0.08) * 0.02;
+      this.gyroGroup.rotation.y += (this.mouse.x * 0.2 - this.gyroGroup.rotation.y * 0.08) * 0.02;
 
       if (this.ringX) {
-        this.ringX.rotation.x = time * 0.5 + this.scrollProgress * 3.0;
-        this.ringX.rotation.y = Math.sin(time * 0.3) * 0.25;
+        this.ringX.rotation.x = time * 0.4 + p * 2.2;
+        this.ringX.rotation.y = Math.sin(time * 0.25) * 0.2;
       }
       if (this.ringY) {
-        this.ringY.rotation.y = time * 0.6 + this.scrollProgress * 4.0;
-        this.ringY.rotation.z = Math.cos(time * 0.4) * 0.2;
+        this.ringY.rotation.y = time * 0.45 + p * 2.8;
+        this.ringY.rotation.z = Math.cos(time * 0.3) * 0.18;
       }
       if (this.ringZ) {
-        this.ringZ.rotation.z = time * 0.4 + this.scrollProgress * 5.0;
-        this.ringZ.rotation.x = Math.sin(time * 0.5) * 0.28;
+        this.ringZ.rotation.z = time * 0.35 + p * 3.2;
+        this.ringZ.rotation.x = Math.sin(time * 0.35) * 0.22;
       }
 
       if (this.coreMesh) {
-        const pulse = 1 + Math.sin(time * 1.5) * 0.03;
+        const pulse = 1 + Math.sin(time * 1.5) * 0.025;
         this.coreMesh.scale.set(pulse, pulse, pulse);
-        this.coreMesh.rotation.y = -time * 0.4;
+        this.coreMesh.rotation.y = -time * 0.25 + p * 1.6;
+        this.coreMesh.rotation.x = time * 0.18 + p * 1.1;
       }
       if (this.wireMesh) {
-        this.wireMesh.rotation.y = time * 0.25;
-        this.wireMesh.rotation.x = time * 0.15;
+        this.wireMesh.rotation.y = -time * 0.25 + p * 1.6;
+        this.wireMesh.rotation.x = time * 0.18 + p * 1.1;
       }
 
       if (this.satellites) {
-        this.satellites.rotation.z = time * 0.5;
-        this.satellites.rotation.y = time * 0.3;
+        this.satellites.rotation.y = time * 0.3 + p * 2.5;
+        this.satellites.rotation.z = Math.sin(time * 0.2) * 0.15;
       }
 
       if (this.camera) {
-        this.camera.position.z = 420 + this.scrollProgress * 120;
-        this.camera.position.y = -this.scrollProgress * 60;
-        this.camera.lookAt(this.gyroGroup.position);
+        let targetCamX = 20;
+        let targetCamY = 0;
+        let targetCamZ = 420;
+        let targetLookX = 0;
+        let targetLookY = 0;
+        let targetLookZ = 0;
+
+        if (p < 0.32) {
+          const t = p / 0.32;
+          const easeT = t * t * (3 - 2 * t);
+          targetCamX = 20 + easeT * 170;
+          targetCamY = easeT * 42;
+          targetCamZ = 420 - easeT * 185;
+          targetLookX = easeT * 20;
+          targetLookY = easeT * 10;
+          targetLookZ = 0;
+        } else if (p < 0.62) {
+          const u = (p - 0.32) / 0.30;
+          const easeU = u * u * (3 - 2 * u);
+          const orbitR = (235 - easeU * 118) * distScale;
+          const theta = easeU * 2.6 + 0.6;
+          targetCamX = Math.cos(theta) * orbitR;
+          targetCamY = 42 - easeU * 28 + Math.sin(easeU * Math.PI) * 24;
+          targetCamZ = Math.sin(theta) * orbitR;
+          targetLookX = Math.cos(theta + 0.7) * 45;
+          targetLookY = Math.sin(easeU * Math.PI) * 12;
+          targetLookZ = Math.sin(theta + 0.7) * 45;
+        } else {
+          const w = (p - 0.62) / 0.38;
+          const easeW = w * w * (3 - 2 * w);
+          const alpha = 3.2 + easeW * 3.6;
+          const surfDist = (117 + Math.sin(easeW * Math.PI) * 12) * distScale;
+          targetCamX = Math.cos(alpha) * surfDist;
+          targetCamY = 14 + Math.sin(alpha * 1.5) * 36;
+          targetCamZ = Math.sin(alpha) * surfDist;
+          targetLookX = Math.cos(alpha + 0.65) * 38;
+          targetLookY = Math.sin(alpha * 1.5) * 15;
+          targetLookZ = Math.sin(alpha + 0.65) * 38;
+        }
+
+        this.camera.position.x += (targetCamX + this.mouse.x * 20 - this.camera.position.x) * 0.08;
+        this.camera.position.y += (targetCamY + this.mouse.y * 16 - this.camera.position.y) * 0.08;
+        this.camera.position.z += (targetCamZ - this.camera.position.z) * 0.08;
+
+        const currentTarget = new THREE.Vector3(targetLookX, targetLookY, targetLookZ);
+        this.camera.lookAt(currentTarget);
       }
     }
 
