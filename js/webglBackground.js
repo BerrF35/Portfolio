@@ -8,7 +8,6 @@ export class WebGLBackgroundEngine {
     this.renderer = null;
 
     this.gyroGroup = null;
-    this.gridBase = null;
     this.coreMesh = null;
     this.wireMesh = null;
     this.ringX = null;
@@ -68,20 +67,9 @@ export class WebGLBackgroundEngine {
     rimLight.position.set(-140, -100, 150);
     this.scene.add(rimLight);
 
-    this.buildGridBase();
     this.buildGyroscope();
     this.bindEvents();
     this.animate();
-  }
-
-  buildGridBase() {
-    this.gridBase = new THREE.GridHelper(900, 24, 0xe0a82e, 0x822216);
-    this.gridBase.position.set(0, -210, 0);
-    if (this.gridBase.material) {
-      this.gridBase.material.transparent = true;
-      this.gridBase.material.opacity = 0.18;
-    }
-    this.scene.add(this.gridBase);
   }
 
   buildGyroscope() {
@@ -90,7 +78,7 @@ export class WebGLBackgroundEngine {
     const coreGeo = new THREE.IcosahedronGeometry(75, 1);
     const coreMat = new THREE.MeshPhongMaterial({
       color: this.themeColors.core,
-      emissive: 0x1f0604,
+      emissive: 0x5a150e,
       shininess: 35,
       flatShading: true,
       transparent: true,
