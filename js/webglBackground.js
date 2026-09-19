@@ -10,10 +10,8 @@ export class WebGLBackgroundEngine {
     this.gyroGroup = null;
     this.coreMesh = null;
     this.wireMesh = null;
-    this.vertexNodes = null;
     this.innerCore = null;
     this.innerWire = null;
-    this.centerStar = null;
     this.ringX = null;
     this.ringY = null;
     this.ringZ = null;
@@ -23,13 +21,20 @@ export class WebGLBackgroundEngine {
     this.planetsGroup = null;
     this.planet1Orbit = null;
     this.planet1 = null;
+    this.planet1Wire = null;
+    this.planet1Core = null;
     this.planet1Moon = null;
     this.planet2Orbit = null;
     this.planet2 = null;
+    this.planet2Wire = null;
+    this.planet2Core = null;
     this.planet3Orbit = null;
     this.planet3 = null;
+    this.planet3Wire = null;
     this.planet4Orbit = null;
     this.planet4 = null;
+    this.planet4Wire = null;
+    this.planet4Core = null;
 
     this.camPath = null;
     this.lookPath = null;
@@ -72,7 +77,7 @@ export class WebGLBackgroundEngine {
 
     this.clock = new THREE.Clock();
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
     this.scene.add(ambientLight);
 
     const pointLight = new THREE.PointLight(0xe0a82e, 1.8, 900);
@@ -124,7 +129,7 @@ export class WebGLBackgroundEngine {
       shininess: 45,
       flatShading: true,
       transparent: true,
-      opacity: 0.16
+      opacity: 0.12
     });
     this.coreMesh = new THREE.Mesh(coreGeo, coreMat);
     this.gyroGroup.add(this.coreMesh);
@@ -134,48 +139,23 @@ export class WebGLBackgroundEngine {
       color: 0xffffff,
       wireframe: true,
       transparent: true,
-      opacity: 0.26
+      opacity: 0.28
     });
     this.wireMesh = new THREE.Mesh(wireGeo, wireMat);
     this.gyroGroup.add(this.wireMesh);
 
-    const posAttr = wireGeo.getAttribute('position');
-    const uniquePoints = [];
-    for (let i = 0; i < posAttr.count; i++) {
-      const v = new THREE.Vector3(posAttr.getX(i), posAttr.getY(i), posAttr.getZ(i));
-      if (!uniquePoints.some(p => p.distanceTo(v) < 1.0)) {
-        uniquePoints.push(v);
-      }
-    }
-
-    const nodeGeo = new THREE.SphereGeometry(2.6, 8, 8);
-    const nodeMat = new THREE.MeshStandardMaterial({
-      color: 0xf5c242,
-      emissive: 0x442800,
-      metalness: 0.8,
-      roughness: 0.2
-    });
-    this.vertexNodes = new THREE.InstancedMesh(nodeGeo, nodeMat, uniquePoints.length);
-    const dummy = new THREE.Object3D();
-    for (let i = 0; i < uniquePoints.length; i++) {
-      dummy.position.copy(uniquePoints[i]);
-      dummy.updateMatrix();
-      this.vertexNodes.setMatrixAt(i, dummy.matrix);
-    }
-    this.gyroGroup.add(this.vertexNodes);
-
-    const innerGeo = new THREE.IcosahedronGeometry(46, 0);
+    const innerGeo = new THREE.DodecahedronGeometry(50, 0);
     const innerMat = new THREE.MeshPhongMaterial({
       color: 0xd84536,
       emissive: 0x3a0d08,
       flatShading: true,
       transparent: true,
-      opacity: 0.22
+      opacity: 0.10
     });
     this.innerCore = new THREE.Mesh(innerGeo, innerMat);
     this.gyroGroup.add(this.innerCore);
 
-    const innerWireGeo = new THREE.IcosahedronGeometry(47, 0);
+    const innerWireGeo = new THREE.DodecahedronGeometry(52, 0);
     const innerWireMat = new THREE.MeshBasicMaterial({
       color: 0xf5c242,
       wireframe: true,
@@ -185,14 +165,7 @@ export class WebGLBackgroundEngine {
     this.innerWire = new THREE.Mesh(innerWireGeo, innerWireMat);
     this.gyroGroup.add(this.innerWire);
 
-    const centerStarGeo = new THREE.SphereGeometry(10, 16, 16);
-    const centerStarMat = new THREE.MeshBasicMaterial({
-      color: 0xffe072
-    });
-    this.centerStar = new THREE.Mesh(centerStarGeo, centerStarMat);
-    this.gyroGroup.add(this.centerStar);
-
-    const centerLight = new THREE.PointLight(0xffbe42, 2.2, 350);
+    const centerLight = new THREE.PointLight(0xffbe42, 1.8, 400);
     this.gyroGroup.add(centerLight);
 
     const ringGeoX = new THREE.TorusGeometry(195, 1.4, 8, 64);
@@ -311,31 +284,43 @@ export class WebGLBackgroundEngine {
     this.planet1Orbit.add(orbit1Line);
 
     this.planet1 = new THREE.Group();
-    const p1Geo = new THREE.SphereGeometry(24, 24, 24);
-    const p1Mat = new THREE.MeshStandardMaterial({
-      color: 0xb53d2d,
-      roughness: 0.6,
-      metalness: 0.2
-    });
-    const p1Mesh = new THREE.Mesh(p1Geo, p1Mat);
-    this.planet1.add(p1Mesh);
-
-    const p1RingGeo = new THREE.RingGeometry(32, 50, 48);
-    const p1RingMat = new THREE.MeshStandardMaterial({
+    const p1WireGeo = new THREE.DodecahedronGeometry(26, 0);
+    const p1WireMat = new THREE.MeshBasicMaterial({
       color: 0xe0a82e,
-      side: THREE.DoubleSide,
+      wireframe: true,
       transparent: true,
-      opacity: 0.42,
-      roughness: 0.4
+      opacity: 0.38
+    });
+    this.planet1Wire = new THREE.Mesh(p1WireGeo, p1WireMat);
+    this.planet1.add(this.planet1Wire);
+
+    const p1CoreGeo = new THREE.DodecahedronGeometry(25, 0);
+    const p1CoreMat = new THREE.MeshPhongMaterial({
+      color: 0xd84536,
+      flatShading: true,
+      transparent: true,
+      opacity: 0.08
+    });
+    this.planet1Core = new THREE.Mesh(p1CoreGeo, p1CoreMat);
+    this.planet1.add(this.planet1Core);
+
+    const p1RingGeo = new THREE.TorusGeometry(38, 0.8, 6, 44);
+    const p1RingMat = new THREE.MeshBasicMaterial({
+      color: 0xe0a82e,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.28
     });
     const p1RingMesh = new THREE.Mesh(p1RingGeo, p1RingMat);
     p1RingMesh.rotation.x = Math.PI * 0.42;
     this.planet1.add(p1RingMesh);
 
-    const p1MoonGeo = new THREE.SphereGeometry(3.6, 12, 12);
-    const p1MoonMat = new THREE.MeshStandardMaterial({
+    const p1MoonGeo = new THREE.DodecahedronGeometry(7, 0);
+    const p1MoonMat = new THREE.MeshBasicMaterial({
       color: 0xffffff,
-      roughness: 0.5
+      wireframe: true,
+      transparent: true,
+      opacity: 0.35
     });
     this.planet1Moon = new THREE.Mesh(p1MoonGeo, p1MoonMat);
     this.planet1.add(this.planet1Moon);
@@ -365,21 +350,25 @@ export class WebGLBackgroundEngine {
     this.planet2Orbit.add(orbit2Line);
 
     this.planet2 = new THREE.Group();
-    const p2Geo = new THREE.IcosahedronGeometry(18, 1);
-    const p2Mat = new THREE.MeshStandardMaterial({
-      color: 0x687e96,
-      roughness: 0.35,
-      metalness: 0.5,
-      flatShading: true
+    const p2WireGeo = new THREE.DodecahedronGeometry(20, 0);
+    const p2WireMat = new THREE.MeshBasicMaterial({
+      color: 0x8da4be,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.32
     });
-    const p2Mesh = new THREE.Mesh(p2Geo, p2Mat);
-    this.planet2.add(p2Mesh);
+    this.planet2Wire = new THREE.Mesh(p2WireGeo, p2WireMat);
+    this.planet2.add(this.planet2Wire);
 
-    const p2Wire = new THREE.Mesh(
-      new THREE.IcosahedronGeometry(18.5, 1),
-      new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.18 })
-    );
-    this.planet2.add(p2Wire);
+    const p2CoreGeo = new THREE.DodecahedronGeometry(19, 0);
+    const p2CoreMat = new THREE.MeshPhongMaterial({
+      color: 0x6e8ca8,
+      flatShading: true,
+      transparent: true,
+      opacity: 0.06
+    });
+    this.planet2Core = new THREE.Mesh(p2CoreGeo, p2CoreMat);
+    this.planet2.add(this.planet2Core);
 
     this.planet2.position.set(r2, 0, 0);
     this.planet2Orbit.add(this.planet2);
@@ -405,20 +394,22 @@ export class WebGLBackgroundEngine {
     this.planet3Orbit.add(orbit3Line);
 
     this.planet3 = new THREE.Group();
-    const p3Geo = new THREE.SphereGeometry(12, 16, 16);
-    const p3Mat = new THREE.MeshStandardMaterial({
+    const p3WireGeo = new THREE.DodecahedronGeometry(14, 0);
+    const p3WireMat = new THREE.MeshBasicMaterial({
       color: 0xf5c242,
-      emissive: 0x8a5500,
-      roughness: 0.3
+      wireframe: true,
+      transparent: true,
+      opacity: 0.42
     });
-    const p3Mesh = new THREE.Mesh(p3Geo, p3Mat);
-    this.planet3.add(p3Mesh);
+    this.planet3Wire = new THREE.Mesh(p3WireGeo, p3WireMat);
+    this.planet3.add(this.planet3Wire);
 
-    const p3HaloGeo = new THREE.TorusGeometry(18, 0.6, 6, 32);
+    const p3HaloGeo = new THREE.TorusGeometry(22, 0.6, 6, 36);
     const p3HaloMat = new THREE.MeshBasicMaterial({
       color: 0xffe072,
+      wireframe: true,
       transparent: true,
-      opacity: 0.35
+      opacity: 0.28
     });
     const p3Halo = new THREE.Mesh(p3HaloGeo, p3HaloMat);
     p3Halo.rotation.x = Math.PI / 2;
@@ -434,15 +425,25 @@ export class WebGLBackgroundEngine {
 
     const r4 = 820;
     this.planet4 = new THREE.Group();
-    const p4Geo = new THREE.IcosahedronGeometry(15, 0);
-    const p4Mat = new THREE.MeshStandardMaterial({
-      color: 0x8a2418,
-      emissive: 0x3d0c06,
-      roughness: 0.5,
-      flatShading: true
+    const p4WireGeo = new THREE.DodecahedronGeometry(18, 0);
+    const p4WireMat = new THREE.MeshBasicMaterial({
+      color: 0xd84536,
+      wireframe: true,
+      transparent: true,
+      opacity: 0.34
     });
-    const p4Mesh = new THREE.Mesh(p4Geo, p4Mat);
-    this.planet4.add(p4Mesh);
+    this.planet4Wire = new THREE.Mesh(p4WireGeo, p4WireMat);
+    this.planet4.add(this.planet4Wire);
+
+    const p4CoreGeo = new THREE.DodecahedronGeometry(17, 0);
+    const p4CoreMat = new THREE.MeshPhongMaterial({
+      color: 0x8a2418,
+      flatShading: true,
+      transparent: true,
+      opacity: 0.06
+    });
+    this.planet4Core = new THREE.Mesh(p4CoreGeo, p4CoreMat);
+    this.planet4.add(this.planet4Core);
 
     this.planet4.position.set(r4, 0, 0);
     this.planet4Orbit.add(this.planet4);
@@ -522,6 +523,9 @@ export class WebGLBackgroundEngine {
 
     const time = this.clock.getElapsedTime();
 
+    const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    this.targetScrollProgress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+
     this.mouse.x += (this.mouse.targetX - this.mouse.x) * 0.08;
     this.mouse.y += (this.mouse.targetY - this.mouse.y) * 0.08;
     this.scrollProgress += (this.targetScrollProgress - this.scrollProgress) * 0.07;
@@ -563,21 +567,13 @@ export class WebGLBackgroundEngine {
         this.wireMesh.rotation.y = -time * 0.25 + p * 1.6;
         this.wireMesh.rotation.x = time * 0.18 + p * 1.1;
       }
-      if (this.vertexNodes) {
-        this.vertexNodes.rotation.y = -time * 0.25 + p * 1.6;
-        this.vertexNodes.rotation.x = time * 0.18 + p * 1.1;
-      }
       if (this.innerCore) {
-        this.innerCore.rotation.y = time * 0.35;
+        this.innerCore.rotation.y = time * 0.35 - p * 1.2;
         this.innerCore.rotation.z = -time * 0.22;
       }
       if (this.innerWire) {
-        this.innerWire.rotation.y = time * 0.35;
+        this.innerWire.rotation.y = time * 0.35 - p * 1.2;
         this.innerWire.rotation.z = -time * 0.22;
-      }
-      if (this.centerStar) {
-        const starPulse = 1 + Math.sin(time * 2.4) * 0.08;
-        this.centerStar.scale.set(starPulse, starPulse, starPulse);
       }
 
       if (this.satellites) {
@@ -588,13 +584,34 @@ export class WebGLBackgroundEngine {
 
     if (this.planetsGroup) {
       if (this.planet1Orbit) this.planet1Orbit.rotation.y = time * 0.045 + p * 0.4;
+      if (this.planet1Wire) {
+        this.planet1Wire.rotation.x = time * 0.3;
+        this.planet1Wire.rotation.y = time * 0.25;
+      }
+      if (this.planet1Core) {
+        this.planet1Core.rotation.x = time * 0.3;
+        this.planet1Core.rotation.y = time * 0.25;
+      }
       if (this.planet1Moon) {
         const ma = time * 1.6;
         this.planet1Moon.position.set(Math.cos(ma) * 52, Math.sin(ma * 0.8) * 12, Math.sin(ma) * 52);
+        this.planet1Moon.rotation.y = time * 0.6;
       }
       if (this.planet2Orbit) this.planet2Orbit.rotation.y = -time * 0.032 - p * 0.35;
+      if (this.planet2Wire) {
+        this.planet2Wire.rotation.y = -time * 0.28;
+        this.planet2Wire.rotation.z = time * 0.2;
+      }
       if (this.planet3Orbit) this.planet3Orbit.rotation.y = time * 0.075 + p * 0.55;
+      if (this.planet3Wire) {
+        this.planet3Wire.rotation.x = time * 0.4;
+        this.planet3Wire.rotation.y = time * 0.35;
+      }
       if (this.planet4Orbit) this.planet4Orbit.rotation.y = time * 0.018 + p * 0.2;
+      if (this.planet4Wire) {
+        this.planet4Wire.rotation.y = time * 0.22;
+        this.planet4Wire.rotation.x = time * 0.15;
+      }
     }
 
     if (this.camera && this.camPath && this.lookPath) {
