@@ -256,7 +256,7 @@ export class PortfolioEngine {
         ctx.shadowBlur = 0;
 
         ctx.fillStyle = '#ffffff';
-        ctx.font = '10px "Space Mono", monospace';
+        ctx.font = '10px "JetBrains Mono", monospace';
         ctx.fillText('VIT Vellore', cx + m.x + 8, cy + m.y + 3);
       }
 

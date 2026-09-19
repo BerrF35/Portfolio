@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
   --bg: #9c261b;
@@ -6,9 +6,9 @@
   --surface: #781b12;
   --surface-card: transparent;
   --surface-card-hover: rgba(245, 194, 66, 0.06);
-  --border: rgba(245, 194, 66, 0.35);
-  --border-subtle: rgba(245, 194, 66, 0.18);
-  --border-strong: #f5c242;
+  --border: none;
+  --border-subtle: none;
+  --border-strong: none;
   --text: #ffffff;
   --text-muted: #fef0ea;
   --text-dim: #f3cfc6;
@@ -21,14 +21,14 @@
   --yellow-line: rgba(245, 194, 66, 0.50);
   --red-soft: rgba(255, 77, 59, 0.20);
   --red-line: rgba(255, 77, 59, 0.50);
-  --font-sans: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
-  --font-mono: 'Space Mono', 'JetBrains Mono', Consolas, monospace;
+  --font-sans: 'Outfit', 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, monospace;
   --font-code: 'JetBrains Mono', monospace;
   --container-max: 1200px;
   --radius-xs: 0px;
   --radius-sm: 0px;
   --radius-md: 0px;
-  --micro-font: 'JetBrains Mono', 'Space Mono', Consolas, monospace;
+  --micro-font: 'JetBrains Mono', Consolas, monospace;
   --micro-border: none;
   --micro-border-dim: none;
   --micro-border-accent: none;
@@ -384,20 +384,18 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   align-items: center;
   gap: 10px;
   background: transparent;
-  border: 1px solid var(--accent);
+  border: none;
   color: #ffffff;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
-  padding: 6px 14px;
+  padding: 6px 4px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .audio-toggle-btn:hover {
-  background: rgba(245, 194, 66, 0.2);
-  border-color: #ffffff;
-  color: #ffffff;
+  color: var(--accent);
 }
 
 .audio-eq-icon {
@@ -451,14 +449,10 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   padding: 6px 0;
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(245, 194, 66, 0.35);
 }
 
 .micro-ruler {
-  width: 100%;
-  height: 1px;
-  background: rgba(245, 194, 66, 0.25);
-  margin: 16px 0;
+  display: none;
 }
 
 .tag-id {
@@ -509,8 +503,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   width: 100%;
   background: transparent;
   border: none;
-  border-left: 3px solid var(--accent);
-  padding: 8px 0 8px 48px;
+  padding: 0;
   display: grid;
   grid-template-columns: 1.4fr 0.8fr;
   gap: 48px;
@@ -556,8 +549,6 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   max-width: 320px;
   aspect-ratio: 4 / 5;
   border: none;
-  border-left: 3px solid var(--accent);
-  border-bottom: 3px solid var(--accent);
   background: transparent;
   overflow: hidden;
   position: relative;
@@ -579,9 +570,8 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .micro-spec-cell {
   border: none;
-  border-top: 1px solid rgba(245, 194, 66, 0.4);
   background: transparent;
-  padding: 10px 0;
+  padding: 6px 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -603,7 +593,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .intro-actions {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   flex-wrap: wrap;
 }
 
@@ -612,12 +602,13 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   align-items: center;
   gap: 10px;
   background: transparent;
-  border: 1px solid #ffffff;
+  border: none;
+  border-bottom: 2px solid var(--accent);
   color: #ffffff;
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.12em;
-  padding: 12px 20px;
+  letter-spacing: 0.14em;
+  padding: 8px 0;
   text-decoration: none;
   cursor: pointer;
   border-radius: 0px !important;
@@ -625,23 +616,23 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 }
 
 .btn-sharp:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: #ffffff;
-  color: #ffffff;
-  transform: translateY(-2px);
+  color: var(--accent);
+  border-bottom-color: #ffffff;
+  transform: translateX(4px);
 }
 
 .btn-sharp.solid {
   background: var(--accent);
-  border-color: var(--accent);
-  color: var(--bg);
+  border: none;
+  color: #000000;
   font-weight: 700;
+  padding: 10px 24px;
 }
 
 .btn-sharp.solid:hover {
   background: #ffffff;
-  border-color: #ffffff;
-  color: var(--bg);
+  color: #000000;
+  transform: translateY(-2px);
 }
 
 .stats-screen-section {
@@ -657,21 +648,19 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   grid-template-columns: repeat(4, 1fr);
   gap: 32px;
   margin-top: 24px;
-  border-top: 1px solid rgba(245, 194, 66, 0.4);
-  border-bottom: 1px solid rgba(245, 194, 66, 0.4);
-  padding: 36px 0;
+  border: none;
+  padding: 24px 0;
 }
 
 .stat-box {
   background: transparent;
   border: none;
-  padding: 0 16px;
+  padding: 0;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: auto;
   box-shadow: none;
-  border-left: 1px dashed rgba(245, 194, 66, 0.35);
   will-change: transform, opacity;
 }
 
@@ -724,17 +713,14 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 .edu-card {
   background: transparent;
   border: none;
-  border-left: 3px solid var(--accent);
-  padding: 12px 0 12px 32px;
+  padding: 0;
   display: flex;
   flex-direction: column;
   box-shadow: none;
-  transition: border-color 0.4s;
   will-change: transform, opacity;
 }
 
 .edu-card.star-hit {
-  border-color: #ffffff;
   box-shadow: none;
 }
 
@@ -779,16 +765,14 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 .project-item {
   background: transparent;
   border: none;
-  border-top: 2px solid var(--accent);
-  padding: 36px 0 44px 0;
+  padding: 32px 0 40px 0;
   box-shadow: none;
-  transition: border-color 0.3s, transform 0.3s;
+  transition: transform 0.3s;
   will-change: transform, opacity;
 }
 
 .project-item:hover {
   transform: translateY(-3px);
-  border-top-color: #ffffff;
 }
 
 .project-name {
@@ -817,11 +801,10 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   font-family: var(--micro-font);
   font-size: 10px;
   letter-spacing: 0.08em;
-  background: transparent;
+  background: rgba(245, 194, 66, 0.12);
   border: none;
-  border-bottom: 1px solid var(--accent);
-  color: #ffffff;
-  padding: 3px 8px;
+  color: var(--accent);
+  padding: 4px 10px;
   border-radius: 0px !important;
 }
 
@@ -851,8 +834,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 .journey-entry {
   background: transparent;
   border: none;
-  border-left: 2px solid var(--accent);
-  padding: 20px 0 20px 28px;
+  padding: 20px 0;
   display: grid;
   grid-template-columns: 140px 1fr;
   gap: 24px;
@@ -883,10 +865,8 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 .personal-suggestion-card {
   background: transparent;
   border: none;
-  border-left: 3px solid var(--accent);
-  border-top: 1px solid rgba(245, 194, 66, 0.35);
-  padding: 36px 0 36px 32px;
-  margin: 64px 0;
+  padding: 48px 0;
+  margin: 48px 0;
   box-shadow: none;
 }
 
@@ -919,8 +899,6 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .title-block-container {
   border: none;
-  border-top: 1px solid var(--accent);
-  border-bottom: 1px solid var(--accent);
   background: transparent;
   padding: 20px 0;
   margin-top: 60px;
@@ -975,8 +953,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 .personal-box {
   background: transparent;
   border: none;
-  border-top: 2px solid var(--accent);
-  padding: 28px 0 36px 0;
+  padding: 24px 0 32px 0;
   display: flex;
   flex-direction: column;
   min-height: auto;
@@ -993,7 +970,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   font-family: var(--font-mono);
   font-size: 11px;
   padding: 9px 0;
-  border-bottom: 1px solid rgba(245, 194, 66, 0.2);
+  border: none;
 }
 
 .spec-key {
@@ -1013,8 +990,8 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .media-thumb {
   aspect-ratio: 1 / 1;
-  background: transparent;
-  border: 1px solid var(--accent);
+  background: rgba(255, 255, 255, 0.04);
+  border: none;
   overflow: hidden;
   position: relative;
 }
@@ -1035,9 +1012,9 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   align-items: flex-end;
   gap: 3px;
   height: 32px;
-  padding: 4px;
+  padding: 0;
   background: transparent;
-  border: 1px solid rgba(245, 194, 66, 0.35);
+  border: none;
 }
 
 .sound-visualizer-bars span {
@@ -1060,7 +1037,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .reading-list-entry {
   padding: 10px 0;
-  border-bottom: 1px solid rgba(245, 194, 66, 0.2);
+  border: none;
 }
 
 .reading-title {
@@ -1094,8 +1071,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   flex: 0 0 340px;
   background: transparent;
   border: none;
-  border-top: 2px solid var(--accent);
-  padding: 24px 0;
+  padding: 20px 0;
   display: flex;
   flex-direction: column;
   box-shadow: none;
@@ -1105,7 +1081,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   width: 100%;
   height: 180px;
   background: transparent;
-  border: 1px solid rgba(245, 194, 66, 0.35);
+  border: none;
   margin-bottom: 16px;
   overflow: hidden;
 }
@@ -1153,8 +1129,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 .contact-form-panel {
   background: transparent;
   border: none;
-  border-left: 3px solid var(--accent);
-  padding: 24px 0 24px 36px;
+  padding: 0;
   box-shadow: none;
 }
 
@@ -1190,8 +1165,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 .contact-telemetry-box {
   background: transparent;
   border: none;
-  border-left: 2px solid var(--accent);
-  padding: 16px 0 16px 28px;
+  padding: 16px 0;
   box-shadow: none;
 }
 
@@ -1219,7 +1193,6 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   max-width: 540px;
   background: #8a2016;
   border: none;
-  border-left: 4px solid var(--accent);
   padding: 36px;
   box-shadow: 0 24px 60px rgba(60, 10, 5, 0.6);
   transform: translateY(20px);
@@ -1237,7 +1210,6 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   right: 32px;
   background: #8a2016;
   border: none;
-  border-left: 3px solid var(--accent);
   color: #ffffff;
   font-family: var(--font-mono);
   font-size: 12px;
