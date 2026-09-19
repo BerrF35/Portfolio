@@ -8,6 +8,7 @@ export class WebGLBackgroundEngine {
     this.renderer = null;
 
     this.gyroGroup = null;
+    this.gridBase = null;
     this.coreMesh = null;
     this.wireMesh = null;
     this.ringX = null;
@@ -24,10 +25,10 @@ export class WebGLBackgroundEngine {
     this.isVisible = true;
 
     this.themeColors = {
-      primary: new THREE.Color(0x2dd4bf),
-      secondary: new THREE.Color(0x38bdf8),
-      accent: new THREE.Color(0x818cf8),
-      core: new THREE.Color(0x0f766e)
+      primary: new THREE.Color(0xd84536),
+      secondary: new THREE.Color(0xe0a82e),
+      accent: new THREE.Color(0xc84131),
+      core: new THREE.Color(0x8f281b)
     };
 
     this.init();
@@ -43,7 +44,7 @@ export class WebGLBackgroundEngine {
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(50, width / height, 1, 2000);
-    this.camera.position.set(0, 0, 380);
+    this.camera.position.set(0, 0, 420);
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
@@ -56,91 +57,102 @@ export class WebGLBackgroundEngine {
 
     this.clock = new THREE.Clock();
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
     this.scene.add(ambientLight);
 
-    const pointLight = new THREE.PointLight(0x2dd4bf, 2.2, 500);
+    const pointLight = new THREE.PointLight(0xd84536, 1.8, 800);
     pointLight.position.set(120, 160, 200);
     this.scene.add(pointLight);
 
-    const rimLight = new THREE.PointLight(0x38bdf8, 1.5, 400);
+    const rimLight = new THREE.PointLight(0xe0a82e, 1.4, 600);
     rimLight.position.set(-140, -100, 150);
     this.scene.add(rimLight);
 
+    this.buildGridBase();
     this.buildGyroscope();
     this.bindEvents();
     this.animate();
   }
 
+  buildGridBase() {
+    this.gridBase = new THREE.GridHelper(900, 24, 0xd84536, 0x4a2418);
+    this.gridBase.position.set(0, -210, 0);
+    if (this.gridBase.material) {
+      this.gridBase.material.transparent = true;
+      this.gridBase.material.opacity = 0.12;
+    }
+    this.scene.add(this.gridBase);
+  }
+
   buildGyroscope() {
     this.gyroGroup = new THREE.Group();
 
-    const coreGeo = new THREE.IcosahedronGeometry(48, 1);
+    const coreGeo = new THREE.IcosahedronGeometry(75, 1);
     const coreMat = new THREE.MeshPhongMaterial({
       color: this.themeColors.core,
-      emissive: 0x092625,
-      shininess: 90,
+      emissive: 0x1a0604,
+      shininess: 35,
       flatShading: true,
       transparent: true,
-      opacity: 0.85
+      opacity: 0.05
     });
     this.coreMesh = new THREE.Mesh(coreGeo, coreMat);
     this.gyroGroup.add(this.coreMesh);
 
-    const wireGeo = new THREE.IcosahedronGeometry(52, 1);
+    const wireGeo = new THREE.IcosahedronGeometry(80, 1);
     const wireMat = new THREE.MeshBasicMaterial({
       color: this.themeColors.primary,
       wireframe: true,
       transparent: true,
-      opacity: 0.7
+      opacity: 0.12
     });
     this.wireMesh = new THREE.Mesh(wireGeo, wireMat);
     this.gyroGroup.add(this.wireMesh);
 
-    const ringGeoX = new THREE.TorusGeometry(85, 1.2, 8, 48);
+    const ringGeoX = new THREE.TorusGeometry(200, 1.3, 8, 54);
     const ringMatX = new THREE.MeshStandardMaterial({
       color: this.themeColors.primary,
-      metalness: 0.8,
-      roughness: 0.2,
-      emissive: 0x134e4a,
-      emissiveIntensity: 0.4
+      metalness: 0.6,
+      roughness: 0.4,
+      transparent: true,
+      opacity: 0.15
     });
     this.ringX = new THREE.Mesh(ringGeoX, ringMatX);
     this.gyroGroup.add(this.ringX);
 
-    const ringGeoY = new THREE.TorusGeometry(105, 1.2, 8, 54);
+    const ringGeoY = new THREE.TorusGeometry(245, 1.3, 8, 60);
     const ringMatY = new THREE.MeshStandardMaterial({
       color: this.themeColors.secondary,
-      metalness: 0.8,
-      roughness: 0.2,
-      emissive: 0x075985,
-      emissiveIntensity: 0.4
+      metalness: 0.6,
+      roughness: 0.4,
+      transparent: true,
+      opacity: 0.16
     });
     this.ringY = new THREE.Mesh(ringGeoY, ringMatY);
     this.ringY.rotation.x = Math.PI / 2;
     this.gyroGroup.add(this.ringY);
 
-    const ringGeoZ = new THREE.TorusGeometry(125, 1.2, 8, 60);
+    const ringGeoZ = new THREE.TorusGeometry(290, 1.3, 8, 64);
     const ringMatZ = new THREE.MeshStandardMaterial({
       color: this.themeColors.accent,
-      metalness: 0.8,
-      roughness: 0.2,
-      emissive: 0x312e81,
-      emissiveIntensity: 0.4
+      metalness: 0.6,
+      roughness: 0.4,
+      transparent: true,
+      opacity: 0.14
     });
     this.ringZ = new THREE.Mesh(ringGeoZ, ringMatZ);
     this.ringZ.rotation.y = Math.PI / 2;
     this.gyroGroup.add(this.ringZ);
 
-    const satCount = 28;
+    const satCount = 36;
     const satGeo = new THREE.BufferGeometry();
     const satPos = new Float32Array(satCount * 3);
     for (let i = 0; i < satCount; i++) {
-      const radius = 90 + (i % 3) * 20;
+      const radius = 240 + (i % 4) * 20;
       const angle = (i / satCount) * Math.PI * 2;
       satPos[i * 3] = Math.cos(angle) * radius;
       satPos[i * 3 + 1] = Math.sin(angle) * radius;
-      satPos[i * 3 + 2] = (Math.sin(angle * 3)) * 25;
+      satPos[i * 3 + 2] = (Math.sin(angle * 3)) * 35;
     }
     satGeo.setAttribute('position', new THREE.BufferAttribute(satPos, 3));
 
@@ -149,8 +161,8 @@ export class WebGLBackgroundEngine {
       size: 5,
       map: satTexture,
       transparent: true,
-      opacity: 0.85,
-      color: 0x2dd4bf,
+      opacity: 0.22,
+      color: 0xe0a82e,
       blending: THREE.AdditiveBlending,
       depthWrite: false
     });
@@ -158,8 +170,8 @@ export class WebGLBackgroundEngine {
     this.gyroGroup.add(this.satellites);
 
     const isDesktop = window.innerWidth > 900;
-    this.gyroGroup.position.set(isDesktop ? 160 : 0, isDesktop ? 10 : -40, 0);
-    this.gyroGroup.rotation.set(0.3, 0.4, 0);
+    this.gyroGroup.position.set(isDesktop ? 30 : 0, isDesktop ? 0 : -20, 0);
+    this.gyroGroup.rotation.set(0.25, 0.35, 0);
 
     this.scene.add(this.gyroGroup);
   }
@@ -171,7 +183,7 @@ export class WebGLBackgroundEngine {
     const ctx = c.getContext('2d');
     const grad = ctx.createRadialGradient(8, 8, 0, 8, 8, 8);
     grad.addColorStop(0, '#ffffff');
-    grad.addColorStop(0.4, 'rgba(45, 212, 191, 0.9)');
+    grad.addColorStop(0.4, 'rgba(224, 168, 46, 0.9)');
     grad.addColorStop(1, 'transparent');
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 16, 16);
@@ -227,7 +239,7 @@ export class WebGLBackgroundEngine {
       if (this.ringX) this.ringX.material.color = c1;
       if (this.ringY) this.ringY.material.color = c2;
       if (this.ringZ) this.ringZ.material.color = c3;
-      if (this.satellites) this.satellites.material.color = c1;
+      if (this.satellites) this.satellites.material.color = c2;
     } catch (err) {
       console.warn(err);
     }
@@ -248,8 +260,8 @@ export class WebGLBackgroundEngine {
 
     const isDesktop = w > 900;
     if (this.gyroGroup) {
-      this.gyroGroup.position.x = isDesktop ? 160 : 0;
-      this.gyroGroup.position.y = isDesktop ? 10 : -40;
+      this.gyroGroup.position.x = isDesktop ? 30 : 0;
+      this.gyroGroup.position.y = isDesktop ? 0 : -20;
     }
   }
 
@@ -279,43 +291,43 @@ export class WebGLBackgroundEngine {
     this.rotationInertia.y *= 0.92;
 
     if (this.gyroGroup) {
-      this.gyroGroup.rotation.x += this.rotationInertia.x + 0.003;
-      this.gyroGroup.rotation.y += this.rotationInertia.y + 0.004;
+      this.gyroGroup.rotation.x += this.rotationInertia.x + 0.002;
+      this.gyroGroup.rotation.y += this.rotationInertia.y + 0.003;
 
-      this.gyroGroup.rotation.x += (this.mouse.y * 0.4 - this.gyroGroup.rotation.x * 0.1) * 0.03;
-      this.gyroGroup.rotation.y += (this.mouse.x * 0.4 - this.gyroGroup.rotation.y * 0.1) * 0.03;
+      this.gyroGroup.rotation.x += (this.mouse.y * 0.3 - this.gyroGroup.rotation.x * 0.1) * 0.025;
+      this.gyroGroup.rotation.y += (this.mouse.x * 0.3 - this.gyroGroup.rotation.y * 0.1) * 0.025;
 
       if (this.ringX) {
-        this.ringX.rotation.x = time * 0.6 + this.scrollProgress * 4.0;
-        this.ringX.rotation.y = Math.sin(time * 0.4) * 0.3;
+        this.ringX.rotation.x = time * 0.5 + this.scrollProgress * 3.0;
+        this.ringX.rotation.y = Math.sin(time * 0.3) * 0.25;
       }
       if (this.ringY) {
-        this.ringY.rotation.y = time * 0.8 + this.scrollProgress * 5.0;
-        this.ringY.rotation.z = Math.cos(time * 0.5) * 0.25;
+        this.ringY.rotation.y = time * 0.6 + this.scrollProgress * 4.0;
+        this.ringY.rotation.z = Math.cos(time * 0.4) * 0.2;
       }
       if (this.ringZ) {
-        this.ringZ.rotation.z = time * 0.5 + this.scrollProgress * 6.0;
-        this.ringZ.rotation.x = Math.sin(time * 0.7) * 0.35;
+        this.ringZ.rotation.z = time * 0.4 + this.scrollProgress * 5.0;
+        this.ringZ.rotation.x = Math.sin(time * 0.5) * 0.28;
       }
 
       if (this.coreMesh) {
-        const pulse = 1 + Math.sin(time * 2.0) * 0.04;
+        const pulse = 1 + Math.sin(time * 1.5) * 0.03;
         this.coreMesh.scale.set(pulse, pulse, pulse);
-        this.coreMesh.rotation.y = -time * 0.5;
+        this.coreMesh.rotation.y = -time * 0.4;
       }
       if (this.wireMesh) {
-        this.wireMesh.rotation.y = time * 0.3;
-        this.wireMesh.rotation.x = time * 0.2;
+        this.wireMesh.rotation.y = time * 0.25;
+        this.wireMesh.rotation.x = time * 0.15;
       }
 
       if (this.satellites) {
-        this.satellites.rotation.z = time * 0.7;
-        this.satellites.rotation.y = time * 0.4;
+        this.satellites.rotation.z = time * 0.5;
+        this.satellites.rotation.y = time * 0.3;
       }
 
       if (this.camera) {
-        this.camera.position.z = 380 + this.scrollProgress * 140;
-        this.camera.position.y = -this.scrollProgress * 80;
+        this.camera.position.z = 420 + this.scrollProgress * 120;
+        this.camera.position.y = -this.scrollProgress * 60;
         this.camera.lookAt(this.gyroGroup.position);
       }
     }

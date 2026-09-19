@@ -257,7 +257,7 @@ export class ScrollParallaxEngine {
         if (pt.alpha > 0) {
           ctx.beginPath();
           ctx.arc(pt.x, pt.y, 2.5 * pt.alpha, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(45, 212, 191, ${pt.alpha * 0.85})`;
+          ctx.fillStyle = `rgba(224, 168, 46, ${pt.alpha * 0.85})`;
           ctx.fill();
         }
       }

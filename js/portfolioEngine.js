@@ -55,6 +55,7 @@ export class PortfolioEngine {
       const p = e.detail;
       if (p && p.tubes && p.tubes.length > 0) {
         document.documentElement.style.setProperty('--accent', p.tubes[0]);
+        document.documentElement.style.setProperty('--accent-secondary', p.tubes[1] || '#e0a82e');
         document.documentElement.style.setProperty('--accent-line', p.tubes[1] || p.tubes[0]);
       }
     });
@@ -256,8 +257,8 @@ export class PortfolioEngine {
       if (m.z > 0) {
         ctx.beginPath();
         ctx.arc(cx + m.x, cy + m.y, 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = '#2dd4bf';
-        ctx.shadowColor = '#2dd4bf';
+        ctx.fillStyle = '#e0a82e';
+        ctx.shadowColor = '#d84536';
         ctx.shadowBlur = 8;
         ctx.fill();
         ctx.shadowBlur = 0;
@@ -324,25 +325,30 @@ export class PortfolioEngine {
     if (!curtain) {
       curtain = document.createElement('div');
       curtain.id = 'pageTransition';
-      curtain.className = 'page-transition-curtain';
+      curtain.className = 'page-transition-bars';
       curtain.setAttribute('aria-hidden', 'true');
       curtain.innerHTML = `
-        <div class="page-transition-line"></div>
-        <div class="page-transition-brand">JAIJITESH SURYAPRAKASH</div>
+        <div class="pt-bar"></div>
+        <div class="pt-bar"></div>
+        <div class="pt-bar"></div>
+        <div class="pt-bar"></div>
+        <div class="pt-bar"></div>
+        <div class="pt-bar"></div>
+        <div class="pt-bar"></div>
       `;
       document.body.prepend(curtain);
     }
 
     if (sessionStorage.getItem('nav_transition_active') === '1') {
       sessionStorage.removeItem('nav_transition_active');
-      curtain.classList.add('initial-covered');
+      curtain.classList.add('covered');
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          curtain.classList.remove('initial-covered');
+          curtain.classList.remove('covered');
           curtain.classList.add('leaving');
           setTimeout(() => {
             curtain.classList.remove('leaving');
-          }, 520);
+          }, 1100);
         });
       });
     }
@@ -380,12 +386,12 @@ export class PortfolioEngine {
         e.preventDefault();
         sessionStorage.setItem('nav_transition_active', '1');
 
-        curtain.classList.remove('leaving', 'initial-covered');
+        curtain.classList.remove('leaving', 'covered');
         curtain.classList.add('entering');
 
         setTimeout(() => {
           window.location.href = href;
-        }, 340);
+        }, 1280);
       }
     });
   }
