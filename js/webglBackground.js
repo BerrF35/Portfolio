@@ -27,8 +27,8 @@ export class WebGLBackgroundEngine {
     this.themeColors = {
       primary: new THREE.Color(0xd84536),
       secondary: new THREE.Color(0xe0a82e),
-      accent: new THREE.Color(0xc84131),
-      core: new THREE.Color(0x8f281b)
+      accent: new THREE.Color(0xffffff),
+      core: new THREE.Color(0x701b12)
     };
 
     this.init();
@@ -57,14 +57,14 @@ export class WebGLBackgroundEngine {
 
     this.clock = new THREE.Clock();
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.45);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.55);
     this.scene.add(ambientLight);
 
-    const pointLight = new THREE.PointLight(0xd84536, 1.8, 800);
+    const pointLight = new THREE.PointLight(0xe0a82e, 1.6, 800);
     pointLight.position.set(120, 160, 200);
     this.scene.add(pointLight);
 
-    const rimLight = new THREE.PointLight(0xe0a82e, 1.4, 600);
+    const rimLight = new THREE.PointLight(0xd84536, 1.8, 700);
     rimLight.position.set(-140, -100, 150);
     this.scene.add(rimLight);
 
@@ -75,11 +75,11 @@ export class WebGLBackgroundEngine {
   }
 
   buildGridBase() {
-    this.gridBase = new THREE.GridHelper(900, 24, 0xd84536, 0x4a2418);
+    this.gridBase = new THREE.GridHelper(900, 24, 0xe0a82e, 0x822216);
     this.gridBase.position.set(0, -210, 0);
     if (this.gridBase.material) {
       this.gridBase.material.transparent = true;
-      this.gridBase.material.opacity = 0.12;
+      this.gridBase.material.opacity = 0.18;
     }
     this.scene.add(this.gridBase);
   }
@@ -90,21 +90,21 @@ export class WebGLBackgroundEngine {
     const coreGeo = new THREE.IcosahedronGeometry(75, 1);
     const coreMat = new THREE.MeshPhongMaterial({
       color: this.themeColors.core,
-      emissive: 0x1a0604,
+      emissive: 0x1f0604,
       shininess: 35,
       flatShading: true,
       transparent: true,
-      opacity: 0.05
+      opacity: 0.08
     });
     this.coreMesh = new THREE.Mesh(coreGeo, coreMat);
     this.gyroGroup.add(this.coreMesh);
 
     const wireGeo = new THREE.IcosahedronGeometry(80, 1);
     const wireMat = new THREE.MeshBasicMaterial({
-      color: this.themeColors.primary,
+      color: 0xffffff,
       wireframe: true,
       transparent: true,
-      opacity: 0.12
+      opacity: 0.16
     });
     this.wireMesh = new THREE.Mesh(wireGeo, wireMat);
     this.gyroGroup.add(this.wireMesh);
@@ -112,10 +112,10 @@ export class WebGLBackgroundEngine {
     const ringGeoX = new THREE.TorusGeometry(200, 1.3, 8, 54);
     const ringMatX = new THREE.MeshStandardMaterial({
       color: this.themeColors.primary,
-      metalness: 0.6,
-      roughness: 0.4,
+      metalness: 0.5,
+      roughness: 0.35,
       transparent: true,
-      opacity: 0.15
+      opacity: 0.22
     });
     this.ringX = new THREE.Mesh(ringGeoX, ringMatX);
     this.gyroGroup.add(this.ringX);
@@ -123,10 +123,10 @@ export class WebGLBackgroundEngine {
     const ringGeoY = new THREE.TorusGeometry(245, 1.3, 8, 60);
     const ringMatY = new THREE.MeshStandardMaterial({
       color: this.themeColors.secondary,
-      metalness: 0.6,
-      roughness: 0.4,
+      metalness: 0.5,
+      roughness: 0.35,
       transparent: true,
-      opacity: 0.16
+      opacity: 0.25
     });
     this.ringY = new THREE.Mesh(ringGeoY, ringMatY);
     this.ringY.rotation.x = Math.PI / 2;
@@ -135,10 +135,10 @@ export class WebGLBackgroundEngine {
     const ringGeoZ = new THREE.TorusGeometry(290, 1.3, 8, 64);
     const ringMatZ = new THREE.MeshStandardMaterial({
       color: this.themeColors.accent,
-      metalness: 0.6,
-      roughness: 0.4,
+      metalness: 0.5,
+      roughness: 0.35,
       transparent: true,
-      opacity: 0.14
+      opacity: 0.22
     });
     this.ringZ = new THREE.Mesh(ringGeoZ, ringMatZ);
     this.ringZ.rotation.y = Math.PI / 2;

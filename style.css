@@ -1,23 +1,26 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 :root {
-  --bg: #0c0908;
-  --bg-subtle: #120e0d;
-  --surface: #171211;
-  --surface-card: rgba(20, 16, 15, 0.88);
-  --surface-card-hover: rgba(28, 22, 20, 0.96);
-  --border: rgba(255, 255, 255, 0.08);
-  --border-subtle: rgba(255, 255, 255, 0.04);
-  --border-strong: rgba(224, 168, 46, 0.25);
-  --text: #f0f3f6;
-  --text-muted: #9e918b;
-  --text-dim: #63524b;
-  --accent: #d84536;
-  --accent-secondary: #e0a82e;
-  --accent-soft: rgba(216, 69, 54, 0.12);
-  --accent-line: rgba(216, 69, 54, 0.42);
-  --yellow-soft: rgba(224, 168, 46, 0.12);
-  --yellow-line: rgba(224, 168, 46, 0.42);
+  --bg: #1a0806;
+  --bg-subtle: #240c09;
+  --surface: #2e100c;
+  --surface-card: rgba(46, 16, 12, 0.90);
+  --surface-card-hover: rgba(64, 22, 17, 0.96);
+  --border: rgba(224, 168, 46, 0.22);
+  --border-subtle: rgba(216, 69, 54, 0.28);
+  --border-strong: #e0a82e;
+  --text: #ffffff;
+  --text-muted: #f4ded8;
+  --text-dim: #c5978d;
+  --accent: #e0a82e;
+  --accent-red: #d84536;
+  --accent-secondary: #ffffff;
+  --accent-soft: rgba(224, 168, 46, 0.15);
+  --accent-line: rgba(224, 168, 46, 0.45);
+  --yellow-soft: rgba(224, 168, 46, 0.15);
+  --yellow-line: rgba(224, 168, 46, 0.45);
+  --red-soft: rgba(216, 69, 54, 0.18);
+  --red-line: rgba(216, 69, 54, 0.45);
   --font-sans: 'Space Grotesk', 'Inter', -apple-system, sans-serif;
   --font-mono: 'Space Mono', 'JetBrains Mono', Consolas, monospace;
   --font-code: 'JetBrains Mono', monospace;
@@ -26,13 +29,13 @@
   --radius-sm: 0px;
   --radius-md: 0px;
   --micro-font: 'JetBrains Mono', 'Space Mono', Consolas, monospace;
-  --micro-border: 1px solid rgba(255, 255, 255, 0.12);
-  --micro-border-dim: 1px solid rgba(255, 255, 255, 0.05);
-  --micro-border-accent: 1px solid rgba(216, 69, 54, 0.35);
-  --micro-text-dim: #715852;
-  --micro-text-mid: #b0958b;
-  --micro-text-bright: #e1d2cb;
-  --micro-bg-card: rgba(18, 14, 13, 0.94);
+  --micro-border: 1px solid rgba(224, 168, 46, 0.20);
+  --micro-border-dim: 1px solid rgba(216, 69, 54, 0.20);
+  --micro-border-accent: 1px solid #e0a82e;
+  --micro-text-dim: #c28e83;
+  --micro-text-mid: #e0a82e;
+  --micro-text-bright: #ffffff;
+  --micro-bg-card: rgba(36, 12, 9, 0.94);
 }
 
 *, *::before, *::after {
@@ -90,8 +93,8 @@ body {
   z-index: 3;
   background-size: 64px 64px;
   background-image: 
-    linear-gradient(to right, rgba(224, 168, 46, 0.02) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(216, 69, 54, 0.02) 1px, transparent 1px);
+    linear-gradient(to right, rgba(224, 168, 46, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(216, 69, 54, 0.08) 1px, transparent 1px);
 }
 
 .grain {
@@ -107,20 +110,26 @@ body {
   pointer-events: none;
   display: flex;
   flex-direction: row;
+  overflow: hidden;
 }
 
 .pt-bar {
-  flex: 1;
+  flex: 1 0 calc(100vw / 7 + 2px);
+  width: calc(100vw / 7 + 2px);
+  margin-right: -2px;
   height: 100%;
-  background: #0d0a0a;
-  border-right: 1px solid rgba(224, 168, 46, 0.1);
   transform: translateY(-100%);
   will-change: transform;
+  box-shadow: inset -1px 0 0 rgba(224, 168, 46, 0.35);
 }
 
-.pt-bar:last-child {
-  border-right: none;
-}
+.pt-bar:nth-child(1) { background: #7a1d13; }
+.pt-bar:nth-child(2) { background: #8e2519; }
+.pt-bar:nth-child(3) { background: #a83222; }
+.pt-bar:nth-child(4) { background: #b86e18; }
+.pt-bar:nth-child(5) { background: #a83222; }
+.pt-bar:nth-child(6) { background: #8e2519; }
+.pt-bar:nth-child(7) { background: #7a1d13; }
 
 .page-transition-bars.entering {
   pointer-events: auto;
@@ -304,7 +313,7 @@ body {
   left: 0;
   width: 100%;
   height: 64px;
-  background: rgba(9, 11, 14, 0.96);
+  background: rgba(26, 8, 6, 0.96);
   border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
@@ -322,7 +331,7 @@ body {
   font-size: 18px;
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: #ffffff;
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -349,9 +358,9 @@ body {
 }
 
 .nav-tab-link:hover {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.03);
+  color: #ffffff;
+  border-color: rgba(224, 168, 46, 0.3);
+  background: rgba(224, 168, 46, 0.08);
 }
 
 .nav-tab-link.active {
@@ -370,8 +379,8 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(224, 168, 46, 0.06);
+  border: 1px solid rgba(224, 168, 46, 0.25);
   color: var(--text-muted);
   font-family: var(--font-mono);
   font-size: 11px;
@@ -382,9 +391,9 @@ body {
 }
 
 .audio-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: #fff;
+  background: rgba(224, 168, 46, 0.14);
+  border-color: var(--accent);
+  color: #ffffff;
 }
 
 .audio-eq-icon {
@@ -426,7 +435,7 @@ body {
   position: absolute;
   width: 6px;
   height: 6px;
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(224, 168, 46, 0.5);
   pointer-events: none;
   z-index: 5;
 }
@@ -455,7 +464,7 @@ body {
   color: var(--micro-text-dim);
   text-transform: uppercase;
   padding: 4px 8px;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(224, 168, 46, 0.04);
   border: var(--micro-border-dim);
 }
 
@@ -1173,7 +1182,7 @@ body {
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: rgba(4, 6, 8, 0.95);
+  background: rgba(22, 6, 4, 0.96);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1191,8 +1200,8 @@ body {
 .letter-box {
   width: 100%;
   max-width: 540px;
-  background: #0b0e14;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: #240c09;
+  border: 1px solid rgba(224, 168, 46, 0.35);
   padding: 36px;
   box-shadow: 0 32px 80px rgba(0, 0, 0, 0.85);
   transform: translateY(20px);
@@ -1208,9 +1217,9 @@ body {
   position: fixed;
   bottom: 32px;
   right: 32px;
-  background: #0d1218;
+  background: #240c09;
   border: 1px solid var(--accent);
-  color: #fff;
+  color: #ffffff;
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.1em;
