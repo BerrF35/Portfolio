@@ -185,6 +185,40 @@ export class ScrollParallaxEngine {
         }
       );
     }
+
+    const timelineWrapper = document.getElementById('timelineTrackWrapper');
+    const timelineBeam = document.getElementById('timelineLineBeam');
+    const timelineItems = document.querySelectorAll('.timeline-item');
+
+    if (timelineWrapper && timelineBeam) {
+      ScrollTrigger.create({
+        trigger: timelineWrapper,
+        start: 'top 75%',
+        end: 'bottom 65%',
+        scrub: 0.1,
+        onUpdate: (self) => {
+          const progress = Math.min(1, Math.max(0, self.progress));
+          timelineBeam.style.height = `${progress * 100}%`;
+          timelineBeam.style.opacity = progress > 0.01 ? '1' : `${progress * 100}`;
+
+          const beamRect = timelineBeam.getBoundingClientRect();
+          const beamTipY = beamRect.bottom;
+
+          timelineItems.forEach((item) => {
+            const dot = item.querySelector('.timeline-dot-inner');
+            if (dot) {
+              const dotRect = dot.getBoundingClientRect();
+              const dotCenterY = dotRect.top + dotRect.height / 2;
+              if (beamTipY >= dotCenterY - 6) {
+                item.classList.add('timeline-active');
+              } else {
+                item.classList.remove('timeline-active');
+              }
+            }
+          });
+        }
+      });
+    }
   }
 
   animateDigitsSequence() {
@@ -293,6 +327,32 @@ export class ScrollParallaxEngine {
           this.introCard.style.opacity = '1';
           this.introCard.style.transform = 'translateY(0)';
         }
+      }
+      const timelineWrapper = document.getElementById('timelineTrackWrapper');
+      const timelineBeam = document.getElementById('timelineLineBeam');
+      const timelineItems = document.querySelectorAll('.timeline-item');
+      if (timelineWrapper && timelineBeam) {
+        const wrapRect = timelineWrapper.getBoundingClientRect();
+        const winH = window.innerHeight;
+        const totalDist = wrapRect.height;
+        const currentDist = winH * 0.75 - wrapRect.top;
+        const progress = Math.min(1, Math.max(0, currentDist / Math.max(1, totalDist)));
+        timelineBeam.style.height = `${progress * 100}%`;
+        timelineBeam.style.opacity = progress > 0.01 ? '1' : '0';
+
+        const beamRect = timelineBeam.getBoundingClientRect();
+        const beamTipY = beamRect.bottom;
+        timelineItems.forEach((item) => {
+          const dot = item.querySelector('.timeline-dot-inner');
+          if (dot) {
+            const dotRect = dot.getBoundingClientRect();
+            if (beamTipY >= dotRect.top + dotRect.height / 2 - 6) {
+              item.classList.add('timeline-active');
+            } else {
+              item.classList.remove('timeline-active');
+            }
+          }
+        });
       }
     }, { passive: true });
   }
