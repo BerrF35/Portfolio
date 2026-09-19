@@ -18,7 +18,6 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    
     <div id="pageTransition" class="page-transition-curtain" aria-hidden="true">
       <div class="page-transition-line"></div>
       <div class="page-transition-brand">JAIJITESH SURYAPRAKASH • SYSTEMS ARCHITECTURE</div>
@@ -36,7 +35,6 @@
 
     <div class="hero-track" id="heroTrack">
       <section class="hero-pin" id="heroPin" aria-label="Jaijitesh Suryaprakash Hero Entrance">
-        
         <header class="hero-header">
           <div class="hero-brand">JAIJITESH SURYAPRAKASH</div>
           <div class="hero-discipline">SYSTEMS ARCHITECTURE &bull; AUTONOMOUS SYSTEMS</div>
@@ -72,7 +70,6 @@
         <a href="contact.html" class="nav-tab-link">[ 03 &bull; CONTACT ]</a>
       </div>
       <div class="nav-actions">
-        
         <button class="audio-toggle-btn" id="audioToggle" data-action="toggle-audio" title="Toggle Ambient Chords">
           <span class="audio-eq-icon">
             <span></span>
@@ -116,7 +113,7 @@
                 <span class="micro-spec-value">C++, ROS 2, WEBSOCKETS</span>
               </div>
               <div class="micro-spec-cell">
-                <span class="micro-spec-label">PHYSICS SOLVER</span>
+                <span class="micro-spec-label">SIMULATION</span>
                 <span class="micro-spec-value">NAVIER-STOKES, GLSL</span>
               </div>
               <div class="micro-spec-cell">
@@ -200,7 +197,6 @@
         <h3 class="section-title">Institutional Trajectory</h3>
         
         <div class="education-stage" style="position: relative;">
-          
           <canvas id="starCanvas" class="star-trajectory-canvas"></canvas>
 
           <div class="edu-card reg-corners" id="eduSchool">
@@ -244,24 +240,23 @@
         <h3 class="section-title">Production Systems &amp; Kernels</h3>
 
         <div class="projects-list">
-          
           <article class="project-item evaporate-card reg-corners">
             <div class="corner-ticks"></div>
             <div class="micro-header-bar">
               <span class="tag-id">PROJECT 01 &bull; FLUID DYNAMICS</span>
-              <span class="telemetry-val">YEAR 2024</span>
+              <span class="telemetry-val">YEAR 2024 &bull; 2026</span>
             </div>
             <div style="padding: 18px 0 0 0;">
-              <h4 class="project-name">WindSim — Computational Aerodynamics</h4>
+              <h4 class="project-name">WindSim — Computational Aerodynamics Platform</h4>
               <div class="micro-ruler"></div>
               <p class="project-overview">
-                GPU-accelerated Navier-Stokes fluid approximations with interactive browser-based vector field rendering, vorticity dynamics, and airfoil lift and drag estimation.
+                Real-time browser Lattice Boltzmann Method (LBM D2Q9) and Navier-Stokes aerodynamic simulation platform featuring interactive vector field rendering, vorticity dynamics, and NACA airfoil lift and drag analysis.
               </p>
               
               <div class="micro-spec-grid">
                 <div class="micro-spec-cell">
                   <span class="micro-spec-label">KERNEL</span>
-                  <span class="micro-spec-value">NAVIER-STOKES</span>
+                  <span class="micro-spec-value">LBM D2Q9 SOLVER</span>
                 </div>
                 <div class="micro-spec-cell">
                   <span class="micro-spec-label">SHADERS</span>
@@ -269,7 +264,7 @@
                 </div>
                 <div class="micro-spec-cell">
                   <span class="micro-spec-label">PRECISION</span>
-                  <span class="micro-spec-value">FP32 VECTOR</span>
+                  <span class="micro-spec-value">FP32 VECTOR FIELD</span>
                 </div>
                 <div class="micro-spec-cell">
                   <span class="micro-spec-label">RUNTIME</span>
@@ -281,7 +276,8 @@
                 <span class="micro-badge">C++</span>
                 <span class="micro-badge">WebGL</span>
                 <span class="micro-badge">GLSL</span>
-                <span class="micro-badge">Fluid Solvers</span>
+                <span class="micro-badge">LBM Solvers</span>
+                <span class="micro-badge">Aerodynamics</span>
               </div>
             </div>
             <a href="https://github.com/BerrF35" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
@@ -293,40 +289,41 @@
           <article class="project-item evaporate-card reg-corners">
             <div class="corner-ticks"></div>
             <div class="micro-header-bar">
-              <span class="tag-id">PROJECT 02 &bull; AGENT RUNTIME</span>
-              <span class="telemetry-val">YEAR 2024</span>
+              <span class="tag-id">PROJECT 02 &bull; AUTONOMOUS ROBOTICS</span>
+              <span class="telemetry-val">YEAR 2025 &bull; 2026</span>
             </div>
             <div style="padding: 18px 0 0 0;">
-              <h4 class="project-name">Autonomous Agent Execution Platform</h4>
+              <h4 class="project-name">BerryBot — Tracked Autonomous Robotics Platform</h4>
               <div class="micro-ruler"></div>
               <p class="project-overview">
-                Multi-modal agent execution engine featuring local execution sandboxes, persistent knowledge indexing, high-throughput tool calling, and contextual telemetry.
+                Custom fabricated tracked autonomous mobile robotics platform featuring SolidWorks CAD chassis, dual-core ESP32 20kHz motor control firmware, 2D LiDAR SLAM, and optical odometry tracking.
               </p>
 
               <div class="micro-spec-grid">
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">ORCHESTRATION</span>
-                  <span class="micro-spec-value">ASYNC RUNTIME</span>
+                  <span class="micro-spec-label">CHASSIS</span>
+                  <span class="micro-spec-value">SOLIDWORKS M4 CAD</span>
                 </div>
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">SANDBOX</span>
-                  <span class="micro-spec-value">ISOLATED PROCESS</span>
+                  <span class="micro-spec-label">FIRMWARE</span>
+                  <span class="micro-spec-value">ESP32 FREERTOS 20KHZ</span>
                 </div>
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">DATA LAYER</span>
-                  <span class="micro-spec-value">VECTOR EMBED</span>
+                  <span class="micro-spec-label">LOCALIZATION</span>
+                  <span class="micro-spec-value">LIDAR SLAM, ODOMETRY</span>
                 </div>
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">PROTOCOL</span>
-                  <span class="micro-spec-value">FASTAPI, REST</span>
+                  <span class="micro-spec-label">KINEMATICS</span>
+                  <span class="micro-spec-value">S-CURVE DUAL DC PWM</span>
                 </div>
               </div>
 
               <div class="project-tech">
-                <span class="micro-badge">Python</span>
-                <span class="micro-badge">FastAPI</span>
-                <span class="micro-badge">Vector DB</span>
-                <span class="micro-badge">Agent Tooling</span>
+                <span class="micro-badge">ROS 2</span>
+                <span class="micro-badge">ESP32</span>
+                <span class="micro-badge">FreeRTOS</span>
+                <span class="micro-badge">SolidWorks</span>
+                <span class="micro-badge">LiDAR SLAM</span>
               </div>
             </div>
             <a href="https://github.com/BerrF35" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
@@ -339,13 +336,13 @@
             <div class="corner-ticks"></div>
             <div class="micro-header-bar">
               <span class="tag-id">PROJECT 03 &bull; HIGH THROUGHPUT</span>
-              <span class="telemetry-val">YEAR 2024</span>
+              <span class="telemetry-val">YEAR 2024 &bull; 2025</span>
             </div>
             <div style="padding: 18px 0 0 0;">
-              <h4 class="project-name">Low-Latency Financial Trading Engine</h4>
+              <h4 class="project-name">Low-Latency Financial Trading &amp; Streaming Engine</h4>
               <div class="micro-ruler"></div>
               <p class="project-overview">
-                Order matching and market data streaming pipeline constructed in Go with WebSocket event multiplexing, lock-free memory buffers, and real-time risk assessment.
+                High-concurrency order matching and market data streaming pipeline constructed in Go with WebSocket event multiplexing, lock-free memory ring buffers, and microsecond risk assessment.
               </p>
 
               <div class="micro-spec-grid">
@@ -363,7 +360,7 @@
                 </div>
                 <div class="micro-spec-cell">
                   <span class="micro-spec-label">CACHE</span>
-                  <span class="micro-spec-value">REDIS, IPC</span>
+                  <span class="micro-spec-value">REDIS, IPC MEMORY</span>
                 </div>
               </div>
 
@@ -372,6 +369,7 @@
                 <span class="micro-badge">WebSockets</span>
                 <span class="micro-badge">Redis</span>
                 <span class="micro-badge">Next.js</span>
+                <span class="micro-badge">High Concurrency</span>
               </div>
             </div>
             <a href="https://github.com/BerrF35" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
@@ -383,40 +381,41 @@
           <article class="project-item evaporate-card reg-corners">
             <div class="corner-ticks"></div>
             <div class="micro-header-bar">
-              <span class="tag-id">PROJECT 04 &bull; AUTONOMOUS ROBOTICS</span>
-              <span class="telemetry-val">YEAR 2025</span>
+              <span class="tag-id">PROJECT 04 &bull; DESKTOP AGENT</span>
+              <span class="telemetry-val">YEAR 2025 &bull; 2026</span>
             </div>
             <div style="padding: 18px 0 0 0;">
-              <h4 class="project-name">Autonomous Robotics Microservice</h4>
+              <h4 class="project-name">Berry AI — Local-First Assistant &amp; OS Sidecar</h4>
               <div class="micro-ruler"></div>
               <p class="project-overview">
-                Decoupled ROS 2 node architecture handling 2D and 3D LiDAR SLAM, EKF sensor fusion, real-time trajectory optimization, and motor driver telemetry.
+                Air-gapped on-device desktop assistant engine with Computer-Use Automation (CUA), vector memory vault, persistent knowledge indexing, and local LLM runtime orchestration.
               </p>
 
               <div class="micro-spec-grid">
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">LOCALIZATION</span>
-                  <span class="micro-spec-value">EKF, SLAM</span>
+                  <span class="micro-spec-label">AUTOMATION</span>
+                  <span class="micro-spec-value">OS COMPUTER-USE</span>
                 </div>
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">SENSOR BUS</span>
-                  <span class="micro-spec-value">LIDAR, IMU</span>
+                  <span class="micro-spec-label">MEMORY</span>
+                  <span class="micro-spec-value">VECTOR EMBEDDING VAULT</span>
                 </div>
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">CONTROL</span>
-                  <span class="micro-spec-value">NAV2, C++</span>
+                  <span class="micro-spec-label">PRIVACY</span>
+                  <span class="micro-spec-value">AIR-GAPPED LOCAL RUNTIME</span>
                 </div>
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">FREQUENCY</span>
-                  <span class="micro-spec-value">50Hz CONTROL LOOP</span>
+                  <span class="micro-spec-label">PROTOCOL</span>
+                  <span class="micro-spec-value">FASTAPI, WEBSOCKETS</span>
                 </div>
               </div>
 
               <div class="project-tech">
-                <span class="micro-badge">ROS 2</span>
-                <span class="micro-badge">C++</span>
-                <span class="micro-badge">Nav2</span>
-                <span class="micro-badge">Kinematics</span>
+                <span class="micro-badge">Python</span>
+                <span class="micro-badge">FastAPI</span>
+                <span class="micro-badge">Vector DB</span>
+                <span class="micro-badge">Local LLMs</span>
+                <span class="micro-badge">CUA Automation</span>
               </div>
             </div>
             <a href="https://github.com/BerrF35" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
@@ -428,49 +427,66 @@
       </section>
 
       <section class="section-container" aria-label="Experience and Roles">
-        <span class="section-label">DEPLOYMENT TRAJECTORY &bull; ROLES</span>
-        <h3 class="section-title">Practical Engineering Experience</h3>
+        <span class="section-label">DEPLOYMENT TRAJECTORY &bull; MILESTONES</span>
+        <h3 class="section-title">Practical Engineering Journey</h3>
 
         <div class="journey-grid">
           <div class="journey-entry reg-corners">
             <div class="corner-ticks"></div>
-            <div class="journey-year">[CURRENT]</div>
+            <div class="journey-year">2026</div>
             <div>
               <div class="micro-header-bar" style="padding: 0 0 6px 0; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px;">
-                <span class="tag-id">ROLE 01</span>
-                <span>EDGE HARDWARE</span>
+                <span class="tag-id">HACKATHON WIN</span>
+                <span>3RD PLACE OVERALL</span>
+              </div>
+              <h4 class="journey-heading">ImpactX 3.0 Hackathon — Lead Developer &amp; Architect</h4>
+              <p class="journey-desc">
+                Led the software architecture and engineering of a high-concurrency geospatial dispatch and real-time logistics routing engine operating over WebSockets.
+              </p>
+            </div>
+          </div>
+
+          <div class="journey-entry reg-corners">
+            <div class="corner-ticks"></div>
+            <div class="journey-year">2026</div>
+            <div>
+              <div class="micro-header-bar" style="padding: 0 0 6px 0; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px;">
+                <span class="tag-id">EDGE VISION</span>
+                <span>CENTRAL HACKATHON</span>
+              </div>
+              <h4 class="journey-heading">FarmAssist AI — Yantra 26 Central Hackathon</h4>
+              <p class="journey-desc">
+                Constructed an offline edge computer vision agricultural diagnostics pipeline running quantized neural models on a Raspberry Pi embedded controller.
+              </p>
+            </div>
+          </div>
+
+          <div class="journey-entry reg-corners">
+            <div class="corner-ticks"></div>
+            <div class="journey-year">2025</div>
+            <div>
+              <div class="micro-header-bar" style="padding: 0 0 6px 0; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px;">
+                <span class="tag-id">ROBOTICS</span>
+                <span>EDGE FIRMWARE</span>
               </div>
               <h4 class="journey-heading">Autonomous Robotics Systems Developer</h4>
               <p class="journey-desc">
-                Engineering autonomous robot navigation stacks, sensor calibration routines, and real-time kinematic solvers for mobile edge hardware.
+                Engineered autonomous robot navigation stacks, sensor calibration routines, and real-time kinematic solvers for mobile edge hardware and tracked chassis.
               </p>
             </div>
           </div>
+
           <div class="journey-entry reg-corners">
             <div class="corner-ticks"></div>
-            <div class="journey-year">[2024]</div>
+            <div class="journey-year">2024</div>
             <div>
               <div class="micro-header-bar" style="padding: 0 0 6px 0; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px;">
-                <span class="tag-id">ROLE 02</span>
-                <span>PHYSICS COMPUTE</span>
+                <span class="tag-id">PHYSICS</span>
+                <span>GRAPHICS COMPUTE</span>
               </div>
               <h4 class="journey-heading">Computational Fluid &amp; Numerical Physics Developer</h4>
               <p class="journey-desc">
-                Designed fluid dynamic solver pipelines and interactive graphics kernels in C++ and WebGL with numerical stability guarantees.
-              </p>
-            </div>
-          </div>
-          <div class="journey-entry reg-corners">
-            <div class="corner-ticks"></div>
-            <div class="journey-year">[2023]</div>
-            <div>
-              <div class="micro-header-bar" style="padding: 0 0 6px 0; background: transparent; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 8px;">
-                <span class="tag-id">ROLE 03</span>
-                <span>DISTRIBUTED SYSTEMS</span>
-              </div>
-              <h4 class="journey-heading">Distributed Systems &amp; Full-Stack Architect</h4>
-              <p class="journey-desc">
-                Constructed resilient microservice APIs, containerized deployment workflows, and event-driven data streaming pipelines.
+                Designed fluid dynamic solver pipelines and interactive graphics kernels in C++ and WebGL with numerical stability guarantees and real-time vector rendering.
               </p>
             </div>
           </div>
@@ -534,15 +550,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script type="module" src="js/tubesCursor.js"></script>
-    <script type="module">import { WebGLBackgroundEngine } from './js/webglBackground.js';
+    <script type="module">
+      import { WebGLBackgroundEngine } from './js/webglBackground.js';
       import { ScrollParallaxEngine } from './js/scrollParallax.js';
       import { PortfolioEngine } from './js/portfolioEngine.js';
 
-            window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
-
-            window.__scrollParallaxInstance = new ScrollParallaxEngine();
-
-            const engine = new PortfolioEngine();
-</script>
+      window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
+      window.__scrollParallaxInstance = new ScrollParallaxEngine();
+      const engine = new PortfolioEngine();
+    </script>
   </body>
 </html>

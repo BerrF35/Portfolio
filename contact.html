@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    
     <div id="pageTransition" class="page-transition-curtain" aria-hidden="true">
       <div class="page-transition-line"></div>
       <div class="page-transition-brand">JAIJITESH SURYAPRAKASH &bull; DIRECT TRANSMISSION</div>
@@ -38,7 +37,7 @@
         <a href="contact.html" class="nav-tab-link active">[ 03 &bull; CONTACT ]</a>
       </div>
       <div class="nav-actions">
-        <button class="audio-toggle-btn" id="audioToggle" data-action="toggle-audio" title="Toggle Lo-Fi Jazz Ambient Chords (Nujabes)">
+        <button class="audio-toggle-btn" id="audioToggle" data-action="toggle-audio" title="Toggle Ambient Chords">
           <span class="audio-eq-icon">
             <span></span>
             <span></span>
@@ -61,7 +60,6 @@
       </div>
 
       <div class="contact-grid">
-
         <div class="contact-form-panel reg-corners">
           <div class="corner-ticks"></div>
           <div class="micro-header-bar">
@@ -98,7 +96,6 @@
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 24px;">
-          
           <div class="contact-telemetry-box reg-corners">
             <div class="corner-ticks"></div>
             <div class="micro-header-bar">
@@ -174,9 +171,7 @@
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
 
       <div class="title-block-container reg-corners" style="margin-top: 60px;">
@@ -214,17 +209,16 @@
     <div id="toast" class="toast-msg" role="status" aria-live="polite"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script type="module" src="js/tubesCursor.js"></script>
-    <script type="module">import { WebGLBackgroundEngine } from './js/webglBackground.js';
+    <script type="module">
+      import { WebGLBackgroundEngine } from './js/webglBackground.js';
       import { PortfolioEngine } from './js/portfolioEngine.js';
 
-            window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
+      window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
 
-            if (typeof Lenis !== 'undefined') {
+      if (typeof Lenis !== 'undefined') {
         const lenis = new Lenis({
           duration: 1.15,
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -246,7 +240,7 @@
         requestAnimationFrame(raf);
       }
 
-            const engine = new PortfolioEngine();
+      const engine = new PortfolioEngine();
 
       const form = document.getElementById('contactPageForm');
       if (form) {
@@ -256,6 +250,6 @@
           form.reset();
         });
       }
-</script>
+    </script>
   </body>
 </html>

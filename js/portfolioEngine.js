@@ -12,7 +12,6 @@ export class PortfolioEngine {
     this.initToast();
     this.initEmailCopy();
     this.initAudioSynthesizer();
-    this.initChecklist();
     this.initLifeSlider();
     this.initGlobe();
     this.initLetterModal();
@@ -20,7 +19,7 @@ export class PortfolioEngine {
     this.initPageTransitions();
   }
 
-    initToast() {
+  initToast() {
     window.showToast = (message) => {
       let toast = document.getElementById('toast');
       if (!toast) {
@@ -38,7 +37,7 @@ export class PortfolioEngine {
     };
   }
 
-    initEmailCopy() {
+  initEmailCopy() {
     document.addEventListener('click', (e) => {
       const copyBtn = e.target.closest('[data-action="copy-email"]');
       if (copyBtn) {
@@ -51,7 +50,7 @@ export class PortfolioEngine {
     });
   }
 
-    initThemeSync() {
+  initThemeSync() {
     window.addEventListener('tubesPaletteChange', (e) => {
       const p = e.detail;
       if (p && p.tubes && p.tubes.length > 0) {
@@ -61,9 +60,15 @@ export class PortfolioEngine {
     });
   }
 
-    initAudioSynthesizer() {
+  initAudioSynthesizer() {
     const chords = [
-      [311.13, 392.00, 466.16, 587.33],       [293.66, 369.99, 440.00, 554.37],       [261.63, 311.13, 392.00, 466.16],       [233.08, 293.66, 349.23, 440.00],       [207.65, 261.63, 311.13, 392.00],       [293.66, 349.23, 440.00, 523.25]      ];
+      [311.13, 392.00, 466.16, 587.33],
+      [293.66, 369.99, 440.00, 554.37],
+      [261.63, 311.13, 392.00, 466.16],
+      [233.08, 293.66, 349.23, 440.00],
+      [207.65, 261.63, 311.13, 392.00],
+      [293.66, 349.23, 440.00, 523.25]
+    ];
 
     const playChord = (notes, duration) => {
       if (!this.audioCtx) return;
@@ -131,48 +136,44 @@ export class PortfolioEngine {
     });
   }
 
-    initChecklist() {
-    const checkboxes = document.querySelectorAll('.plan-checkbox');
-    const badge = document.getElementById('planCountBadge');
+  initLifeSlider() {
+    const track = document.getElementById('lifeSliderTrack');
+    const prevBtn = document.getElementById('sliderPrev');
+    const nextBtn = document.getElementById('sliderNext');
 
-    const update = () => {
-      let remaining = 0;
-      checkboxes.forEach(cb => {
-        const row = cb.closest('.checklist-item');
-        if (cb.checked) {
-          if (row) row.classList.add('completed');
-        } else {
-          if (row) row.classList.remove('completed');
-          remaining++;
-        }
-      });
-      if (badge) badge.textContent = `${remaining} remaining`;
+    if (!track) return;
+
+    let currentIndex = 0;
+    const items = track.children;
+
+    const updateSlider = () => {
+      const itemWidth = items[0] ? items[0].offsetWidth + 20 : 360;
+      const visibleCount = window.innerWidth > 992 ? 3 : (window.innerWidth > 600 ? 2 : 1);
+      const maxIndex = Math.max(0, items.length - visibleCount);
+      currentIndex = Math.max(0, Math.min(currentIndex, maxIndex));
+      track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
     };
-
-    checkboxes.forEach(cb => cb.addEventListener('change', update));
-    update();
-  }
-
-    initLifeSlider() {
-    const slider = document.getElementById('lifeSlider');
-    const prevBtn = document.getElementById('lifePrevBtn');
-    const nextBtn = document.getElementById('lifeNextBtn');
-
-    if (!slider) return;
 
     if (prevBtn) {
       prevBtn.addEventListener('click', () => {
-        slider.scrollBy({ left: -320, behavior: 'smooth' });
+        currentIndex = Math.max(0, currentIndex - 1);
+        updateSlider();
       });
     }
+
     if (nextBtn) {
       nextBtn.addEventListener('click', () => {
-        slider.scrollBy({ left: 320, behavior: 'smooth' });
+        const visibleCount = window.innerWidth > 992 ? 3 : (window.innerWidth > 600 ? 2 : 1);
+        const maxIndex = Math.max(0, items.length - visibleCount);
+        currentIndex = Math.min(maxIndex, currentIndex + 1);
+        updateSlider();
       });
     }
+
+    window.addEventListener('resize', updateSlider, { passive: true });
   }
 
-    initGlobe() {
+  initGlobe() {
     const canvas = document.getElementById('globeCanvas');
     if (!canvas) return;
 
@@ -181,15 +182,15 @@ export class PortfolioEngine {
 
     const resizeGlobe = () => {
       const rect = canvas.parentElement.getBoundingClientRect();
-      canvas.width = Math.min(rect.width || 300, 320);
-      canvas.height = 200;
+      canvas.width = Math.min(rect.width || 280, 320);
+      canvas.height = 180;
     };
     resizeGlobe();
     window.addEventListener('resize', resizeGlobe, { passive: true });
 
-    const radius = 80;
+    const radius = 70;
     const dots = [];
-    const count = 340;
+    const count = 300;
     for (let i = 0; i < count; i++) {
       const phi = Math.acos(-1 + (2 * i) / count);
       const theta = Math.sqrt(count * Math.PI) * phi;
@@ -200,7 +201,7 @@ export class PortfolioEngine {
       });
     }
 
-        const pinLat = 12.97 * (Math.PI / 180);
+    const pinLat = 12.97 * (Math.PI / 180);
     const pinLon = 79.15 * (Math.PI / 180);
     const pinMarker = {
       x: radius * Math.cos(pinLat) * Math.sin(pinLon),
@@ -227,7 +228,7 @@ export class PortfolioEngine {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       ctx.beginPath();
-      ctx.arc(cx, cy, radius + 3, 0, Math.PI * 2);
+      ctx.arc(cx, cy, radius + 2, 0, Math.PI * 2);
       ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
       ctx.lineWidth = 1;
       ctx.stroke();
@@ -263,7 +264,7 @@ export class PortfolioEngine {
 
         ctx.fillStyle = '#ffffff';
         ctx.font = '10px "Space Mono", monospace';
-        ctx.fillText('India', cx + m.x + 8, cy + m.y + 3);
+        ctx.fillText('VIT Vellore', cx + m.x + 8, cy + m.y + 3);
       }
 
       requestAnimationFrame(render);
@@ -272,7 +273,7 @@ export class PortfolioEngine {
     render();
   }
 
-    initLetterModal() {
+  initLetterModal() {
     const modal = document.getElementById('letterModal');
     if (!modal) return;
 
@@ -307,18 +308,18 @@ export class PortfolioEngine {
       }
     });
 
-    const form = document.getElementById('letterForm');
+    const form = document.getElementById('personalLetterForm') || document.getElementById('letterForm');
     if (form) {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
-        window.showToast('Letter received. Thank you.');
+        window.showToast('Message transmitted to Berry. Thank you.');
         form.reset();
         closeModal();
       });
     }
   }
 
-    initPageTransitions() {
+  initPageTransitions() {
     let curtain = document.getElementById('pageTransition');
     if (!curtain) {
       curtain = document.createElement('div');
@@ -332,7 +333,7 @@ export class PortfolioEngine {
       document.body.prepend(curtain);
     }
 
-        if (sessionStorage.getItem('nav_transition_active') === '1') {
+    if (sessionStorage.getItem('nav_transition_active') === '1') {
       sessionStorage.removeItem('nav_transition_active');
       curtain.classList.add('initial-covered');
       requestAnimationFrame(() => {
@@ -346,14 +347,14 @@ export class PortfolioEngine {
       });
     }
 
-        document.addEventListener('click', (e) => {
+    document.addEventListener('click', (e) => {
       const link = e.target.closest('a[href]');
       if (!link) return;
 
       const href = link.getAttribute('href');
       if (!href) return;
 
-            if (
+      if (
         href.startsWith('#') ||
         href.startsWith('mailto:') ||
         href.startsWith('tel:') ||
@@ -365,13 +366,14 @@ export class PortfolioEngine {
         return;
       }
 
-            const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-      const cleanHref = href.split('#')[0].split('?')[0].replace(/^\.\
+      const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+      const cleanHref = href.split('#')[0].split('?')[0].replace(/^\.\//, '');
+
       if (cleanHref === currentFile || (cleanHref === '' && currentFile === 'index.html')) {
         return;
       }
 
-            if (cleanHref.endsWith('.html') || cleanHref === '') {
+      if (cleanHref.endsWith('.html') || cleanHref === '') {
         e.preventDefault();
         sessionStorage.setItem('nav_transition_active', '1');
 

@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    
     <div id="pageTransition" class="page-transition-curtain" aria-hidden="true">
       <div class="page-transition-line"></div>
       <div class="page-transition-brand">JAIJITESH SURYAPRAKASH &bull; RESEARCH ARCHIVE</div>
@@ -38,7 +37,7 @@
         <a href="contact.html" class="nav-tab-link">[ 03 &bull; CONTACT ]</a>
       </div>
       <div class="nav-actions">
-        <button class="audio-toggle-btn" id="audioToggle" data-action="toggle-audio" title="Toggle Lo-Fi Jazz Ambient Chords (Nujabes)">
+        <button class="audio-toggle-btn" id="audioToggle" data-action="toggle-audio" title="Toggle Ambient Chords">
           <span class="audio-eq-icon">
             <span></span>
             <span></span>
@@ -51,118 +50,47 @@
 
     <main class="content-wrapper" style="padding-top: 100px;">
 
-      <div style="margin-bottom: 40px;">
+      <div style="margin-bottom: 48px;">
         <span class="section-label">TECHNICAL ARCHIVE &bull; PERSPECTIVES</span>
-        <h1 class="section-title" style="margin-bottom: 16px;">Systems Philosophy &amp; Research</h1>
-        <div class="micro-ruler" style="margin-bottom: 16px;"></div>
-        <p style="color: var(--text-muted); max-width: 680px; font-size: 16px; line-height: 1.7; margin-bottom: 24px;">
-          Investigations into deterministic robotics, mathematical fluid kinematics, foundational computing literature, and acoustic architecture.
+        <h1 class="section-title" style="font-size: clamp(34px, 5vw, 64px); font-weight: 800; line-height: 1.05; margin-bottom: 20px;">
+          Hello again? <br />
+          My nickname is <span style="color: var(--accent);">Berry</span>
+        </h1>
+        <div class="micro-ruler" style="margin-bottom: 20px;"></div>
+        <p style="color: var(--text-muted); max-width: 740px; font-size: 16px; line-height: 1.7; margin-bottom: 28px;">
+          Systems builder, computational physics enthusiast, and creator of BerryBot. Here is a curated view into my creative experiments, lo-fi acoustic soundscapes, foundational computing literature, and personal life components.
         </p>
         <div style="display: flex; gap: 16px; flex-wrap: wrap;">
           <button class="btn-sharp solid" data-action="open-letter">
             <span>[ TRANSMIT DIRECT MESSAGE ]</span>
             <span>&rarr;</span>
           </button>
+          <a href="#hobbiesSection" class="btn-sharp">
+            <span>[ EXPLORE HOBBIES ]</span>
+            <span>&darr;</span>
+          </a>
         </div>
       </div>
 
+      <div id="hobbiesSection" style="padding-top: 20px;">
+        <span class="section-label">CURATED FACETS &bull; BERRY'S HOBBIES</span>
+        <h2 class="section-title" style="margin-bottom: 8px;">Berry's Hobbies &amp; Creative Lab</h2>
+        <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 28px;">
+          Interactive systems, acoustic environments, retro specimens, and literature that inspire my engineering work.
+        </p>
+      </div>
+
       <div class="personal-grid">
-
         <article class="personal-box reg-corners">
           <div class="corner-ticks"></div>
           <div class="micro-header-bar">
-            <span class="tag-id">LOG 01 &bull; DISCIPLINES</span>
-            <span>CORE FOCUS</span>
+            <span class="tag-id">AUDIO SYNTHESIS</span>
+            <span>ACOUSTIC NODE</span>
           </div>
           <div style="padding: 16px 0 0 0;">
             <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
-              <span style="color: var(--accent);">PRIMARY FIELDS</span>
-              <span style="color: var(--micro-text-dim);">DOMAINS</span>
-            </div>
-            <div class="micro-ruler"></div>
-            <div class="spec-row" style="margin-top: 12px;">
-              <span class="spec-key">[ROBOTICS]</span>
-              <span class="spec-val">LiDAR SLAM, EKF Fusion, Nav2 Stacks</span>
-            </div>
-            <div class="spec-row">
-              <span class="spec-key">[PHYSICS]</span>
-              <span class="spec-val">Navier-Stokes Approximations, WebGL Solvers</span>
-            </div>
-            <div class="spec-row">
-              <span class="spec-key">[NETWORKING]</span>
-              <span class="spec-val">Low-Latency WebSockets, Go Concurrency</span>
-            </div>
-            <div class="spec-row">
-              <span class="spec-key">[SYSTEMS]</span>
-              <span class="spec-val">Deterministic State Engines, Linux Edge</span>
-            </div>
-            <div class="spec-row">
-              <span class="spec-key">[THEORY]</span>
-              <span class="spec-val">Algorithmic Complexity &amp; Numerical Stability</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="personal-box reg-corners">
-          <div class="corner-ticks"></div>
-          <div class="micro-header-bar">
-            <span class="tag-id">LOG 02 &bull; VISUAL LAB</span>
-            <span>SPECIMENS</span>
-          </div>
-          <div style="padding: 16px 0 0 0;">
-            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
-              <span style="color: var(--accent);">VISUAL LABORATORY</span>
-              <span style="color: var(--micro-text-dim);">SIMULATIONS</span>
-            </div>
-            <div class="micro-ruler"></div>
-            <div class="media-preview-grid">
-              <div class="media-thumb"><img src="retro/sp.gif" alt="Specimen SP" class="media-thumb-img"></div>
-              <div class="media-thumb"><img src="retro/space.gif" alt="Specimen Orbital" class="media-thumb-img"></div>
-              <div class="media-thumb"><img src="retro/eva.gif" alt="Specimen Eva" class="media-thumb-img"></div>
-              <div class="media-thumb"><img src="retro/a1.gif" alt="Specimen Cyberpunk" class="media-thumb-img"></div>
-              <div class="media-thumb"><img src="retro/rick_64.gif" alt="Specimen Rick" class="media-thumb-img"></div>
-              <div class="media-thumb"><img src="retro/nirvana.gif" alt="Specimen Nirvana" class="media-thumb-img"></div>
-            </div>
-          </div>
-        </article>
-
-        <article class="personal-box reg-corners">
-          <div class="corner-ticks"></div>
-          <div class="micro-header-bar">
-            <span class="tag-id">LOG 03 &bull; INITIATIVES</span>
-            <span>ACTIVE</span>
-          </div>
-          <div style="padding: 16px 0 0 0;">
-            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
-              <span style="color: var(--accent);">RESEARCH INITIATIVES</span>
-              <span style="color: var(--micro-text-dim);">IN PROGRESS</span>
-            </div>
-            <div class="micro-ruler"></div>
-            <div class="reading-list-entry" style="margin-top: 14px;">
-              <div class="reading-title">Autonomous Quadruped Dynamic Gait Controller</div>
-              <div class="reading-author">ROS 2 &bull; Inverse Kinematics &bull; C++</div>
-            </div>
-            <div class="reading-list-entry">
-              <div class="reading-title">GPU Lattice Boltzmann Method (LBM) Simulator</div>
-              <div class="reading-author">WebGL &bull; Compute Shaders &bull; Fluid Dynamics</div>
-            </div>
-            <div class="reading-list-entry">
-              <div class="reading-title">Zero-Copy Lock-Free Ring Buffer Engine</div>
-              <div class="reading-author">Go &bull; Microsecond Event Streaming</div>
-            </div>
-          </div>
-        </article>
-
-        <article class="personal-box reg-corners">
-          <div class="corner-ticks"></div>
-          <div class="micro-header-bar">
-            <span class="tag-id">LOG 04 &bull; ACOUSTIC SPACE</span>
-            <span>AUDIO NODE: 440Hz</span>
-          </div>
-          <div style="padding: 16px 0 0 0;">
-            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
-              <span style="color: var(--accent);">ACOUSTIC SPACE</span>
-              <span style="color: var(--micro-text-dim);">SYNTHESIS</span>
+              <span style="color: var(--accent);">LO-FI JAZZ SYNTHESIZER</span>
+              <span style="color: var(--micro-text-dim);">WEB AUDIO</span>
             </div>
             <div class="micro-ruler"></div>
             <div style="display: flex; align-items: center; gap: 16px; margin-top: 14px;">
@@ -171,12 +99,12 @@
               </div>
               <div>
                 <div style="font-weight: 700; color: #fff; font-size: 15px;">Aruarian Dance</div>
-                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);">
-                  Nujabes &bull; Web Audio API Synthesizer
+                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                  Nujabes &bull; Programmatic Web Audio
                 </div>
               </div>
             </div>
-            <button class="btn-sharp" data-action="toggle-audio" style="margin-top: 16px; width: 100%; justify-content: center;">
+            <button class="btn-sharp" data-action="toggle-audio" style="margin-top: 20px; width: 100%; justify-content: center;">
               [ TOGGLE SOUND ]
             </button>
           </div>
@@ -185,32 +113,18 @@
         <article class="personal-box reg-corners">
           <div class="corner-ticks"></div>
           <div class="micro-header-bar">
-            <span class="tag-id">LOG 05 &bull; METRICS</span>
-            <span>SYSTEM TELEMETRY</span>
+            <span class="tag-id">GLOBAL LOCATION</span>
+            <span>3D WIREFRAME</span>
           </div>
-          <div style="padding: 16px 0 0 0;">
-            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
-              <span style="color: var(--accent);">SYSTEM METRICS</span>
-              <span style="color: var(--micro-text-dim);">INDICES</span>
+          <div style="padding: 16px 0 0 0; display: flex; flex-direction: column; align-items: center;">
+            <div class="micro-header-bar" style="width: 100%; background: transparent; border: none; padding: 0; margin-bottom: 8px;">
+              <span style="color: var(--accent);">LOCATION PIN</span>
+              <span style="color: var(--micro-text-dim);">INDIA</span>
             </div>
             <div class="micro-ruler"></div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 14px;">
-              <div>
-                <div style="font-size: 28px; font-weight: 800; color: var(--accent);">04+</div>
-                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 2px;">Years Engineering</div>
-              </div>
-              <div>
-                <div style="font-size: 28px; font-weight: 800; color: #fff;">24+</div>
-                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 2px;">Projects Built</div>
-              </div>
-              <div>
-                <div style="font-size: 28px; font-weight: 800; color: #fff;">12+</div>
-                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 2px;">Deployed Systems</div>
-              </div>
-              <div>
-                <div style="font-size: 28px; font-weight: 800; color: var(--accent);">30+</div>
-                <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 2px;">Core Skills</div>
-              </div>
+            <canvas id="globeCanvas" style="width: 100%; max-width: 280px; height: 150px;"></canvas>
+            <div style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+              Vellore Institute of Technology (VIT)
             </div>
           </div>
         </article>
@@ -218,37 +132,123 @@
         <article class="personal-box reg-corners">
           <div class="corner-ticks"></div>
           <div class="micro-header-bar">
-            <span class="tag-id">LOG 06 &bull; LITERATURE</span>
-            <span>BIBLIOGRAPHY</span>
+            <span class="tag-id">VISUAL SPECIMENS</span>
+            <span>PIXEL LAB</span>
           </div>
           <div style="padding: 16px 0 0 0;">
             <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
-              <span style="color: var(--accent);">LITERATURE ARCHIVE</span>
-              <span style="color: var(--micro-text-dim);">THEORY</span>
+              <span style="color: var(--accent);">RETRO GALLERY</span>
+              <span style="color: var(--micro-text-dim);">ANIMATED</span>
             </div>
             <div class="micro-ruler"></div>
-            <div class="reading-list-entry" style="margin-top: 14px;">
-              <div class="reading-title">Cybernetics: Control and Communication</div>
-              <div class="reading-author">Norbert Wiener &bull; MIT Press</div>
-            </div>
-            <div class="reading-list-entry">
-              <div class="reading-title">Mathematical Theory of Communication</div>
-              <div class="reading-author">Claude E. Shannon &bull; Bell System Technical Journal</div>
-            </div>
-            <div class="reading-list-entry">
-              <div class="reading-title">Feynman Lectures on Computation</div>
-              <div class="reading-author">Richard P. Feynman &bull; Quantum &amp; Physical Limits</div>
+            <div class="media-preview-grid">
+              <div class="media-thumb"><img src="retro/sp.gif" alt="Specimen SP" class="media-thumb-img" /></div>
+              <div class="media-thumb"><img src="retro/space.gif" alt="Specimen Orbital" class="media-thumb-img" /></div>
+              <div class="media-thumb"><img src="retro/eva.gif" alt="Specimen Eva" class="media-thumb-img" /></div>
+              <div class="media-thumb"><img src="retro/a1.gif" alt="Specimen Cyberpunk" class="media-thumb-img" /></div>
+              <div class="media-thumb"><img src="retro/rick_64.gif" alt="Specimen Rick" class="media-thumb-img" /></div>
+              <div class="media-thumb"><img src="retro/nirvana.gif" alt="Specimen Nirvana" class="media-thumb-img" /></div>
             </div>
           </div>
         </article>
 
+        <article class="personal-box reg-corners">
+          <div class="corner-ticks"></div>
+          <div class="micro-header-bar">
+            <span class="tag-id">LITERATURE</span>
+            <span>FOUNDATIONS</span>
+          </div>
+          <div style="padding: 16px 0 0 0;">
+            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
+              <span style="color: var(--accent);">READING ARCHIVE</span>
+              <span style="color: var(--micro-text-dim);">THEORY &bull; MIND</span>
+            </div>
+            <div class="micro-ruler"></div>
+            <div class="reading-list-entry" style="margin-top: 8px;">
+              <div class="reading-title">Norwegian Wood</div>
+              <div class="reading-author">Haruki Murakami &bull; Memory, Reflection &bull; Novel</div>
+            </div>
+            <div class="reading-list-entry">
+              <div class="reading-title">Cybernetics: Control and Communication</div>
+              <div class="reading-author">Norbert Wiener &bull; MIT Press &bull; Feedback Loops</div>
+            </div>
+            <div class="reading-list-entry">
+              <div class="reading-title">Feynman Lectures on Computation</div>
+              <div class="reading-author">Richard P. Feynman &bull; Limits of Physical Computing</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="personal-box reg-corners">
+          <div class="corner-ticks"></div>
+          <div class="micro-header-bar">
+            <span class="tag-id">DISCIPLINES</span>
+            <span>DOMAINS</span>
+          </div>
+          <div style="padding: 16px 0 0 0;">
+            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
+              <span style="color: var(--accent);">CORE SPECIALTIES</span>
+              <span style="color: var(--micro-text-dim);">ENGINEERING</span>
+            </div>
+            <div class="micro-ruler"></div>
+            <div class="spec-row" style="margin-top: 10px;">
+              <span class="spec-key">[ROBOTICS]</span>
+              <span class="spec-val">LiDAR SLAM, EKF Fusion, Nav2</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">[PHYSICS]</span>
+              <span class="spec-val">LBM D2Q9, Navier-Stokes, GLSL</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">[SYSTEMS]</span>
+              <span class="spec-val">Go Concurrency, Lock-Free Buffers</span>
+            </div>
+            <div class="spec-row">
+              <span class="spec-key">[FIRMWARE]</span>
+              <span class="spec-val">ESP32 FreeRTOS, 20kHz Motor PWM</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="personal-box reg-corners">
+          <div class="corner-ticks"></div>
+          <div class="micro-header-bar">
+            <span class="tag-id">QUANTITATIVE</span>
+            <span>METRICS</span>
+          </div>
+          <div style="padding: 16px 0 0 0;">
+            <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 10px;">
+              <span style="color: var(--accent);">SYSTEM TELEMETRY</span>
+              <span style="color: var(--micro-text-dim);">OVERVIEW</span>
+            </div>
+            <div class="micro-ruler"></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px;">
+              <div>
+                <div style="font-size: 26px; font-weight: 800; color: var(--accent);">04+</div>
+                <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 2px;">Years Engineering</div>
+              </div>
+              <div>
+                <div style="font-size: 26px; font-weight: 800; color: #fff;">24+</div>
+                <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 2px;">Projects Built</div>
+              </div>
+              <div>
+                <div style="font-size: 26px; font-weight: 800; color: #fff;">12+</div>
+                <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 2px;">Deployed Systems</div>
+              </div>
+              <div>
+                <div style="font-size: 26px; font-weight: 800; color: var(--accent);">30+</div>
+                <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 2px;">Core Skills</div>
+              </div>
+            </div>
+          </div>
+        </article>
       </div>
 
-      <section class="section-container" style="padding-top: 60px;">
+      <section class="section-container" style="padding-top: 80px;">
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
           <div>
-            <span class="section-label">RESEARCH DOMAINS &bull; ARCHITECTURAL FOCUS</span>
-            <h3 class="section-title" style="margin-bottom: 0;">Architectural Focus</h3>
+            <span class="section-label">COMPONENTS &bull; BERRY'S LIFE</span>
+            <h3 class="section-title" style="margin-bottom: 0;">Components of Berry's Life</h3>
           </div>
           <div style="display: flex; gap: 8px;">
             <button class="btn-sharp" id="sliderPrev" aria-label="Previous slide">&larr; [PREV]</button>
@@ -260,31 +260,69 @@
           <div class="personal-slider-track" id="lifeSliderTrack">
             <div class="personal-slider-item reg-corners">
               <div class="corner-ticks"></div>
-              <div class="slider-tag">01 &bull; KINEMATICS</div>
-              <div class="slider-title">Fluid &amp; Numerical Physics</div>
+              <div class="slider-img-frame">
+                <img src="assets/images/personal/interstellar.jpg" alt="Interstellar Film" class="slider-img" />
+              </div>
+              <div class="slider-tag">01 &bull; CINEMA &bull; COSMOS</div>
+              <div class="slider-title">Interstellar &amp; Relativistic Scale</div>
               <div class="micro-ruler" style="margin-bottom: 10px;"></div>
-              <div class="slider-desc">Navier-Stokes solvers, finite volume methods, computational aerodynamics, and GLSL vector shaders.</div>
+              <div class="slider-desc">
+                Exploration of gravitational physics, time dilation, and the mathematical frontiers of astrophysics that inspired my computational work.
+              </div>
             </div>
+
             <div class="personal-slider-item reg-corners">
               <div class="corner-ticks"></div>
-              <div class="slider-tag">02 &bull; HARDWARE</div>
-              <div class="slider-title">Autonomous Robotics</div>
+              <div class="slider-img-frame">
+                <img src="assets/images/personal/steinsgate.jpg" alt="Steins;Gate Worldlines" class="slider-img" />
+              </div>
+              <div class="slider-tag">02 &bull; CAUSALITY &bull; SCI-FI</div>
+              <div class="slider-title">Steins;Gate &amp; Determinism</div>
               <div class="micro-ruler" style="margin-bottom: 10px;"></div>
-              <div class="slider-desc">ROS 2 architecture, LiDAR SLAM, EKF sensor fusion, inverse kinematics, and edge microcontrollers.</div>
+              <div class="slider-desc">
+                Causality, parallel worldlines, and deterministic state architectures that influence my approach to predictable robotics and finite state machines.
+              </div>
             </div>
+
             <div class="personal-slider-item reg-corners">
               <div class="corner-ticks"></div>
-              <div class="slider-tag">03 &bull; COMPUTING</div>
-              <div class="slider-title">Distributed Concurrency</div>
+              <div class="slider-img-frame">
+                <img src="assets/images/personal/radiohead.jpg" alt="Radiohead Album" class="slider-img" />
+              </div>
+              <div class="slider-tag">03 &bull; SOUNDSCAPES &bull; FOCUS</div>
+              <div class="slider-title">Radiohead &amp; Atmospheric Sound</div>
               <div class="micro-ruler" style="margin-bottom: 10px;"></div>
-              <div class="slider-desc">Lock-free memory architectures, high-throughput WebSocket pipelines, and resilient distributed microservices.</div>
+              <div class="slider-desc">
+                Complex rhythm, electronic synth layering, and ambient soundscapes that provide an immersive backdrop for deep architectural engineering.
+              </div>
             </div>
+
             <div class="personal-slider-item reg-corners">
               <div class="corner-ticks"></div>
-              <div class="slider-tag">04 &bull; REASONING</div>
-              <div class="slider-title">Autonomous Agent Runtimes</div>
+              <div class="slider-img-frame">
+                <img src="assets/images/personal/e33.jpg" alt="Hardware & Chassis" class="slider-img" />
+              </div>
+              <div class="slider-tag">04 &bull; HARDWARE &bull; ROBOTICS</div>
+              <div class="slider-title">Tracked Robotics &amp; Physical Computing</div>
               <div class="micro-ruler" style="margin-bottom: 10px;"></div>
-              <div class="slider-desc">Deterministic execution sandboxes, persistent knowledge graphs, and asynchronous tool invocation.</div>
+              <div class="slider-desc">
+                SolidWorks CAD assembly, tactile microcontroller wiring, sensor bus calibration, and the thrill of seeing mechanical code move in real life.
+              </div>
+            </div>
+
+            <div class="personal-slider-item reg-corners">
+              <div class="corner-ticks"></div>
+              <div class="slider-img-frame">
+                <div style="width: 100%; height: 100%; background: #0c1017; display: flex; align-items: center; justify-content: center; color: var(--accent); font-family: var(--font-mono); font-size: 12px;">
+                  [ NUMERICAL SOLVERS ]
+                </div>
+              </div>
+              <div class="slider-tag">05 &bull; COMPUTATION &bull; AERODYNAMICS</div>
+              <div class="slider-title">Fluid Dynamics &amp; WindSim</div>
+              <div class="micro-ruler" style="margin-bottom: 10px;"></div>
+              <div class="slider-desc">
+                Lattice Boltzmann particle distributions, Navier-Stokes approximations, and interactive GLSL compute shaders running in real time.
+              </div>
             </div>
           </div>
         </div>
@@ -293,18 +331,24 @@
       <div class="personal-suggestion-card evaporate-card reg-corners" style="margin-top: 40px;">
         <div class="corner-ticks"></div>
         <div class="micro-header-bar" style="margin-bottom: 16px;">
-          <span class="tag-id">RETURN ROUTE</span>
-          <span>CHAPTER 01 &bull; PROFESSIONAL</span>
+          <span class="tag-id">ACKNOWLEDGMENT</span>
+          <span>PROFILE COMPLETE</span>
         </div>
-        <span class="suggestion-tag">PRIMARY REPERTOIRE &bull; SYSTEMS</span>
-        <h3 class="suggestion-title">Inspect Production Systems &amp; Engineering Trajectory</h3>
+        <span class="suggestion-tag">GRATITUDE &bull; ENGAGEMENT</span>
+        <h3 class="suggestion-title">For visiting my profile, thank you.</h3>
         <p class="suggestion-desc">
-          Return to the primary engineering portfolio to view active production systems, quantitative metrics, and technical project implementations.
+          Whether you are exploring potential collaboration on autonomous systems, computational physics, or high-throughput architectures, feel free to transmit a message directly.
         </p>
-        <a href="index.html" class="btn-sharp solid">
-          <span>[ RETURN TO PORTFOLIO ]</span>
-          <span>&rarr;</span>
-        </a>
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <a href="index.html" class="btn-sharp solid">
+            <span>[ RETURN TO PORTFOLIO ]</span>
+            <span>&rarr;</span>
+          </a>
+          <button class="btn-sharp" data-action="open-letter">
+            <span>[ TRANSMIT MESSAGE ]</span>
+            <span>&uarr;</span>
+          </button>
+        </div>
       </div>
 
       <div class="title-block-container reg-corners">
@@ -316,11 +360,11 @@
           </div>
           <div class="title-block-cell">
             <span class="title-block-label">AUTHOR</span>
-            <span class="title-block-val">JAIJITESH SURYAPRAKASH</span>
+            <span class="title-block-val">JAIJITESH SURYAPRAKASH (BERRY)</span>
           </div>
           <div class="title-block-cell">
-            <span class="title-block-label">FOCUS</span>
-            <span class="title-block-val">AUTONOMOUS SYSTEMS</span>
+            <span class="title-block-label">DISCIPLINE</span>
+            <span class="title-block-val">SYSTEMS &bull; ROBOTICS</span>
           </div>
           <div class="title-block-cell">
             <span class="title-block-label">LOCATION</span>
@@ -340,16 +384,17 @@
     </main>
 
     <div id="letterModal" class="letter-modal" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="letter-box">
+      <div class="letter-box reg-corners">
+        <div class="corner-ticks"></div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
           <div class="suggestion-tag" style="margin-bottom: 0;">DIRECT MESSAGE</div>
           <button class="btn-sharp" data-action="close-letter" style="height: 32px; padding: 0 10px;">&times;</button>
         </div>
         <h3 style="font-family: var(--font-sans); font-size: 22px; font-weight: 700; color: #fff; margin-bottom: 12px;">
-          Transmit Message to Jaijitesh
+          Write a Letter to Berry
         </h3>
         <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.6;">
-          For collaboration on autonomous robotics, high-throughput systems, or computational physics, send a message directly.
+          Share thoughts, discuss ideas on autonomous robotics, simulation, or technical collaboration.
         </p>
         <form id="personalLetterForm" style="display: flex; flex-direction: column; gap: 16px;">
           <input type="email" id="letterEmail" class="form-input" placeholder="Your Email Address" required />
@@ -365,17 +410,16 @@
     <div id="toast" class="toast-msg" role="status" aria-live="polite"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script type="module" src="js/tubesCursor.js"></script>
-    <script type="module">import { WebGLBackgroundEngine } from './js/webglBackground.js';
+    <script type="module">
+      import { WebGLBackgroundEngine } from './js/webglBackground.js';
       import { PortfolioEngine } from './js/portfolioEngine.js';
 
-            window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
+      window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
 
-            if (typeof Lenis !== 'undefined') {
+      if (typeof Lenis !== 'undefined') {
         const lenis = new Lenis({
           duration: 1.15,
           easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -397,33 +441,7 @@
         requestAnimationFrame(raf);
       }
 
-            const engine = new PortfolioEngine();
-
-            const track = document.getElementById('lifeSliderTrack');
-      const prevBtn = document.getElementById('sliderPrev');
-      const nextBtn = document.getElementById('sliderNext');
-      if (track && prevBtn && nextBtn) {
-        let currentIndex = 0;
-        const items = track.children;
-        const updateSlider = () => {
-          const itemWidth = items[0] ? items[0].offsetWidth + 20 : 300;
-          const visibleCount = window.innerWidth > 768 ? 2 : 1;
-          const maxIndex = Math.max(0, items.length - visibleCount);
-          currentIndex = Math.max(0, Math.min(currentIndex, maxIndex));
-          track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
-        };
-        prevBtn.addEventListener('click', () => {
-          currentIndex = Math.max(0, currentIndex - 1);
-          updateSlider();
-        });
-        nextBtn.addEventListener('click', () => {
-          const visibleCount = window.innerWidth > 768 ? 2 : 1;
-          const maxIndex = Math.max(0, items.length - visibleCount);
-          currentIndex = Math.min(maxIndex, currentIndex + 1);
-          updateSlider();
-        });
-        window.addEventListener('resize', updateSlider, { passive: true });
-      }
-</script>
+      const engine = new PortfolioEngine();
+    </script>
   </body>
 </html>

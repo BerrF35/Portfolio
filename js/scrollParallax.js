@@ -1,30 +1,25 @@
 export class ScrollParallaxEngine {
   constructor() {
     this.lenis = null;
-
-        this.heroTrack = document.getElementById('heroTrack');
+    this.heroTrack = document.getElementById('heroTrack');
     this.heroPin = document.getElementById('heroPin');
     this.titleJai = document.getElementById('titleJaijitesh');
     this.titleSur = document.getElementById('titleSuryaprakash');
     this.subtitle = document.getElementById('entrySubtitle');
     this.scrollHint = document.getElementById('scrollHint');
     this.topNav = document.getElementById('topNav');
-
-        this.introContainer = document.getElementById('introContainer');
+    this.introContainer = document.getElementById('introContainer');
     this.introCard = document.getElementById('introCard');
-
-        this.statsScreen = document.getElementById('statsScreen');
+    this.statsScreen = document.getElementById('statsScreen');
     this.statBoxes = document.querySelectorAll('.stat-box');
     this.statDigits = document.querySelectorAll('.stat-digits');
     this.hasAnimatedDigits = false;
-
-        this.eduSection = document.getElementById('educationSection');
+    this.eduSection = document.getElementById('educationSection');
     this.eduSchool = document.getElementById('eduSchool');
     this.eduCollege = document.getElementById('eduCollege');
     this.starCanvas = document.getElementById('starCanvas');
     this.hasShotStar = false;
-
-        this.projectsSection = document.getElementById('projectsSection');
+    this.projectsSection = document.getElementById('projectsSection');
     this.projectItems = document.querySelectorAll('.project-item');
 
     this.init();
@@ -37,12 +32,11 @@ export class ScrollParallaxEngine {
       gsap.registerPlugin(ScrollTrigger);
       this.initGSAPChoreography();
     } else {
-      console.warn('GSAP or ScrollTrigger not found, falling back to basic scroll listener.');
       this.initFallback();
     }
   }
 
-        initLenis() {
+  initLenis() {
     if (typeof Lenis === 'undefined') return;
 
     try {
@@ -56,12 +50,12 @@ export class ScrollParallaxEngine {
         touchMultiplier: 1.5,
       });
 
-            this.lenis.on('scroll', (e) => {
+      this.lenis.on('scroll', (e) => {
         if (typeof ScrollTrigger !== 'undefined') {
           ScrollTrigger.update();
         }
 
-                if (window.__webglBackgroundInstance) {
+        if (window.__webglBackgroundInstance) {
           const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
           const progress = Math.min(1, Math.max(0, e.scroll / maxScroll));
           window.__webglBackgroundInstance.setScrollProgress(progress);
@@ -81,29 +75,57 @@ export class ScrollParallaxEngine {
         requestAnimationFrame(raf);
       }
     } catch (err) {
-      console.warn('Lenis init error:', err);
+      console.warn(err);
     }
   }
 
-        initGSAPChoreography() {
-        if (this.heroTrack && this.titleJai && this.titleSur) {
+  initGSAPChoreography() {
+    if (this.heroTrack && this.titleJai && this.titleSur) {
       const heroTL = gsap.timeline({
         scrollTrigger: {
           trigger: this.heroTrack,
           start: 'top top',
           end: 'bottom top',
-          scrub: 0.6,
+          scrub: 0.5,
           pin: this.heroPin,
           pinSpacing: false
         }
       });
 
-            heroTL
-        .to(this.titleJai, { x: () => window.innerWidth * 0.75, opacity: 0, ease: 'power1.inOut' }, 0)
-        .to(this.titleSur, { x: () => window.innerWidth * 0.40, opacity: 0, ease: 'power1.inOut' }, 0)
-        .to([this.subtitle, this.scrollHint], { y: -30, opacity: 0, duration: 0.35, ease: 'power1.out' }, 0);
+      const getJaiDistance = () => {
+        const rect = this.titleJai.getBoundingClientRect();
+        return window.innerWidth - rect.left + 180;
+      };
 
-            if (this.topNav) {
+      const getSurDistance = () => {
+        const rect = this.titleSur.getBoundingClientRect();
+        return window.innerWidth - rect.left + 180;
+      };
+
+      heroTL
+        .to(this.titleJai, { 
+          x: getJaiDistance, 
+          ease: 'power1.out',
+          duration: 1 
+        }, 0)
+        .to(this.titleSur, { 
+          x: getSurDistance, 
+          ease: 'power2.in',
+          duration: 1 
+        }, 0)
+        .to([this.titleJai, this.titleSur], {
+          opacity: 0,
+          duration: 0.2,
+          ease: 'power1.in'
+        }, 0.8)
+        .to([this.subtitle, this.scrollHint], { 
+          y: -30, 
+          opacity: 0, 
+          duration: 0.35, 
+          ease: 'power1.out' 
+        }, 0);
+
+      if (this.topNav) {
         gsap.fromTo(this.topNav, 
           { y: -20, opacity: 0, pointerEvents: 'none' },
           {
@@ -122,7 +144,7 @@ export class ScrollParallaxEngine {
       }
     }
 
-        if (this.introCard && this.introContainer) {
+    if (this.introCard && this.introContainer) {
       const introTL = gsap.timeline({
         scrollTrigger: {
           trigger: this.introContainer,
@@ -133,12 +155,12 @@ export class ScrollParallaxEngine {
       });
 
       introTL
-                .fromTo(this.introCard, 
+        .fromTo(this.introCard, 
           { y: 75, opacity: 0, filter: 'blur(8px)' },
           { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.4, ease: 'power2.out' }
         )
-                .to(this.introCard, { y: 0, opacity: 1, duration: 0.4 })
-                .to(this.introCard, {
+        .to(this.introCard, { y: 0, opacity: 1, duration: 0.4 })
+        .to(this.introCard, {
           y: -75,
           opacity: 0.1,
           filter: 'blur(5px)',
@@ -147,7 +169,7 @@ export class ScrollParallaxEngine {
         });
     }
 
-        if (this.statsScreen && this.statBoxes.length > 0) {
+    if (this.statsScreen && this.statBoxes.length > 0) {
       const statsTL = gsap.timeline({
         scrollTrigger: {
           trigger: this.statsScreen,
@@ -159,12 +181,12 @@ export class ScrollParallaxEngine {
       });
 
       statsTL
-                .fromTo(this.statBoxes, 
+        .fromTo(this.statBoxes, 
           { y: 55, opacity: 0, scale: 0.96 },
           { y: 0, opacity: 1, scale: 1, stagger: 0.08, duration: 0.35, ease: 'power2.out' }
         )
-                .to(this.statBoxes, { y: 0, opacity: 1, duration: 0.4 })
-                .to(this.statBoxes, {
+        .to(this.statBoxes, { y: 0, opacity: 1, duration: 0.4 })
+        .to(this.statBoxes, {
           y: -65,
           opacity: 0.15,
           stagger: 0.05,
@@ -173,7 +195,7 @@ export class ScrollParallaxEngine {
         });
     }
 
-        if (this.eduSection && this.eduSchool && this.eduCollege) {
+    if (this.eduSection && this.eduSchool && this.eduCollege) {
       const eduTL = gsap.timeline({
         scrollTrigger: {
           trigger: this.eduSection,
@@ -190,12 +212,12 @@ export class ScrollParallaxEngine {
       });
 
       eduTL
-                .fromTo([this.eduSchool, this.eduCollege],
+        .fromTo([this.eduSchool, this.eduCollege],
           { y: 60, opacity: 0 },
           { y: 0, opacity: 1, stagger: 0.12, duration: 0.4, ease: 'power2.out' }
         )
-                .to([this.eduSchool, this.eduCollege], { y: 0, opacity: 1, duration: 0.4 })
-                .to([this.eduSchool, this.eduCollege], {
+        .to([this.eduSchool, this.eduCollege], { y: 0, opacity: 1, duration: 0.4 })
+        .to([this.eduSchool, this.eduCollege], {
           y: -55,
           opacity: 0.15,
           stagger: 0.06,
@@ -204,7 +226,7 @@ export class ScrollParallaxEngine {
         });
     }
 
-        if (this.projectsSection && this.projectItems.length > 0) {
+    if (this.projectsSection && this.projectItems.length > 0) {
       gsap.fromTo(this.projectItems,
         { y: 45, opacity: 0, scale: 0.98 },
         {
@@ -224,7 +246,7 @@ export class ScrollParallaxEngine {
     }
   }
 
-        animateDigitsSequence() {
+  animateDigitsSequence() {
     if (this.hasAnimatedDigits) return;
     this.hasAnimatedDigits = true;
 
@@ -254,7 +276,7 @@ export class ScrollParallaxEngine {
     });
   }
 
-        launchShootingStar() {
+  launchShootingStar() {
     if (!this.starCanvas || !this.eduSchool || !this.eduCollege) return;
     const canvasRect = this.starCanvas.getBoundingClientRect();
     this.starCanvas.width = canvasRect.width || this.starCanvas.parentElement.clientWidth || 800;
@@ -288,7 +310,7 @@ export class ScrollParallaxEngine {
 
       ctx.clearRect(0, 0, this.starCanvas.width, this.starCanvas.height);
 
-            for (let i = 0; i < trail.length; i++) {
+      for (let i = 0; i < trail.length; i++) {
         const pt = trail[i];
         pt.alpha -= 0.04;
         if (pt.alpha > 0) {
@@ -301,7 +323,7 @@ export class ScrollParallaxEngine {
         }
       }
 
-            ctx.beginPath();
+      ctx.beginPath();
       ctx.arc(curX, curY, 4.5, 0, Math.PI * 2);
       ctx.fillStyle = '#ffffff';
       ctx.shadowColor = '#2dd4bf';
@@ -324,7 +346,7 @@ export class ScrollParallaxEngine {
     requestAnimationFrame(animateStar);
   }
 
-    initFallback() {
+  initFallback() {
     window.addEventListener('scroll', () => {
       const scrollY = window.scrollY || 0;
       if (this.titleJai) this.titleJai.style.transform = `translateX(${scrollY * 0.4}px)`;
