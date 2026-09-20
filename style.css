@@ -2089,18 +2089,19 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   gap: 16px;
 }
 
-.emoji-options {
+.emoji-options,
+.rating-options {
   display: flex;
   gap: 10px;
   justify-content: space-between;
 }
 
-.emoji-btn {
+.emoji-btn,
+.rating-btn {
   background: rgba(0, 0, 0, 0.35);
   border: none;
   border-radius: 6px;
-  padding: 10px;
-  font-size: 20px;
+  padding: 10px 6px;
   cursor: pointer;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
@@ -2110,20 +2111,34 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   flex: 1;
 }
 
-.emoji-btn span {
-  font-size: 9px;
+.rating-btn .rating-num {
+  font-size: 15px;
   font-family: var(--font-mono);
-  color: var(--text-muted);
+  font-weight: 800;
+  color: var(--accent-secondary);
 }
 
-.emoji-btn:hover {
-  transform: translateY(-3px) scale(1.08);
+.rating-btn .rating-label {
+  font-size: 9px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+}
+
+.rating-btn:hover {
+  transform: translateY(-3px) scale(1.04);
   background: rgba(216, 69, 54, 0.2);
 }
 
-.emoji-btn.active {
+.rating-btn.active {
   background: rgba(216, 69, 54, 0.35);
   box-shadow: 0 0 14px rgba(216, 69, 54, 0.4);
+}
+
+.rating-btn.active .rating-num,
+.rating-btn.active .rating-label {
+  color: #ffffff;
 }
 
 .citation-tag {

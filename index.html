@@ -143,12 +143,12 @@
             </div>
           </div>
           <div class="intro-visual">
-            <div class="badge-3d-wrapper" id="badge3DWrapper">
-              <canvas id="badgeCanvas" class="badge-3d-canvas" title="Interactive 3D Event Badge &bull; Grab and Drag"></canvas>
+            <div class="avatar-simple-box reg-corners">
+              <img src="assets/images/profile/portrait_full_body.jpg" alt="Jaijitesh Suryaprakash" />
             </div>
             <div class="micro-header-bar" style="margin-top: 8px; font-size: 9px;">
-              <span>SPECTRUM UI &bull; 3D BADGE</span>
-              <span>GRAB &bull; DRAG</span>
+              <span>PORTRAIT FRAME</span>
+              <span>AUTHENTIC</span>
             </div>
           </div>
         </article>
@@ -833,12 +833,10 @@
       import { WebGLBackgroundEngine } from './js/webglBackground.js';
       import { ScrollParallaxEngine } from './js/scrollParallax.js';
       import { PortfolioEngine } from './js/portfolioEngine.js';
-      import { EventBadge3D } from './js/eventBadge3D.js';
 
       window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
       window.__scrollParallaxInstance = new ScrollParallaxEngine();
       const engine = new PortfolioEngine();
-      new EventBadge3D('badgeCanvas');
 
       const shareTrigger = document.getElementById('shareTriggerBtn');
       const shareFanout = document.getElementById('shareFanoutContainer');

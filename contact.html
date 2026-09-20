@@ -283,26 +283,26 @@
             Select a rating pulse and leave technical commentary to log your visit interaction.
           </div>
 
-          <div class="emoji-options" id="emojiGroup">
-            <button type="button" class="emoji-btn" data-reaction="Fast">
-              ⚡
-              <span>FAST</span>
+          <div class="rating-options" id="emojiGroup">
+            <button type="button" class="rating-btn" data-reaction="Fast">
+              <span class="rating-num">01</span>
+              <span class="rating-label">FAST</span>
             </button>
-            <button type="button" class="emoji-btn" data-reaction="Sharp">
-              🚀
-              <span>SHARP</span>
+            <button type="button" class="rating-btn" data-reaction="Sharp">
+              <span class="rating-num">02</span>
+              <span class="rating-label">SHARP</span>
             </button>
-            <button type="button" class="emoji-btn active" data-reaction="Innovative">
-              💡
-              <span>INNOVATIVE</span>
+            <button type="button" class="rating-btn active" data-reaction="Innovative">
+              <span class="rating-num">03</span>
+              <span class="rating-label">INNOVATIVE</span>
             </button>
-            <button type="button" class="emoji-btn" data-reaction="Impactful">
-              🔥
-              <span>IMPACTFUL</span>
+            <button type="button" class="rating-btn" data-reaction="Impactful">
+              <span class="rating-num">04</span>
+              <span class="rating-label">IMPACTFUL</span>
             </button>
-            <button type="button" class="emoji-btn" data-reaction="Inspiring">
-              ❤️
-              <span>INSPIRING</span>
+            <button type="button" class="rating-btn" data-reaction="Inspiring">
+              <span class="rating-num">05</span>
+              <span class="rating-label">INSPIRING</span>
             </button>
           </div>
 
@@ -409,10 +409,10 @@
       });
 
       let selectedReaction = 'Innovative';
-      const emojiBtns = document.querySelectorAll('.emoji-btn');
-      emojiBtns.forEach((btn) => {
+      const ratingBtns = document.querySelectorAll('.rating-btn, .emoji-btn');
+      ratingBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
-          emojiBtns.forEach((b) => b.classList.remove('active'));
+          ratingBtns.forEach((b) => b.classList.remove('active'));
           btn.classList.add('active');
           selectedReaction = btn.getAttribute('data-reaction') || 'Innovative';
         });
