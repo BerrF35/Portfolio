@@ -225,6 +225,31 @@ export class ScrollParallaxEngine {
       }
     }
 
+    const timelineContainer = document.getElementById('timelineContainer');
+    if (treeNav && timelineContainer) {
+      ScrollTrigger.create({
+        trigger: timelineContainer,
+        start: 'top 65%',
+        end: 'bottom 35%',
+        onEnter: () => treeNav.classList.add('visible'),
+        onLeave: () => treeNav.classList.remove('visible'),
+        onEnterBack: () => treeNav.classList.add('visible'),
+        onLeaveBack: () => treeNav.classList.remove('visible')
+      });
+
+      const checkTreeVisibility = () => {
+        const rect = timelineContainer.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        if (rect.top <= windowHeight * 0.65 && rect.bottom >= windowHeight * 0.35) {
+          treeNav.classList.add('visible');
+        } else {
+          treeNav.classList.remove('visible');
+        }
+      };
+      window.addEventListener('scroll', checkTreeVisibility, { passive: true });
+      checkTreeVisibility();
+    }
+
     if (timelineWrapper && timelineBeam) {
       ScrollTrigger.create({
         trigger: timelineWrapper,

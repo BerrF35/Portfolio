@@ -149,9 +149,6 @@ export class EventBadge3D {
 
     ctx.fillStyle = '#1e2430';
     ctx.fillRect(70, 470, 440, 520);
-    ctx.strokeStyle = '#d84536';
-    ctx.lineWidth = 4;
-    ctx.strokeRect(70, 470, 440, 520);
 
     const img = new Image();
     img.crossOrigin = 'anonymous';
@@ -203,10 +200,6 @@ export class EventBadge3D {
     ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
     ctx.font = '18px monospace';
     ctx.fillText('* JAIJITESH.OS - CERTIFIED CREDENTIAL HARDWARE *', 70, 1220);
-
-    ctx.strokeStyle = '#d84536';
-    ctx.lineWidth = 8;
-    ctx.strokeRect(20, 20, 984, 1496);
 
     this.badgeTexture = new THREE.CanvasTexture(canvas);
     this.badgeTexture.generateMipmaps = true;

@@ -1022,7 +1022,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   aspect-ratio: 16 / 10;
   min-height: 130px;
   background: rgba(14, 18, 26, 0.72);
-  border: 1px dashed rgba(216, 69, 54, 0.38);
+  border: none;
   border-radius: 4px;
   display: flex;
   flex-direction: column;
@@ -1031,12 +1031,11 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   padding: 16px;
   text-align: center;
   overflow: hidden;
-  transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+  transition: background 0.25s ease, transform 0.25s ease;
 }
 
 .timeline-placeholder:hover {
-  border-color: var(--accent);
-  background: rgba(216, 69, 54, 0.08);
+  background: rgba(216, 69, 54, 0.12);
   transform: translateY(-2px);
 }
 
@@ -1475,7 +1474,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   padding-left: 1.1em;
   display: inline-flex;
   align-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: none;
   border-radius: 4px;
   overflow: hidden;
   transition: all 0.25s ease;
@@ -1566,8 +1565,8 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   margin: 0;
   width: 2.8rem;
   height: 2.8rem;
-  background: rgba(216, 69, 54, 0.2);
-  border: 1px solid var(--accent);
+  background: rgba(216, 69, 54, 0.25);
+  border: none;
   border-radius: 1.4rem;
 }
 
@@ -1637,7 +1636,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   overflow: hidden;
   border-radius: 4px;
   background: rgba(14, 18, 26, 0.85);
-  border: 1px solid rgba(216, 69, 54, 0.25);
+  border: none;
   animation: borderBeamBreath 4s ease-in-out infinite alternate;
 }
 
@@ -1689,18 +1688,26 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   position: fixed;
   right: 28px;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%) translateX(24px);
   z-index: 100;
   display: flex;
   flex-direction: column;
-  background: rgba(14, 18, 26, 0.85);
-  border: 1px solid rgba(216, 69, 54, 0.3);
+  background: rgba(14, 18, 26, 0.88);
+  border: none;
   border-radius: 6px;
   padding: 16px 14px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timeline-tree-nav.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
 }
 
 .timeline-tree-nav .tree-header {
@@ -1711,7 +1718,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   color: var(--accent);
   margin-bottom: 12px;
   padding-bottom: 6px;
-  border-bottom: 1px solid rgba(216, 69, 54, 0.2);
+  border-bottom: none;
 }
 
 .timeline-tree-nav .tree-track-rail {
@@ -1763,7 +1770,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   height: 8px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: none;
   z-index: 1;
   transition: all 0.25s ease;
   flex-shrink: 0;
@@ -1776,7 +1783,6 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .timeline-tree-nav .tree-item-link:hover .tree-node-dot {
   background: var(--accent);
-  border-color: #ffffff;
   box-shadow: 0 0 8px var(--accent);
 }
 
@@ -1786,7 +1792,6 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .timeline-tree-nav .tree-item-link.active .tree-node-dot {
   background: var(--accent-secondary);
-  border-color: var(--accent);
   box-shadow: 0 0 10px var(--accent-secondary);
 }
 
@@ -1798,7 +1803,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .ticker-card {
   background: rgba(14, 18, 26, 0.8);
-  border: 1px solid rgba(216, 69, 54, 0.3);
+  border: none;
   border-radius: 4px;
   padding: 20px;
   display: flex;
@@ -1818,7 +1823,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   height: 48px;
   line-height: 48px;
   background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: none;
   border-radius: 4px;
   padding: 0 12px;
 }
@@ -1860,7 +1865,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   align-items: center;
   gap: 8px;
   background: rgba(14, 18, 26, 0.88);
-  border: 1px solid rgba(216, 69, 54, 0.35);
+  border: none;
   border-radius: 30px;
   padding: 6px 10px;
   backdrop-filter: blur(14px);
@@ -1929,7 +1934,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   flex-direction: column;
   gap: 6px;
   background: rgba(14, 18, 26, 0.95);
-  border: 1px solid rgba(216, 69, 54, 0.35);
+  border: none;
   border-radius: 6px;
   padding: 8px;
   opacity: 0;
@@ -1970,7 +1975,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .faq-card {
   background: rgba(14, 18, 26, 0.8);
-  border: 1px solid rgba(216, 69, 54, 0.3);
+  border: none;
   border-radius: 4px;
   padding: 24px;
   display: flex;
@@ -1981,14 +1986,14 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 .faq-tabs {
   display: flex;
   gap: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: none;
   padding-bottom: 12px;
   overflow-x: auto;
 }
 
 .faq-tab-btn {
   background: transparent;
-  border: 1px solid transparent;
+  border: none;
   color: var(--text-muted);
   font-family: var(--font-mono);
   font-size: 11px;
@@ -2002,7 +2007,6 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .faq-tab-btn.active {
   background: rgba(216, 69, 54, 0.25);
-  border-color: var(--accent);
   color: #ffffff;
 }
 
@@ -2013,15 +2017,15 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 }
 
 .faq-accordion-item {
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: none;
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.3);
   overflow: hidden;
-  transition: border-color 0.25s ease;
+  transition: background 0.25s ease;
 }
 
 .faq-accordion-item.open {
-  border-color: rgba(216, 69, 54, 0.4);
+  background: rgba(216, 69, 54, 0.08);
 }
 
 .faq-question {
@@ -2069,7 +2073,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   align-items: center;
   justify-content: space-between;
   padding-top: 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: none;
   font-family: var(--font-mono);
   font-size: 11px;
   color: var(--micro-text-dim);
@@ -2077,7 +2081,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .feedback-card {
   background: rgba(14, 18, 26, 0.8);
-  border: 1px solid rgba(216, 69, 54, 0.3);
+  border: none;
   border-radius: 4px;
   padding: 24px;
   display: flex;
@@ -2093,7 +2097,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .emoji-btn {
   background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: none;
   border-radius: 6px;
   padding: 10px;
   font-size: 20px;
@@ -2114,13 +2118,11 @@ html.nav-transitioning .page-transition-bars .pt-bar {
 
 .emoji-btn:hover {
   transform: translateY(-3px) scale(1.08);
-  border-color: var(--accent);
-  background: rgba(216, 69, 54, 0.15);
+  background: rgba(216, 69, 54, 0.2);
 }
 
 .emoji-btn.active {
-  border-color: var(--accent);
-  background: rgba(216, 69, 54, 0.3);
+  background: rgba(216, 69, 54, 0.35);
   box-shadow: 0 0 14px rgba(216, 69, 54, 0.4);
 }
 
@@ -2146,7 +2148,7 @@ html.nav-transitioning .page-transition-bars .pt-bar {
   left: 50%;
   transform: translateX(-50%) translateY(4px);
   background: rgba(14, 18, 26, 0.96);
-  border: 1px solid var(--accent);
+  border: none;
   border-radius: 4px;
   padding: 10px 12px;
   font-family: var(--font-sans);
