@@ -246,14 +246,19 @@
                 <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 2px;">Core Skills</div>
               </div>
             </div>
-            <div class="micro-ruler" style="margin: 16px 0 12px 0;"></div>
             <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 8px;">
-              <span style="color: var(--accent);">UNIQUE TELEMETRY ACCESS</span>
-              <span style="color: var(--micro-text-dim);">DEVICE VERIFIED</span>
+              <span style="color: var(--accent);">VISITOR TELEMETRY WIDGET</span>
+              <span style="color: var(--micro-text-dim);">UPCOUNTABLE</span>
             </div>
-            <div class="ticker-display" id="visitorTicker"></div>
-            <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 6px;">
-              Global System Node Interactions &bull; Verified Unique Device Hits
+            <div class="visitor-widget" id="visitorWidget">
+              <div class="ticker-display" id="visitorTicker"></div>
+              <button class="btn-upcount" id="upcountBtn" type="button" aria-label="Upcount visitor telemetry">
+                <span class="upcount-badge">+1</span>
+                <span>UPCOUNT</span>
+              </button>
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); margin-top: 8px;">
+              Global System Node Interactions &bull; Tap To Upcount
             </div>
           </div>
         </article>
@@ -323,7 +328,7 @@
 
             <div class="personal-slider-item reg-corners">
               <div class="slider-img-frame">
-                <div style="width: 100%; height: 100%; background: #0c1017; display: flex; align-items: center; justify-content: center; color: var(--accent); font-family: var(--font-mono); font-size: 12px;">
+                <div style="width: 100%; height: 100%; background: rgba(255, 255, 255, 0.04); border: 1px dashed rgba(255, 255, 255, 0.15); display: flex; align-items: center; justify-content: center; color: var(--accent); font-family: var(--font-mono); font-size: 12px;">
                   [ NUMERICAL SOLVERS ]
                 </div>
               </div>
@@ -338,23 +343,10 @@
         </div>
       </section>
 
-      <section class="section-container" style="padding-top: 60px;" id="eventBadgeSection" aria-label="Interactive 3D Credential Badge">
-        <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 8px;">
-          <span style="color: var(--accent);">PHYSICS SIMULATION</span>
-          <span style="color: var(--micro-text-dim);">SPECTRUM UI</span>
-        </div>
-        <span class="section-label">INTERACTIVE HARDWARE &bull; 3D LANYARD BADGE</span>
-        <h3 class="section-title">Verified Hardware Credential</h3>
-        <p style="color: var(--text-muted); font-size: 14px; max-width: 680px; margin-bottom: 24px; line-height: 1.6;">
-          Interactive dynamic rigid-body lanyard pass with analytical pendulum physics. Click and drag the credential tag in 3D space to test real-time inertia, tension, and kinetic damping.
-        </p>
-
-        <div class="badge-3d-wrapper" id="badge3DWrapper" style="height: 520px; max-width: 800px; margin: 0 auto; background: rgba(14, 18, 26, 0.6); border: none; border-radius: 8px; overflow: hidden;">
-          <canvas id="badgeCanvas" class="badge-3d-canvas" title="Interactive 3D Event Badge &bull; Grab and Drag"></canvas>
-        </div>
-        <div class="micro-header-bar" style="max-width: 800px; margin: 10px auto 0 auto; font-size: 9px; background: transparent; border: none;">
-          <span>VERIFIED HARDWARE PASS</span>
-          <span>POINTER INTERACTIVE &bull; GRAB &bull; DRAG</span>
+      <section class="section-container" style="padding-top: 40px;" id="eventBadgeSection" aria-label="Interactive 3D Credential">
+        <h3 class="section-title" style="margin-bottom: 12px;">Interactive 3D Credential</h3>
+        <div class="badge-3d-wrapper" id="badge3DWrapper" style="height: 520px; max-width: 800px; margin: 0 auto; background: transparent; border: none; overflow: hidden; position: relative;">
+          <canvas id="badgeCanvas" class="badge-3d-canvas" title="Interactive 3D Event Badge" style="width: 100%; height: 100%; display: block;"></canvas>
         </div>
       </section>
 
@@ -437,6 +429,7 @@
     <div id="toast" class="toast-msg" role="status" aria-live="polite"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
     <script type="module" src="js/tubesCursor.js"></script>
     <script type="module">
@@ -455,7 +448,7 @@
       }, { passive: true });
 
       const engine = new PortfolioEngine();
-      new VisitorCounter('visitorTicker');
+      new VisitorCounter('visitorTicker', 'upcountBtn');
       new EventBadge3D('badgeCanvas');
     </script>
   </body>

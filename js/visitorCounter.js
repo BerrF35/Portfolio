@@ -1,29 +1,46 @@
 export class VisitorCounter {
-  constructor(containerId) {
-    this.container = document.getElementById(containerId);
+  constructor(tickerId, buttonId) {
+    this.container = document.getElementById(tickerId);
+    this.button = document.getElementById(buttonId || 'upcountBtn');
     if (!this.container) return;
+
+    this.countKey = 'jaijitesh_os_visitor_count';
+    this.baseCount = 1428;
+    this.currentCount = this.getCount();
+
     this.init();
   }
 
+  getCount() {
+    let saved = parseInt(localStorage.getItem(this.countKey), 10);
+    if (isNaN(saved) || saved < this.baseCount) {
+      saved = this.baseCount;
+    }
+    return saved;
+  }
+
   init() {
-    const storageKey = 'jaijitesh_os_visitor_logged';
-    const countKey = 'jaijitesh_os_visitor_count';
-    const baseCount = 1428;
+    this.render(this.currentCount.toString().padStart(6, '0'));
 
-    let currentCount = parseInt(localStorage.getItem(countKey), 10);
-    if (isNaN(currentCount) || currentCount < baseCount) {
-      currentCount = baseCount;
+    if (this.button) {
+      this.button.addEventListener('click', () => {
+        this.upcount();
+      });
     }
+  }
 
-    const hasLogged = localStorage.getItem(storageKey);
-    if (!hasLogged) {
-      currentCount += 1;
-      localStorage.setItem(storageKey, 'true');
-      localStorage.setItem(countKey, currentCount.toString());
+  upcount() {
+    this.currentCount += 1;
+    localStorage.setItem(this.countKey, this.currentCount.toString());
+
+    this.render(this.currentCount.toString().padStart(6, '0'));
+
+    if (this.button) {
+      this.button.classList.add('pulse');
+      setTimeout(() => {
+        this.button.classList.remove('pulse');
+      }, 400);
     }
-
-    const formatted = currentCount.toString().padStart(6, '0');
-    this.render(formatted);
   }
 
   render(digitString) {
@@ -54,8 +71,8 @@ export class VisitorCounter {
         strip.style.transform = `translateY(${targetY}px)`;
         setTimeout(() => {
           strip.classList.remove('ticker-blur');
-        }, 1200);
-      }, 100 + i * 140);
+        }, 800);
+      }, 50 + i * 80);
     });
   }
 }
