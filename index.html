@@ -109,21 +109,21 @@
             </h2>
             <div class="micro-ruler"></div>
             <p class="intro-bio">
-              Software engineer and systems builder focused on autonomous robotics, high-throughput computational engineering, and distributed microservices.
+              Software engineer and systems builder focused on AI agent runtimes, aerodynamics simulation, embedded robotics, and desktop telemetry systems.
             </p>
 
             <div class="micro-spec-grid" style="max-width: 480px; margin-bottom: 24px;">
               <div class="micro-spec-cell">
                 <span class="micro-spec-label">DOMAIN</span>
-                <span class="micro-spec-value">AUTONOMOUS ROBOTICS</span>
+                <span class="micro-spec-value">AI SYSTEMS &bull; EMBEDDED ROBOTICS</span>
               </div>
               <div class="micro-spec-cell">
                 <span class="micro-spec-label">CORE STACK</span>
-                <span class="micro-spec-value">C++, ROS 2, WEBSOCKETS</span>
+                <span class="micro-spec-value">PYTHON, C++, ESP32, FASTAPI</span>
               </div>
               <div class="micro-spec-cell">
                 <span class="micro-spec-label">SIMULATION</span>
-                <span class="micro-spec-value">NAVIER-STOKES, GLSL</span>
+                <span class="micro-spec-value">LBM CFD, THREE.JS, WEBGPU</span>
               </div>
               <div class="micro-spec-cell">
                 <span class="micro-spec-label">AVAILABILITY</span>
@@ -243,180 +243,184 @@
 
         <div class="projects-list">
           <article class="project-item evaporate-card reg-corners border-beam-card">
-                        <div class="micro-header-bar">
-              <span class="tag-id">FLUID DYNAMICS</span>
+            <div class="micro-header-bar">
+              <span class="tag-id">AERODYNAMICS &bull; SIMULATION</span>
               <span class="telemetry-val">YEAR 2024 &bull; 2026</span>
             </div>
             <div style="padding: 18px 0 0 0;">
-              <h4 class="project-name">WindSim — Computational Aerodynamics Platform</h4>
+              <h4 class="project-name">WindSim — Aerodynamics Sandbox &amp; CFD Laboratory</h4>
               <div class="micro-ruler"></div>
               <p class="project-overview">
-                Real-time browser Lattice Boltzmann Method (LBM D2Q9)<sup class="citation-tag" data-citation="1">[1]<span class="citation-tooltip"><strong>LBM D2Q9 Simulation Framework</strong><br/>Chen &amp; Doolen (1998) &bull; Mesoscopic Navier-Stokes Solver</span></sup> and Navier-Stokes aerodynamic simulation platform featuring interactive vector field rendering, vorticity dynamics, and NACA airfoil lift and drag analysis.
+                Browser-native aerodynamics platform combining reduced-order flight physics (Reynolds drag, dynamic projected area, barometric atmospheric density) with a D3Q19 Lattice Boltzmann Method (LBM)<sup class="citation-tag" data-citation="1">[1]<span class="citation-tooltip"><strong>D3Q19 LBM Simulation Framework</strong><br/>Mesoscopic Navier-Stokes Solver &bull; Pressure &amp; Velocity Fields</span></sup> reference solver, Three.js 3D flow visualization, and WebGPU detection.
               </p>
               
               <div class="micro-spec-grid">
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">KERNEL</span>
-                  <span class="micro-spec-value">LBM D2Q9 SOLVER</span>
+                  <span class="micro-spec-label">CFD SOLVER</span>
+                  <span class="micro-spec-value">D3Q19 LBM SOLVER</span>
                 </div>
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">SHADERS</span>
-                  <span class="micro-spec-value">GLSL COMPUTE</span>
+                  <span class="micro-spec-label">VISUALIZATION</span>
+                  <span class="micro-spec-value">THREE.JS 3D FLOW</span>
                 </div>
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">PRECISION</span>
-                  <span class="micro-spec-value">FP32 VECTOR FIELD</span>
+                  <span class="micro-spec-label">PHYSICS MODEL</span>
+                  <span class="micro-spec-value">REYNOLDS DRAG &bull; DHO</span>
                 </div>
                 <div class="micro-spec-cell">
                   <span class="micro-spec-label">RUNTIME</span>
-                  <span class="micro-spec-value">C++, WEBGL</span>
+                  <span class="micro-spec-value">JAVASCRIPT, WEBGPU</span>
+                </div>
+              </div>
+
+              <div class="project-tech">
+                <span class="micro-badge">JavaScript</span>
+                <span class="micro-badge">Three.js</span>
+                <span class="micro-badge">WebGPU</span>
+                <span class="micro-badge">LBM D3Q19</span>
+                <span class="micro-badge">IndexedDB</span>
+                <span class="micro-badge">Aerodynamics</span>
+              </div>
+            </div>
+            <a href="https://github.com/BerrF35/Windsim" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
+              <span>[ VIEW SOURCE CODE ]</span>
+              <span>&rarr;</span>
+            </a>
+          </article>
+
+          <article class="project-item evaporate-card reg-corners">
+            <div class="micro-header-bar">
+              <span class="tag-id">EMBEDDED ROBOTICS</span>
+              <span class="telemetry-val">YEAR 2025 &bull; 2026</span>
+            </div>
+            <div style="padding: 18px 0 0 0;">
+              <h4 class="project-name">AutoBot — Autonomous Tracked Robotics Architecture</h4>
+              <div class="micro-ruler"></div>
+              <p class="project-overview">
+                12-layer embedded robotics architecture on tracked chassis driven by ESP32-WROOM-32<sup class="citation-tag" data-citation="2">[2]<span class="citation-tooltip"><strong>12-Layer Embedded Control Stack</strong><br/>Closed-Loop PID with Anti-Windup &bull; Multi-Rate Scheduler 200Hz-1Hz</span></sup>, featuring quadrature encoders, QMI8658 6-DOF IMU, closed-loop PID velocity regulation with anti-windup, deterministic multi-rate scheduler (200Hz to 1Hz), and live WebSocket telemetry HUD.
+              </p>
+
+              <div class="micro-spec-grid">
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">CONTROLLER</span>
+                  <span class="micro-spec-value">ESP32-WROOM-32</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">CONTROL LOOP</span>
+                  <span class="micro-spec-value">PID ANTI-WINDUP &bull; S-CURVE</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">SENSORS</span>
+                  <span class="micro-spec-value">6-DOF IMU &bull; ENCODERS</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">TELEMETRY</span>
+                  <span class="micro-spec-value">WEBSOCKET HUD &bull; INA219</span>
                 </div>
               </div>
 
               <div class="project-tech">
                 <span class="micro-badge">C++</span>
-                <span class="micro-badge">WebGL</span>
-                <span class="micro-badge">GLSL</span>
-                <span class="micro-badge">LBM Solvers</span>
-                <span class="micro-badge">Aerodynamics</span>
-              </div>
-            </div>
-            <a href="https://github.com/BerrF35" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
-              <span>[ VIEW SOURCE CODE ]</span>
-              <span>&rarr;</span>
-            </a>
-          </article>
-
-          <article class="project-item evaporate-card reg-corners">
-                        <div class="micro-header-bar">
-              <span class="tag-id">AUTONOMOUS ROBOTICS</span>
-              <span class="telemetry-val">YEAR 2025 &bull; 2026</span>
-            </div>
-            <div style="padding: 18px 0 0 0;">
-              <h4 class="project-name">BerryBot — Tracked Autonomous Robotics Platform</h4>
-              <div class="micro-ruler"></div>
-              <p class="project-overview">
-                Custom fabricated tracked autonomous mobile robotics platform featuring SolidWorks CAD chassis, dual-core ESP32 20kHz motor control firmware<sup class="citation-tag" data-citation="2">[2]<span class="citation-tooltip"><strong>Hard Real-Time Motor Kinematics</strong><br/>FreeRTOS 20kHz S-Curve PWM &bull; Hardware Timer ISR</span></sup>, 2D LiDAR SLAM, and optical odometry tracking.
-              </p>
-
-              <div class="micro-spec-grid">
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">CHASSIS</span>
-                  <span class="micro-spec-value">SOLIDWORKS M4 CAD</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">FIRMWARE</span>
-                  <span class="micro-spec-value">ESP32 FREERTOS 20KHZ</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">LOCALIZATION</span>
-                  <span class="micro-spec-value">LIDAR SLAM, ODOMETRY</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">KINEMATICS</span>
-                  <span class="micro-spec-value">S-CURVE DUAL DC PWM</span>
-                </div>
-              </div>
-
-              <div class="project-tech">
-                <span class="micro-badge">ROS 2</span>
                 <span class="micro-badge">ESP32</span>
-                <span class="micro-badge">FreeRTOS</span>
-                <span class="micro-badge">SolidWorks</span>
-                <span class="micro-badge">LiDAR SLAM</span>
-              </div>
-            </div>
-            <a href="https://github.com/BerrF35" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
-              <span>[ VIEW SOURCE CODE ]</span>
-              <span>&rarr;</span>
-            </a>
-          </article>
-
-          <article class="project-item evaporate-card reg-corners">
-                        <div class="micro-header-bar">
-              <span class="tag-id">HIGH THROUGHPUT</span>
-              <span class="telemetry-val">YEAR 2024 &bull; 2025</span>
-            </div>
-            <div style="padding: 18px 0 0 0;">
-              <h4 class="project-name">Low-Latency Financial Trading &amp; Streaming Engine</h4>
-              <div class="micro-ruler"></div>
-              <p class="project-overview">
-                High-concurrency order matching and market data streaming pipeline constructed in Go with WebSocket event multiplexing, lock-free memory ring buffers<sup class="citation-tag" data-citation="3">[3]<span class="citation-tooltip"><strong>Disruptor Concurrency Pattern</strong><br/>Zero-Lock Atomic IPC Ring Buffers</span></sup>, and microsecond risk assessment.
-              </p>
-
-              <div class="micro-spec-grid">
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">THROUGHPUT</span>
-                  <span class="micro-spec-value">&gt; 100K OPS PER SEC</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">MEMORY</span>
-                  <span class="micro-spec-value">LOCK-FREE RING BUFFER</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">STREAMING</span>
-                  <span class="micro-spec-value">WEBSOCKET MULTIPLEX</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">CACHE</span>
-                  <span class="micro-spec-value">REDIS, IPC MEMORY</span>
-                </div>
-              </div>
-
-              <div class="project-tech">
-                <span class="micro-badge">Go</span>
+                <span class="micro-badge">PlatformIO</span>
+                <span class="micro-badge">PID Control</span>
                 <span class="micro-badge">WebSockets</span>
-                <span class="micro-badge">Redis</span>
-                <span class="micro-badge">Next.js</span>
-                <span class="micro-badge">High Concurrency</span>
+                <span class="micro-badge">Robotics HAL</span>
               </div>
             </div>
-            <a href="https://github.com/BerrF35" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
+            <a href="https://github.com/BerrF35/AutoBot" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
               <span>[ VIEW SOURCE CODE ]</span>
               <span>&rarr;</span>
             </a>
           </article>
 
           <article class="project-item evaporate-card reg-corners">
-                        <div class="micro-header-bar">
-              <span class="tag-id">DESKTOP AGENT</span>
+            <div class="micro-header-bar">
+              <span class="tag-id">AI AGENT RUNTIME</span>
               <span class="telemetry-val">YEAR 2025 &bull; 2026</span>
             </div>
             <div style="padding: 18px 0 0 0;">
-              <h4 class="project-name">Berry AI — Local-First Assistant &amp; OS Sidecar</h4>
+              <h4 class="project-name">Berry — Local-First AI Desktop Agent Runtime</h4>
               <div class="micro-ruler"></div>
               <p class="project-overview">
-                Air-gapped on-device desktop assistant engine with Computer-Use Automation (CUA), vector memory vault, persistent knowledge indexing, and local LLM runtime orchestration.
+                Local-first desktop agent connecting LLM reasoning directly to operating system execution<sup class="citation-tag" data-citation="3">[3]<span class="citation-tooltip"><strong>Computer-Use Agent Runtime</strong><br/>Chromium Relay Architecture &bull; OS Execution Sandbox</span></sup>, featuring OS file and terminal automation, Chromium browser relay architecture, vector skill codices, and multi-provider LLM orchestration.
               </p>
 
               <div class="micro-spec-grid">
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">ORCHESTRATION</span>
+                  <span class="micro-spec-value">FASTAPI &bull; PYWEBVIEW</span>
+                </div>
                 <div class="micro-spec-cell">
                   <span class="micro-spec-label">AUTOMATION</span>
-                  <span class="micro-spec-value">OS COMPUTER-USE</span>
+                  <span class="micro-spec-value">OS COMPUTER-USE &bull; CUA</span>
                 </div>
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">MEMORY</span>
-                  <span class="micro-spec-value">VECTOR EMBEDDING VAULT</span>
+                  <span class="micro-spec-label">BROWSER</span>
+                  <span class="micro-spec-value">CHROMIUM RELAY</span>
                 </div>
                 <div class="micro-spec-cell">
-                  <span class="micro-spec-label">PRIVACY</span>
-                  <span class="micro-spec-value">AIR-GAPPED LOCAL RUNTIME</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">PROTOCOL</span>
-                  <span class="micro-spec-value">FASTAPI, WEBSOCKETS</span>
+                  <span class="micro-spec-label">INFERENCE</span>
+                  <span class="micro-spec-value">LITELLM &bull; MULTI-PROVIDER</span>
                 </div>
               </div>
 
               <div class="project-tech">
                 <span class="micro-badge">Python</span>
                 <span class="micro-badge">FastAPI</span>
-                <span class="micro-badge">Vector DB</span>
-                <span class="micro-badge">Local LLMs</span>
-                <span class="micro-badge">CUA Automation</span>
+                <span class="micro-badge">PyAutoGUI</span>
+                <span class="micro-badge">LiteLLM</span>
+                <span class="micro-badge">Docker</span>
+                <span class="micro-badge">Chromium Relay</span>
               </div>
             </div>
-            <a href="https://github.com/BerrF35" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
+            <a href="https://github.com/BerrF35/Berry" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
+              <span>[ VIEW SOURCE CODE ]</span>
+              <span>&rarr;</span>
+            </a>
+          </article>
+
+          <article class="project-item evaporate-card reg-corners">
+            <div class="micro-header-bar">
+              <span class="tag-id">REMOTE SENSING &bull; ML</span>
+              <span class="telemetry-val">YEAR 2025 &bull; 2026</span>
+            </div>
+            <div style="padding: 18px 0 0 0;">
+              <h4 class="project-name">SATQuery-AI — Multimodal Satellite Remote Sensing</h4>
+              <div class="micro-ruler"></div>
+              <p class="project-overview">
+                Multimodal Earth observation assistant routing satellite queries through a LangGraph orchestrator to Qwen2.5-VL-3B adapted via 4-bit QLoRA, GroundingDINO visual grounding, ChangeFormer V6 bi-temporal change detection, and optical plus SAR fusion.
+              </p>
+
+              <div class="micro-spec-grid">
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">VLM BACKBONE</span>
+                  <span class="micro-spec-value">QWEN2.5-VL 4-BIT QLORA</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">GROUNDING</span>
+                  <span class="micro-spec-value">GROUNDINGDINO-TINY</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">CHANGE DETECT</span>
+                  <span class="micro-spec-value">CHANGEFORMER V6</span>
+                </div>
+                <div class="micro-spec-cell">
+                  <span class="micro-spec-label">PIPELINE</span>
+                  <span class="micro-spec-value">LANGGRAPH &bull; GEOTIFF CRS</span>
+                </div>
+              </div>
+
+              <div class="project-tech">
+                <span class="micro-badge">PyTorch</span>
+                <span class="micro-badge">LangGraph</span>
+                <span class="micro-badge">FastAPI</span>
+                <span class="micro-badge">QLoRA</span>
+                <span class="micro-badge">ChangeFormer</span>
+                <span class="micro-badge">Sentinel-1 &bull; 2</span>
+              </div>
+            </div>
+            <a href="https://github.com/BerrF35/SATQuery-AI" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
               <span>[ VIEW SOURCE CODE ]</span>
               <span>&rarr;</span>
             </a>
@@ -429,13 +433,13 @@
         </div>
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);" class="contact-subgrid">
           <div style="padding: 12px; background: rgba(14, 18, 26, 0.6); border: none; border-radius: 4px;">
-            <span style="color: var(--accent-secondary); font-weight: 700;">[1]</span> Lattice Boltzmann Model for Fluid Dynamics (Chen &amp; Doolen, Ann. Rev. Fluid Mech).
+            <span style="color: var(--accent-secondary); font-weight: 700;">[1]</span> Discrete Velocity Boltzmann Kinetics (D3Q19 LBM) &bull; Navier-Stokes Incompressible Flow Approximations.
           </div>
           <div style="padding: 12px; background: rgba(14, 18, 26, 0.6); border: none; border-radius: 4px;">
-            <span style="color: var(--accent-secondary); font-weight: 700;">[2]</span> Deterministic Real-Time Motor Kinematics on Dual-Core RISC-V and Xtensa (FreeRTOS Core V10).
+            <span style="color: var(--accent-secondary); font-weight: 700;">[2]</span> Deterministic Embedded Robotics &bull; 12-Layer Stack &bull; Multi-Rate Task Scheduling (200Hz to 1Hz) &bull; Closed-Loop PID Anti-Windup.
           </div>
           <div style="padding: 12px; background: rgba(14, 18, 26, 0.6); border: none; border-radius: 4px;">
-            <span style="color: var(--accent-secondary); font-weight: 700;">[3]</span> High-Throughput Inter-Thread Messaging via Atomic Ring Buffers (Thompson &amp; Barker).
+            <span style="color: var(--accent-secondary); font-weight: 700;">[3]</span> Local-First Agentic Architecture &bull; OS Process Lifecycle Sandbox &bull; Chromium Automation Relay.
           </div>
         </div>
       </section>
@@ -549,21 +553,22 @@
               <h3 class="timeline-mobile-year">2025</h3>
 
               <div class="timeline-entry-header">
-                <span class="tag-id">ROBOTICS</span>
-                <span class="telemetry-val">EDGE FIRMWARE</span>
+                <span class="tag-id">EMBEDDED ROBOTICS</span>
+                <span class="telemetry-val">12-LAYER ARCHITECTURE</span>
               </div>
 
-              <h4 class="timeline-entry-title">Autonomous Robotics Systems Developer &amp; BerryBot</h4>
+              <h4 class="timeline-entry-title">Autonomous Robotics Systems Developer &amp; AutoBot</h4>
               <p class="timeline-entry-desc">
-                Engineered autonomous robot navigation stacks, sensor calibration routines, and real-time kinematic solvers for mobile edge hardware and tracked chassis with custom dual-core ESP32 FreeRTOS 20kHz PWM motor control.
+                Engineered a 12-layer embedded robotics architecture on tracked chassis powered by ESP32-WROOM-32, featuring closed-loop PID velocity control with anti-windup, quadrature encoder feedback, QMI8658 6-DOF IMU filtering, multi-rate task scheduling (200Hz to 1Hz), and live WebSocket telemetry streaming.
               </p>
 
               <div class="timeline-tags">
-                <span class="micro-badge">ROS 2</span>
+                <span class="micro-badge">C++</span>
                 <span class="micro-badge">ESP32</span>
-                <span class="micro-badge">FreeRTOS</span>
-                <span class="micro-badge">SolidWorks</span>
-                <span class="micro-badge">LiDAR SLAM</span>
+                <span class="micro-badge">PlatformIO</span>
+                <span class="micro-badge">PID Control</span>
+                <span class="micro-badge">WebSockets</span>
+                <span class="micro-badge">Robotics HAL</span>
               </div>
 
               <div class="timeline-media-grid">
@@ -571,28 +576,28 @@
                   <div class="timeline-placeholder-icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   </div>
-                  <div class="timeline-placeholder-label">[ SOLIDWORKS CAD 01 ]</div>
+                  <div class="timeline-placeholder-label">[ CHASSIS TELEMETRY 01 ]</div>
                   <div class="timeline-placeholder-sub">INSERT MEDIA</div>
                 </div>
                 <div class="timeline-placeholder reg-corners">
                   <div class="timeline-placeholder-icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   </div>
-                  <div class="timeline-placeholder-label">[ FIRMWARE PWM 02 ]</div>
+                  <div class="timeline-placeholder-label">[ PID VELOCITY CONTROL 02 ]</div>
                   <div class="timeline-placeholder-sub">INSERT MEDIA</div>
                 </div>
                 <div class="timeline-placeholder reg-corners">
                   <div class="timeline-placeholder-icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   </div>
-                  <div class="timeline-placeholder-label">[ LIDAR SLAM GRID 03 ]</div>
+                  <div class="timeline-placeholder-label">[ MULTI-RATE SCHEDULER 03 ]</div>
                   <div class="timeline-placeholder-sub">INSERT MEDIA</div>
                 </div>
                 <div class="timeline-placeholder reg-corners">
                   <div class="timeline-placeholder-icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   </div>
-                  <div class="timeline-placeholder-label">[ PHYSICAL CHASSIS 04 ]</div>
+                  <div class="timeline-placeholder-label">[ SENSOR BUS IMU 04 ]</div>
                   <div class="timeline-placeholder-sub">INSERT MEDIA</div>
                 </div>
               </div>
@@ -611,21 +616,22 @@
               <h3 class="timeline-mobile-year">2024</h3>
 
               <div class="timeline-entry-header">
-                <span class="tag-id">PHYSICS</span>
-                <span class="telemetry-val">GRAPHICS COMPUTE</span>
+                <span class="tag-id">AERODYNAMICS</span>
+                <span class="telemetry-val">CFD SIMULATION</span>
               </div>
 
-              <h4 class="timeline-entry-title">Computational Fluid &amp; Numerical Physics Developer</h4>
+              <h4 class="timeline-entry-title">WindSim &amp; Computational Aerodynamics Developer</h4>
               <p class="timeline-entry-desc">
-                Designed fluid dynamic solver pipelines and interactive graphics kernels in C++ and WebGL with numerical stability guarantees and real-time Lattice Boltzmann vector rendering.
+                Architected browser-native aerodynamics platform featuring reduced-order rigid-body flight dynamics (Reynolds drag, dynamic projected area, barometric atmospheric density model) and a D3Q19 CPU Lattice Boltzmann Method CFD solver paired with interactive Three.js 3D flow visualization and WebGPU detection.
               </p>
 
               <div class="timeline-tags">
-                <span class="micro-badge">C++</span>
-                <span class="micro-badge">WebGL</span>
-                <span class="micro-badge">GLSL</span>
-                <span class="micro-badge">LBM D2Q9</span>
-                <span class="micro-badge">Navier-Stokes</span>
+                <span class="micro-badge">JavaScript</span>
+                <span class="micro-badge">Three.js</span>
+                <span class="micro-badge">WebGPU</span>
+                <span class="micro-badge">LBM D3Q19</span>
+                <span class="micro-badge">IndexedDB</span>
+                <span class="micro-badge">Aerodynamics</span>
               </div>
 
               <div class="timeline-media-grid">
@@ -633,28 +639,28 @@
                   <div class="timeline-placeholder-icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   </div>
-                  <div class="timeline-placeholder-label">[ LBM SOLVER KERNEL 01 ]</div>
+                  <div class="timeline-placeholder-label">[ D3Q19 LBM SOLVER 01 ]</div>
                   <div class="timeline-placeholder-sub">INSERT MEDIA</div>
                 </div>
                 <div class="timeline-placeholder reg-corners">
                   <div class="timeline-placeholder-icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   </div>
-                  <div class="timeline-placeholder-label">[ GLSL COMPUTE SHADER 02 ]</div>
+                  <div class="timeline-placeholder-label">[ REYNOLDS DRAG MODEL 02 ]</div>
                   <div class="timeline-placeholder-sub">INSERT MEDIA</div>
                 </div>
                 <div class="timeline-placeholder reg-corners">
                   <div class="timeline-placeholder-icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   </div>
-                  <div class="timeline-placeholder-label">[ VORTICITY FIELD 03 ]</div>
+                  <div class="timeline-placeholder-label">[ THREE.JS FLOW FIELD 03 ]</div>
                   <div class="timeline-placeholder-sub">INSERT MEDIA</div>
                 </div>
                 <div class="timeline-placeholder reg-corners">
                   <div class="timeline-placeholder-icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   </div>
-                  <div class="timeline-placeholder-label">[ AIRFOIL STREAMLINE 04 ]</div>
+                  <div class="timeline-placeholder-label">[ WEBGPU CAPABILITY 04 ]</div>
                   <div class="timeline-placeholder-sub">INSERT MEDIA</div>
                 </div>
               </div>
@@ -673,20 +679,22 @@
               <h3 class="timeline-mobile-year">Foundations</h3>
 
               <div class="timeline-entry-header">
-                <span class="tag-id">SYSTEMS</span>
-                <span class="telemetry-val">HIGH CONCURRENCY</span>
+                <span class="tag-id">SYSTEMS &bull; AGENTS</span>
+                <span class="telemetry-val">CORE ARCHITECTURES</span>
               </div>
 
-              <h4 class="timeline-entry-title">High-Throughput Streaming Engines &amp; Kernels</h4>
+              <h4 class="timeline-entry-title">Systems Software, Agent Infrastructure &amp; Applied ML</h4>
               <p class="timeline-entry-desc">
-                Constructed high-concurrency order matching pipelines in Go with WebSocket event multiplexing, lock-free memory ring buffers, and microsecond risk assessment.
+                Developed desktop hardware telemetry suite Performance Monitor (Electron, TypeScript, WMI, Windows performance counters), built from-scratch ReAct agentic RAG engines without external frameworks, tabular synthesis with CTGAN and TVAE, and local desktop agent orchestration in Berry.
               </p>
 
               <div class="timeline-tags">
-                <span class="micro-badge">Go</span>
-                <span class="micro-badge">Lock-Free Buffers</span>
-                <span class="micro-badge">Redis</span>
-                <span class="micro-badge">High Concurrency</span>
+                <span class="micro-badge">Python</span>
+                <span class="micro-badge">Electron</span>
+                <span class="micro-badge">TypeScript</span>
+                <span class="micro-badge">LiteLLM</span>
+                <span class="micro-badge">CTGAN</span>
+                <span class="micro-badge">Agentic RAG</span>
               </div>
 
               <div class="timeline-media-grid">
@@ -694,28 +702,28 @@
                   <div class="timeline-placeholder-icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   </div>
-                  <div class="timeline-placeholder-label">[ RING BUFFER SCHEMA 01 ]</div>
+                  <div class="timeline-placeholder-label">[ DESKTOP TELEMETRY 01 ]</div>
                   <div class="timeline-placeholder-sub">INSERT MEDIA</div>
                 </div>
                 <div class="timeline-placeholder reg-corners">
                   <div class="timeline-placeholder-icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   </div>
-                  <div class="timeline-placeholder-label">[ 100K OPS STREAMING 02 ]</div>
+                  <div class="timeline-placeholder-label">[ REACTION LOOP AGENT 02 ]</div>
                   <div class="timeline-placeholder-sub">INSERT MEDIA</div>
                 </div>
                 <div class="timeline-placeholder reg-corners">
                   <div class="timeline-placeholder-icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   </div>
-                  <div class="timeline-placeholder-label">[ MEMORY PROFILING 03 ]</div>
+                  <div class="timeline-placeholder-label">[ SYNTHETIC DATA CTGAN 03 ]</div>
                   <div class="timeline-placeholder-sub">INSERT MEDIA</div>
                 </div>
                 <div class="timeline-placeholder reg-corners">
                   <div class="timeline-placeholder-icon">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   </div>
-                  <div class="timeline-placeholder-label">[ SYSTEM TOPOLOGY 04 ]</div>
+                  <div class="timeline-placeholder-label">[ LOCAL AGENT RUNTIME 04 ]</div>
                   <div class="timeline-placeholder-sub">INSERT MEDIA</div>
                 </div>
               </div>
