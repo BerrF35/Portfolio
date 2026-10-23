@@ -89,7 +89,7 @@ def test_local_assets_and_links():
 
 
 def test_no_placeholders_or_fake_features():
-    print("\n--> Verifying elimination of placeholders and fabricated metrics...")
+    print("\n--> Verifying elimination of placeholders, fabricated metrics, and AI design tropes...")
     forbidden_terms = [
         'INSERT MEDIA',
         'visitorCounter.js',
@@ -99,7 +99,15 @@ def test_no_placeholders_or_fake_features():
         'Thank you! Your message was sent.',
         '04+ Years Engineering',
         '24+ Projects Built',
-        '12+ Deployed Systems'
+        '12+ Deployed Systems',
+        '01 /',
+        '02 /',
+        '03 /',
+        'status-badge',
+        'status-dot',
+        'serif-italic',
+        'Plus Jakarta Sans',
+        'JetBrains Mono'
     ]
 
     for page in PAGES:
@@ -110,11 +118,11 @@ def test_no_placeholders_or_fake_features():
         for term in forbidden_terms:
             assert term not in content, f"Forbidden term '{term}' found in {page}!"
 
-    print("  [OK] Zero placeholder frames or fabricated metrics in all production pages.")
+    print("  [OK] Zero placeholder frames, fabricated metrics, pills, or numbering tropes in all production pages.")
 
 
 def test_design_system_and_a11y():
-    print("\n--> Checking design system tokens and accessibility rules in style.css...")
+    print("\n--> Checking design system tokens, typography stack, and anti-slop rules in style.css...")
     css_path = os.path.join(ROOT_DIR, 'style.css')
     assert os.path.exists(css_path), "style.css missing!"
     with open(css_path, 'r', encoding='utf-8') as f:
@@ -124,12 +132,16 @@ def test_design_system_and_a11y():
     assert '--accent: #e5a93c;' in css, "Missing accent token"
     assert 'prefers-reduced-motion' in css, "Missing prefers-reduced-motion media query"
     assert ':focus-visible' in css, "Missing :focus-visible accessibility rule"
+    assert 'Clash Display' in css, "Missing Clash Display font specification"
+    assert 'General Sans' in css, "Missing General Sans font specification"
     assert 'Syne' in css, "Missing Syne font specification"
     assert 'Epilogue' in css, "Missing Epilogue font specification"
-    assert 'Newsreader' in css, "Missing Newsreader font specification"
     assert 'Space Mono' in css, "Missing Space Mono font specification"
+    assert '999px' not in css, "Found forbidden 999px pill border-radius in style.css!"
+    assert 'Plus Jakarta Sans' not in css, "Forbidden Plus Jakarta Sans found in style.css!"
+    assert 'JetBrains Mono' not in css, "Forbidden JetBrains Mono found in style.css!"
 
-    print("  [OK] Design system tokens, editorial fonts, and accessibility rules verified.")
+    print("  [OK] Design system tokens, European grotesque typography, zero-pill geometry, and accessibility rules verified.")
 
 
 if __name__ == '__main__':

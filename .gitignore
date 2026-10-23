@@ -18,4 +18,5 @@ _saved_room_os_backup/
 
 # Transient test screenshots and audit images
 tests/screenshots/
+.playwright-mcp/
 docs/*.png
