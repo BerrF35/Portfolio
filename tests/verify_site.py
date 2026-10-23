@@ -105,7 +105,6 @@ def test_no_placeholders_or_fake_features():
         '03 /',
         'status-badge',
         'status-dot',
-        'serif-italic',
         'Plus Jakarta Sans',
         'JetBrains Mono'
     ]
@@ -136,12 +135,14 @@ def test_design_system_and_a11y():
     assert 'General Sans' in css, "Missing General Sans font specification"
     assert 'Syne' in css, "Missing Syne font specification"
     assert 'Epilogue' in css, "Missing Epilogue font specification"
+    assert 'Instrument Serif' in css, "Missing Instrument Serif font specification"
+    assert 'Fraunces' in css, "Missing Fraunces font specification"
     assert 'Space Mono' in css, "Missing Space Mono font specification"
     assert '999px' not in css, "Found forbidden 999px pill border-radius in style.css!"
     assert 'Plus Jakarta Sans' not in css, "Forbidden Plus Jakarta Sans found in style.css!"
     assert 'JetBrains Mono' not in css, "Forbidden JetBrains Mono found in style.css!"
 
-    print("  [OK] Design system tokens, European grotesque typography, zero-pill geometry, and accessibility rules verified.")
+    print("  [OK] Design system tokens, European grotesque & designer serif typography, zero-pill geometry, and accessibility rules verified.")
 
 
 if __name__ == '__main__':

@@ -5,7 +5,7 @@
 
 /* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 */
 @import url('https://api.fontshare.com/v2/css?f[]=clash-display@600,700&f[]=general-sans@400,500,600,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Instrument+Serif:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&display=swap');
 
 /* --- CSS Reset & Box Sizing --- */
 *, *::before, *::after {
@@ -48,9 +48,10 @@ html {
   --success: #34d399;
   --success-dim: rgba(52, 211, 153, 0.12);
 
-  /* Typography Stack — Foundry-grade European Grotesque & Mechanical Mono */
+  /* Typography Stack — Foundry-grade European Grotesque, Editorial Serif & Mechanical Mono */
   --font-display-face: 'Clash Display', 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-sans: 'General Sans', 'Epilogue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Instrument Serif', 'Fraunces', Georgia, serif;
   --font-mono: 'Space Mono', 'IBM Plex Mono', monospace;
 
   /* Fluid Type Hierarchy */
@@ -252,7 +253,16 @@ textarea:focus-visible {
   color: var(--ink);
   max-width: 980px;
   margin-bottom: 2rem;
-  font-style: normal;
+}
+
+.serif-italic,
+.designer-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--accent-light);
+  padding-right: 0.06em;
 }
 
 .hero-bio {
