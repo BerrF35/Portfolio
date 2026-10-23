@@ -1,3 +1,8 @@
+/**
+ * JAIJITESH SURYAPRAKASH — EVENT BADGE 3D
+ * Single-instance Three.js 3D Lanyard Badge with pause-on-scroll optimization
+ */
+
 export class EventBadge3D {
   constructor(canvasId) {
     this.canvas = document.getElementById(canvasId);
@@ -24,6 +29,7 @@ export class EventBadge3D {
     this.mouse = { x: 0, y: 0 };
     this.dragOffset = { x: 0, y: 0, z: 0 };
 
+    this.isVisible = true;
     this.animId = null;
     this.boundAnimate = this.animate.bind(this);
     this.boundResize = this.onResize.bind(this);
@@ -37,8 +43,8 @@ export class EventBadge3D {
   init() {
     if (typeof THREE === 'undefined') return;
 
-    const width = this.canvas.clientWidth || 800;
-    const height = this.canvas.clientHeight || 520;
+    const width = this.canvas.clientWidth || 600;
+    const height = this.canvas.clientHeight || 380;
 
     this.scene = new THREE.Scene();
 
@@ -63,6 +69,12 @@ export class EventBadge3D {
     this.buildLanyard();
     this.loadModel();
 
+    // IntersectionObserver to pause rendering when scrolled off screen
+    this.observer = new IntersectionObserver(([entry]) => {
+      this.isVisible = entry.isIntersecting;
+    }, { threshold: 0.05 });
+    this.observer.observe(this.canvas);
+
     window.addEventListener('resize', this.boundResize);
     this.canvas.addEventListener('pointerdown', this.boundPointerDown);
     window.addEventListener('pointermove', this.boundPointerMove);
@@ -79,11 +91,11 @@ export class EventBadge3D {
     dir1.position.set(5, 6, 5);
     this.scene.add(dir1);
 
-    const dir2 = new THREE.DirectionalLight(0xd84536, 1.2);
+    const dir2 = new THREE.DirectionalLight(0xe5a93c, 1.2);
     dir2.position.set(-5, -2, 3);
     this.scene.add(dir2);
 
-    const dir3 = new THREE.DirectionalLight(0xf59e0b, 1.0);
+    const dir3 = new THREE.DirectionalLight(0xffffff, 1.0);
     dir3.position.set(0, 4, 4);
     this.scene.add(dir3);
   }
@@ -266,12 +278,21 @@ export class EventBadge3D {
 
   animate() {
     this.animId = requestAnimationFrame(this.boundAnimate);
+    if (!this.isVisible) return; // Skip work when offscreen!
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion && !this.isDragging) {
+      this.renderer.render(this.scene, this.camera);
+      return;
+    }
+
     this.updatePhysics(0.016);
     this.renderer.render(this.scene, this.camera);
   }
 
   destroy() {
     if (this.animId) cancelAnimationFrame(this.animId);
+    if (this.observer) this.observer.disconnect();
     window.removeEventListener('resize', this.boundResize);
     if (this.canvas) {
       this.canvas.removeEventListener('pointerdown', this.boundPointerDown);

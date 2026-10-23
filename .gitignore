@@ -12,3 +12,10 @@ yarn-error.log*
 
 # Saved copy backup of original Room OS codebase
 _saved_room_os_backup/
+
+# Skill caches
+.taste-skill/
+
+# Transient test screenshots and audit images
+tests/screenshots/
+docs/*.png

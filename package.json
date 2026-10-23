@@ -1,18 +1,21 @@
 {
   "name": "jaijitesh-portfolio",
-  "version": "3.0.0",
-  "description": "Jaijitesh Suryaprakash — Minimalist Portfolio & Interactive 3D Cursor Tubes",
+  "version": "4.0.0",
+  "description": "Jaijitesh Suryaprakash — Editorial Systems & Robotics Portfolio",
   "type": "module",
   "scripts": {
     "dev": "python -m http.server 8088",
-    "preview": "python -m http.server 8088"
+    "preview": "python -m http.server 8088",
+    "test": "python tests/verify_site.py"
   },
   "keywords": [
     "portfolio",
-    "threejs",
-    "tubes-cursor",
-    "webgl",
+    "systems-engineering",
+    "robotics",
+    "editorial",
     "minimalist",
+    "cfd",
+    "vit-vellore",
     "jaijitesh"
   ],
   "author": "Jaijitesh Suryaprakash <jaijiteshsp@gmail.com>",

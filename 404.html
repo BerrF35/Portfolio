@@ -1,27 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>404 — Page Not Found</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body style="display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 24px; background: var(--bg);">
-    <div class="reg-corners" style="max-width: 500px; width: 100%; text-align: center; padding: 40px 24px; border: none; background: transparent; position: relative;">
-      <div class="corner-ticks"></div>
-      <div class="micro-header-bar" style="margin-bottom: 20px;">
-        <span class="tag-id">STATUS: 404</span>
-        <span class="telemetry-val">INVALID ROUTE</span>
-      </div>
-      <h1 style="font-size: 48px; font-weight: 800; color: var(--accent); margin-bottom: 12px; font-family: var(--font-mono);">404</h1>
-      <p style="color: var(--text-muted); font-size: 14px; margin-bottom: 24px; line-height: 1.6;">
-        The requested system endpoint does not exist or has been relocated within the architecture.
-      </p>
-      <a href="index.html" class="btn-sharp solid" style="justify-content: center; width: 100%;">
-        <span>[ RETURN TO HOME ]</span>
-        <span>&rarr;</span>
-      </a>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 — Page Not Found &middot; Jaijitesh Suryaprakash</title>
+  <meta name="description" content="The requested page could not be found.">
+  <meta name="author" content="Jaijitesh Suryaprakash">
+  <meta name="theme-color" content="#090a0c">
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Design System Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=2.0">
+</head>
+<body style="display: flex; flex-direction: column; min-height: 100vh; justify-content: center; align-items: center; padding: 2rem; text-align: center;">
+
+  <div style="max-width: 520px; width: 100%; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 3rem 2rem;">
+    <div style="font-family: var(--font-mono); font-size: 0.78rem; color: var(--accent); margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;">
+      Error 404 &middot; Route Not Found
     </div>
-  </body>
+    
+    <h1 style="font-size: var(--font-h1); font-weight: 800; color: var(--ink); letter-spacing: -0.025em; margin-bottom: 1rem;">
+      Endpoint Not Found
+    </h1>
+    
+    <p style="color: var(--ink-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem;">
+      The requested route does not exist or has been restructured. You can return to the main portfolio or navigate to the sections below.
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <a href="index.html" class="btn btn-primary" style="justify-content: center; width: 100%;">
+        <span>Return to Portfolio</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </a>
+      <div style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 1rem; font-size: 0.85rem;">
+        <a href="index.html#work" style="color: var(--ink-muted);">Work</a>
+        <a href="personal.html" style="color: var(--ink-muted);">Archive</a>
+        <a href="contact.html" style="color: var(--ink-muted);">Contact</a>
+      </div>
+    </div>
+  </div>
+
+</body>
 </html>

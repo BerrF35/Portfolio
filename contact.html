@@ -1,441 +1,245 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#9c261b" />
-    <meta name="color-scheme" content="dark" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Jaijitesh Suryaprakash</title>
+  <meta name="description" content="Direct communication channel for engineering roles, autonomous robotics, and computational systems collaboration with Jaijitesh Suryaprakash.">
+  <meta name="author" content="Jaijitesh Suryaprakash">
+  <meta name="theme-color" content="#090a0c">
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-    <title>Contact — Jaijitesh Suryaprakash</title>
-    <meta name="title" content="Jaijitesh Suryaprakash — Contact" />
-    <meta name="description" content="Direct communication for autonomous robotics, high-throughput systems, and computational engineering." />
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
-    <link rel="stylesheet" href="style.css" />
-    <script>
-      if (sessionStorage.getItem('nav_transition_active') === '1') {
-        document.documentElement.classList.add('nav-transitioning');
-      }
-    </script>
-  </head>
-  <body>
-    <div id="pageTransition" class="page-transition-bars" aria-hidden="true">
-      <div class="pt-bar"></div>
-      <div class="pt-bar"></div>
-      <div class="pt-bar"></div>
-      <div class="pt-bar"></div>
-      <div class="pt-bar"></div>
-      <div class="pt-bar"></div>
-      <div class="pt-bar"></div>
-    </div>
+  <!-- Design System Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=2.0">
+</head>
+<body>
 
-    <div id="tubesContainer" class="tubes-container" aria-hidden="true">
-      <canvas id="tubesCanvas" class="tubes-canvas"></canvas>
-    </div>
+  <!-- Top Navigation Bar -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-link" aria-label="Jaijitesh Suryaprakash Home">
+        <span class="brand-name">JAIJITESH SURYAPRAKASH</span>
+        <span class="status-badge">
+          <span class="status-dot"></span>
+          <span>VIT Vellore &middot; Available</span>
+        </span>
+      </a>
 
-    <canvas id="webglBackgroundCanvas" class="webgl-background-canvas" aria-hidden="true"></canvas>
+      <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
 
-    <div class="architectural-grid" aria-hidden="true"></div>
-    <div class="glassy-blur-layer" aria-hidden="true"></div>
-    <div class="grain" aria-hidden="true"></div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html#work">Work</a></li>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#timeline">Milestones</a></li>
+          <li><a href="personal.html">Archive</a></li>
+          <li><a href="contact.html" class="active">Contact</a></li>
+        </ul>
+      </nav>
 
-    <nav class="top-nav" style="opacity: 1; transform: none; pointer-events: auto;">
-      <a href="index.html" class="nav-brand">JITESH<span class="dot">.</span></a>
-      <div class="nav-tabs">
-        <a href="index.html" class="nav-tab-link">[ PROFESSIONAL ]</a>
-        <a href="personal.html" class="nav-tab-link">[ ARCHIVE ]</a>
-        <a href="contact.html" class="nav-tab-link active">[ CONTACT ]</a>
+      <div class="nav-external">
+        <a href="https://github.com/BerrF35" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="GitHub Profile">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+          </svg>
+        </a>
+        <a href="https://www.linkedin.com/in/jaijitesh/" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="LinkedIn Profile">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+        </a>
       </div>
-      <div class="nav-actions">
-        <button class="audio-toggle-btn" id="audioToggle" data-action="toggle-audio" title="Toggle Ambient Chords">
-          <span class="audio-eq-icon">
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
-          <span>[ SOUND &bull; NUJABES ]</span>
-        </button>
-      </div>
-    </nav>
+    </div>
+  </header>
 
-    <main class="content-wrapper" style="padding-top: 100px;">
-
-      <div style="margin-bottom: 40px;">
-        <span class="section-label">DIRECT COMMUNICATION &bull; UPLINK</span>
-        <h1 class="section-title" style="margin-bottom: 16px;">Direct Transmission</h1>
-        <div class="micro-ruler" style="margin-bottom: 16px;"></div>
-        <p style="color: var(--text-muted); max-width: 680px; font-size: 16px; line-height: 1.7;">
-          Direct communication channel for autonomous robotics development, high-throughput computational engineering, and distributed systems architecture.
+  <main>
+    <!-- Editorial Page Header -->
+    <section class="section" style="padding-bottom: 2rem;">
+      <div class="container">
+        <div class="section-label">03 / CONTACT &amp; INQUIRIES</div>
+        <h1 class="hero-statement" style="margin-bottom: 1.25rem;">
+          Get in touch for <span class="serif-italic">engineering roles</span> &amp; collaboration.
+        </h1>
+        <p class="section-desc" style="max-width: 760px; font-size: 1.15rem; line-height: 1.7;">
+          Open for full-time systems engineering positions, robotics roles, and technical discussions. I respond promptly to all genuine professional inquiries.
         </p>
       </div>
+    </section>
 
-      <div class="contact-grid">
-        <div class="contact-form-panel reg-corners">
-                    <div class="micro-header-bar">
-            <span class="tag-id">MESSAGE TRANSMISSION</span>
-            <span>SECURE TERMINAL</span>
-          </div>
-
-          <form id="contactPageForm" style="display: flex; flex-direction: column; gap: 20px; padding: 24px 0 0 0;">
-            <div>
-              <label class="form-label" for="senderName">Your Name or Organization</label>
-              <input type="text" id="senderName" class="form-input" placeholder="Name or Organization" required />
-            </div>
-
-            <div>
-              <label class="form-label" for="senderEmail">Your Email Address</label>
-              <input type="email" id="senderEmail" class="form-input" placeholder="name@example.com" required />
-            </div>
-
-            <div>
-              <label class="form-label" for="senderSubject">Discipline or Project Subject</label>
-              <input type="text" id="senderSubject" class="form-input" placeholder="Robotics, Systems, or Software Collaboration" required />
-            </div>
-
-            <div>
-              <label class="form-label" for="senderMessage">Message Details</label>
-              <textarea id="senderMessage" class="form-input" rows="5" placeholder="Technical query or collaboration parameters..." required></textarea>
-            </div>
-
-            <button type="submit" class="btn-send-airplane" style="justify-content: center; height: 46px;">
-              <div class="svg-wrapper-1">
-                <div class="svg-wrapper">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
-                    <path fill="none" d="M0 0h24v24H0z"></path>
-                    <path fill="currentColor" d="M1.946 9.315c-.522-.174-.527-.455.01-.634l19.087-6.362c.529-.176.832.12.684.638l-5.454 19.086c-.15.529-.455.547-.679.045L12 14l6-8-8 6-8.054-2.685z"></path>
-                  </svg>
-                </div>
-              </div>
-              <span>TRANSMIT DISPATCH</span>
-            </button>
-          </form>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 24px;">
-          <div class="contact-telemetry-box reg-corners">
-                        <div class="micro-header-bar">
-              <span class="tag-id">STATUS READOUT</span>
-              <span>NOMINAL</span>
-            </div>
-            <div style="padding: 18px 0 0 0;">
-              <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 8px;">
-                <span style="color: var(--accent);">CURRENT STATUS</span>
-                <span style="color: var(--accent);">ACTIVE</span>
-              </div>
-              <div class="micro-ruler"></div>
-              <div style="color: #fff; font-size: 15px; font-weight: 600; line-height: 1.5; margin-top: 10px;">
-                Systems Engineer &bull; Autonomous Robotics &bull; Available for Roles
-              </div>
-            </div>
-          </div>
-
-          <div class="contact-telemetry-box reg-corners">
-                        <div class="micro-header-bar">
-              <span class="tag-id">BASE LOCATION</span>
-              <span>LOCATION</span>
-            </div>
-            <div style="padding: 18px 0 0 0;">
-              <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 8px;">
-                <span style="color: var(--accent);">LOCATION NODE</span>
-                <span style="color: var(--micro-text-dim);">GLOBAL</span>
-              </div>
-              <div class="micro-ruler"></div>
-              <div style="color: #fff; font-size: 14px; font-weight: 600; line-height: 1.6; margin-top: 10px;">
-                VIT Vellore, India &bull; Available Globally (Remote or Relocation)
-              </div>
-            </div>
-          </div>
-
-          <div class="contact-telemetry-box reg-corners">
-                        <div class="micro-header-bar">
-              <span class="tag-id">DIRECT INBOX</span>
-              <span>EMAIL</span>
-            </div>
-            <div style="padding: 18px 0 0 0;">
-              <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 8px;">
-                <span style="color: var(--accent);">DIRECT MAIL LINK</span>
-                <span style="color: var(--micro-text-dim);">COPYABLE</span>
-              </div>
-              <div class="micro-ruler"></div>
-              <div style="margin-top: 12px; font-family: var(--font-mono); font-size: 14px; color: var(--accent); word-break: break-all;">
-                jaijiteshsp@gmail.com
-              </div>
-              <button class="btn-sharp" data-action="copy-email" style="margin-top: 14px; width: 100%; justify-content: center;">
-                [ COPY EMAIL ADDRESS ]
-              </button>
-            </div>
-          </div>
-
-          <div class="contact-telemetry-box reg-corners">
-                        <div class="micro-header-bar">
-              <span class="tag-id">NAVIGATION CHANNELS</span>
-              <span>PAGES</span>
-            </div>
-            <div style="padding: 18px 0 0 0;">
-              <div class="micro-header-bar" style="background: transparent; border: none; padding: 0; margin-bottom: 8px;">
-                <span style="color: var(--accent);">PORTFOLIO DIRECTORY</span>
-                <span style="color: var(--micro-text-dim);">LINKS</span>
-              </div>
-              <div class="micro-ruler"></div>
-              <div style="display: flex; gap: 10px; margin-top: 14px;">
-                <a href="index.html" class="btn-sharp" style="font-size: 11px; flex: 1; justify-content: center;">[ PROFESSIONAL ] &rarr;</a>
-                <a href="personal.html" class="btn-sharp" style="font-size: 11px; flex: 1; justify-content: center;">[ ARCHIVE ] &rarr;</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px;" class="contact-subgrid">
-        <div class="faq-card reg-corners" id="faqCard">
-          <div class="micro-header-bar">
-            <span class="tag-id">SYSTEM INQUIRIES</span>
-            <span>INDEX &bull; FAQ</span>
-          </div>
-
-          <div class="faq-tabs" id="faqTabs">
-            <button type="button" class="faq-tab-btn active" data-tab="tab-engineering">[ ENGINEERING ]</button>
-            <button type="button" class="faq-tab-btn" data-tab="tab-robotics">[ ROBOTICS &bull; HARDWARE ]</button>
-            <button type="button" class="faq-tab-btn" data-tab="tab-roles">[ AVAILABILITY ]</button>
-          </div>
-
-          <div class="faq-accordion-group" id="faqAccordion">
-            <div class="faq-panel active" id="tab-engineering">
-              <div class="faq-accordion-item open">
-                <button type="button" class="faq-question">
-                  <span>What core architecture patterns do you deploy?</span>
-                  <span class="faq-icon">&darr;</span>
-                </button>
-                <div class="faq-answer">
-                  I construct low-latency event multiplexing pipelines in Go, lock-free memory ring buffers, real-time GLSL compute kernels, and distributed microservices with rigorous determinism.
-                </div>
-              </div>
-              <div class="faq-accordion-item" style="margin-top: 8px;">
-                <button type="button" class="faq-question">
-                  <span>How do you handle real-time simulation?</span>
-                  <span class="faq-icon">&darr;</span>
-                </button>
-                <div class="faq-answer">
-                  Using numerical physics solvers such as Lattice Boltzmann Method (LBM D2Q9) and Navier-Stokes formulations executed on browser WebGL and C++ compute shaders.
-                </div>
-              </div>
-            </div>
-
-            <div class="faq-panel" id="tab-robotics" style="display: none;">
-              <div class="faq-accordion-item open">
-                <button type="button" class="faq-question">
-                  <span>Which robotics stacks and hardware do you use?</span>
-                  <span class="faq-icon">&darr;</span>
-                </button>
-                <div class="faq-answer">
-                  SolidWorks M4 CAD for custom chassis, dual-core ESP32 with FreeRTOS 20kHz PWM, 2D LiDAR SLAM, optical odometry, and ROS 2 Nav2 autonomous traversal pipelines.
-                </div>
-              </div>
-              <div class="faq-accordion-item" style="margin-top: 8px;">
-                <button type="button" class="faq-question">
-                  <span>Do you build physical embedded prototypes?</span>
-                  <span class="faq-icon">&darr;</span>
-                </button>
-                <div class="faq-answer">
-                  Yes. I design, calibrate, and solder full tactile hardware systems, from power distribution buses to motor drivers and real-time microcontroller firmware.
-                </div>
-              </div>
-            </div>
-
-            <div class="faq-panel" id="tab-roles" style="display: none;">
-              <div class="faq-accordion-item open">
-                <button type="button" class="faq-question">
-                  <span>What roles and collaborations are you seeking?</span>
-                  <span class="faq-icon">&darr;</span>
-                </button>
-                <div class="faq-answer">
-                  Autonomous Systems Engineer, Embedded Firmware Engineer, Robotics Software Developer, and High-Throughput Distributed Systems roles.
-                </div>
-              </div>
-              <div class="faq-accordion-item" style="margin-top: 8px;">
-                <button type="button" class="faq-question">
-                  <span>Are you open to global relocation?</span>
-                  <span class="faq-icon">&darr;</span>
-                </button>
-                <div class="faq-answer">
-                  Yes. Available globally for both remote roles and international on-site relocation with full commitment.
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="faq-support-footer">
-            <span>UNLISTED INQUIRY TELEMETRY</span>
-            <a href="mailto:jaijiteshsp@gmail.com" class="hero-social-link">[ INBOX DIRECT ] &rarr;</a>
-          </div>
-        </div>
-
-        <div class="feedback-card reg-corners" id="feedbackCard">
-          <div class="micro-header-bar">
-            <span class="tag-id">EXPERIENCE TELEMETRY</span>
-            <span>FEEDBACK</span>
-          </div>
-
-          <div style="color: #ffffff; font-size: 14px; font-weight: 600;">
-            Rate Your Interaction With This System
-          </div>
-          <div style="color: var(--text-muted); font-size: 12px; line-height: 1.5;">
-            Select a rating pulse and leave technical commentary to log your visit interaction.
-          </div>
-
-          <div class="rating-options" id="emojiGroup">
-            <button type="button" class="rating-btn" data-reaction="Fast">
-              <span class="rating-num">01</span>
-              <span class="rating-label">FAST</span>
-            </button>
-            <button type="button" class="rating-btn" data-reaction="Sharp">
-              <span class="rating-num">02</span>
-              <span class="rating-label">SHARP</span>
-            </button>
-            <button type="button" class="rating-btn active" data-reaction="Innovative">
-              <span class="rating-num">03</span>
-              <span class="rating-label">INNOVATIVE</span>
-            </button>
-            <button type="button" class="rating-btn" data-reaction="Impactful">
-              <span class="rating-num">04</span>
-              <span class="rating-label">IMPACTFUL</span>
-            </button>
-            <button type="button" class="rating-btn" data-reaction="Inspiring">
-              <span class="rating-num">05</span>
-              <span class="rating-label">INSPIRING</span>
-            </button>
-          </div>
-
+    <!-- Main Contact Section -->
+    <section class="section section-alt">
+      <div class="container">
+        <div class="contact-grid">
+          <!-- Left Column: Direct Email + Form -->
           <div>
-            <label class="form-label" for="feedbackComment">Commentary or Impressions</label>
-            <textarea id="feedbackComment" class="form-input" rows="3" placeholder="Telemetry comments, suggestions, or impressions..."></textarea>
+            <!-- Direct Email Highlight Box -->
+            <div class="email-direct-box">
+              <span class="email-direct-title">Direct Mail Channel</span>
+              <div class="email-row">
+                <span class="email-text">jaijiteshsp@gmail.com</span>
+                <button type="button" class="copy-btn" data-action="copy-email" data-email="jaijiteshsp@gmail.com">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span>Copy Address</span>
+                </button>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--ink-secondary); margin-top: 0.25rem;">
+                Primary inbox. Feel free to send messages directly or use the dispatch generator below.
+              </p>
+            </div>
+
+            <!-- Honest Mailto Form -->
+            <div class="contact-card">
+              <h2 style="font-size: 1.25rem; font-weight: 700; color: var(--ink); margin-bottom: 0.5rem;">
+                Compose Dispatch
+              </h2>
+              <p style="font-size: 0.88rem; color: var(--ink-secondary); margin-bottom: 1.5rem; line-height: 1.5;">
+                Fills a formatted email draft and prepares it in your local mail client.
+              </p>
+
+              <form id="contactForm">
+                <div class="form-group">
+                  <label for="name" class="form-label">Name / Organization</label>
+                  <input type="text" id="name" class="form-input" placeholder="Your name or company" autocomplete="name" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="email" class="form-label">Email Address</label>
+                  <input type="email" id="email" class="form-input" placeholder="name@domain.com" autocomplete="email" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="subject" class="form-label">Subject</label>
+                  <input type="text" id="subject" class="form-input" placeholder="Engineering Inquiry / Collaboration" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="message" class="form-label">Message Details</label>
+                  <textarea id="message" class="form-textarea" placeholder="Describe the role, project, or technical topic..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                  <span>Launch Mail Client &middot; Dispatch</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </button>
+                <div style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-muted); text-align: center; margin-top: 0.75rem;">
+                  Copies draft to clipboard &middot; Launches native mail client directly
+                </div>
+              </form>
+            </div>
           </div>
 
-          <button type="button" id="submitFeedbackBtn" class="btn-sharp solid" style="justify-content: center;">
-            <span>[ SUBMIT TELEMETRY FEEDBACK ]</span>
-            <span>&rarr;</span>
-          </button>
-          <div id="feedbackStatus" style="font-family: var(--font-mono); font-size: 11px; color: var(--accent-secondary); display: none; text-align: center;">
-            [ FEEDBACK LOGGED &bull; THANK YOU ]
+          <!-- Right Column: Status & Technical FAQ -->
+          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <!-- Availability & Status Card -->
+            <div class="contact-card">
+              <h2 style="font-size: 1.15rem; font-weight: 700; color: var(--ink); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                <span class="status-dot"></span>
+                <span>Current Status &amp; Availability</span>
+              </h2>
+
+              <div style="display: flex; flex-direction: column; gap: 1rem; font-size: 0.9rem;">
+                <div>
+                  <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Status</span>
+                  <strong style="color: var(--ink);">Actively open for roles</strong> &middot; Graduating undergraduate engineer available for full-time positions or research.
+                </div>
+
+                <div style="border-top: 1px solid var(--border); padding-top: 0.75rem;">
+                  <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Location &amp; Mobility</span>
+                  <strong style="color: var(--ink);">Vellore / Bangalore, India</strong> &middot; Available globally for remote work, and fully open to international relocation.
+                </div>
+
+                <div style="border-top: 1px solid var(--border); padding-top: 0.75rem;">
+                  <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); text-transform: uppercase; display: block; margin-bottom: 0.2rem;">Preferred Domains</span>
+                  <span style="color: var(--ink-secondary);">Autonomous Robotics &middot; Systems Engineering &middot; CFD Simulation &middot; Local AI Agents</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Technical Inquiries FAQ -->
+            <div class="contact-card">
+              <h2 style="font-size: 1.15rem; font-weight: 700; color: var(--ink); margin-bottom: 1rem;">
+                Frequently Asked Inquiries
+              </h2>
+
+              <div class="faq-list">
+                <div class="faq-item">
+                  <button type="button" class="faq-question" aria-expanded="true">
+                    <span>What engineering disciplines do you focus on?</span>
+                    <span style="font-family: var(--font-mono); font-size: 0.8rem;">&plusmn;</span>
+                  </button>
+                  <div class="faq-answer">
+                    My core expertise spans autonomous robotics (ESP32 firmware, closed-loop PID control, FreeRTOS), computational aerodynamics (Lattice Boltzmann Method solvers), local AI agent architectures (Python, LangGraph, tool calling), and real-time telemetry systems.
+                  </div>
+                </div>
+
+                <div class="faq-item">
+                  <button type="button" class="faq-question" aria-expanded="false">
+                    <span>What types of roles or collaborations are you seeking?</span>
+                    <span style="font-family: var(--font-mono); font-size: 0.8rem;">&plusmn;</span>
+                  </button>
+                  <div class="faq-answer" hidden>
+                    I am seeking systems engineering, robotics software, embedded systems, and simulation engineering roles where clean architecture, deterministic testing, and first-principles reasoning are valued.
+                  </div>
+                </div>
+
+                <div class="faq-item">
+                  <button type="button" class="faq-question" aria-expanded="false">
+                    <span>Are you open to international relocation?</span>
+                    <span style="font-family: var(--font-mono); font-size: 0.8rem;">&plusmn;</span>
+                  </button>
+                  <div class="faq-answer" hidden>
+                    Yes. While currently based in India completing my degree at VIT Vellore, I am fully open to international on-site relocation as well as remote positions across all timezones.
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    </section>
+  </main>
 
-      <div class="title-block-container reg-corners" style="margin-top: 60px;">
-        <div class="title-block-row">
-          <div class="title-block-cell">
-            <span class="title-block-label">COMMUNICATION</span>
-            <span class="title-block-val">DIRECT TRANSMISSION</span>
-          </div>
-          <div class="title-block-cell">
-            <span class="title-block-label">ENGINEER</span>
-            <span class="title-block-val">JAIJITESH SURYAPRAKASH</span>
-          </div>
-          <div class="title-block-cell">
-            <span class="title-block-label">STATUS</span>
-            <span class="title-block-val" style="color: var(--accent);">ACCEPTING INQUIRIES</span>
-          </div>
-          <div class="title-block-cell">
-            <span class="title-block-label">LOCATION</span>
-            <span class="title-block-val">VELLORE, INDIA</span>
-          </div>
-        </div>
+  <!-- Minimal Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div>
+        <strong>Jaijitesh Suryaprakash</strong> &middot; Systems &amp; Robotics Engineer &middot; VIT Vellore
       </div>
+      <ul class="footer-links">
+        <li><a href="index.html#work">Work</a></li>
+        <li><a href="personal.html">Archive</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="https://github.com/BerrF35" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/jaijitesh/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+      </ul>
+      <div style="font-family: var(--font-mono); font-size: 0.78rem;">
+        &copy; 2026 Jaijitesh Suryaprakash
+      </div>
+    </div>
+  </footer>
 
-      <footer class="site-footer">
-        <div>&copy; 2026 JAIJITESH SURYAPRAKASH. ALL RIGHTS RESERVED.</div>
-        <div style="display: flex; gap: 20px;">
-          <a href="https://github.com/BerrF35" class="hero-social-link" target="_blank" rel="noopener">[GITHUB]</a>
-          <a href="https://www.linkedin.com/in/jaijitesh/" class="hero-social-link" target="_blank" rel="noopener">[LINKEDIN]</a>
-          <a href="index.html" class="hero-social-link">[PROFESSIONAL]</a>
-        </div>
-      </footer>
-    </main>
-
-    <div id="toast" class="toast-msg" role="status" aria-live="polite"></div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-    <script type="module" src="js/tubesCursor.js"></script>
-    <script type="module">
-      import { WebGLBackgroundEngine } from './js/webglBackground.js';
-      import { PortfolioEngine } from './js/portfolioEngine.js';
-
-      window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
-
-      window.addEventListener('scroll', () => {
-        if (window.__webglBackgroundInstance) {
-          const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-          window.__webglBackgroundInstance.setScrollProgress(window.scrollY / maxScroll);
-        }
-      }, { passive: true });
-
-      const engine = new PortfolioEngine();
-
-      const form = document.getElementById('contactPageForm');
-      if (form) {
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-          window.showToast('Thank you! Your message was sent.');
-          form.reset();
-        });
-      }
-
-      const faqTabBtns = document.querySelectorAll('.faq-tab-btn');
-      const faqPanels = document.querySelectorAll('.faq-panel');
-      faqTabBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          faqTabBtns.forEach((b) => b.classList.remove('active'));
-          btn.classList.add('active');
-          const targetId = btn.getAttribute('data-tab');
-          faqPanels.forEach((panel) => {
-            if (panel.id === targetId) {
-              panel.style.display = 'block';
-            } else {
-              panel.style.display = 'none';
-            }
-          });
-        });
-      });
-
-      const faqQuestions = document.querySelectorAll('.faq-question');
-      faqQuestions.forEach((q) => {
-        q.addEventListener('click', () => {
-          const item = q.closest('.faq-accordion-item');
-          if (item) {
-            item.classList.toggle('open');
-          }
-        });
-      });
-
-      let selectedReaction = 'Innovative';
-      const ratingBtns = document.querySelectorAll('.rating-btn, .emoji-btn');
-      ratingBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          ratingBtns.forEach((b) => b.classList.remove('active'));
-          btn.classList.add('active');
-          selectedReaction = btn.getAttribute('data-reaction') || 'Innovative';
-        });
-      });
-
-      const submitFeedbackBtn = document.getElementById('submitFeedbackBtn');
-      const feedbackComment = document.getElementById('feedbackComment');
-      const feedbackStatus = document.getElementById('feedbackStatus');
-      if (submitFeedbackBtn) {
-        submitFeedbackBtn.addEventListener('click', () => {
-          const comment = feedbackComment ? feedbackComment.value.trim() : '';
-          localStorage.setItem('jaijitesh_portfolio_feedback', JSON.stringify({
-            reaction: selectedReaction,
-            comment: comment,
-            timestamp: new Date().toISOString()
-          }));
-          if (feedbackStatus) {
-            feedbackStatus.style.display = 'block';
-          }
-          window.showToast('Telemetry feedback recorded. Thank you!');
-          if (feedbackComment) feedbackComment.value = '';
-        });
-      }
-    </script>
-  </body>
+  <!-- Portfolio Engine Module -->
+  <script type="module" src="js/portfolioEngine.js"></script>
+</body>
 </html>

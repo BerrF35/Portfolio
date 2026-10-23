@@ -1,874 +1,457 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#9c261b" />
-    <meta name="color-scheme" content="dark" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jaijitesh Suryaprakash — Systems &amp; Robotics Engineer</title>
+  <meta name="description" content="Personal portfolio of Jaijitesh Suryaprakash. Systems &amp; robotics engineer crafting autonomous machines, fluid simulations, and local intelligence from first principles.">
+  <meta name="author" content="Jaijitesh Suryaprakash">
+  <meta name="theme-color" content="#090a0c">
+  
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Jaijitesh Suryaprakash — Systems &amp; Robotics Engineer">
+  <meta property="og:description" content="Systems &amp; robotics engineer crafting autonomous machines, fluid simulations, and local intelligence from first principles.">
+  <meta property="og:image" content="og-image.png">
+  <meta property="og:url" content="https://berrf35.github.io/Portfolio/">
 
-    <title>Jaijitesh Suryaprakash — Systems &amp; Autonomous Engineering</title>
-    <meta name="title" content="Jaijitesh Suryaprakash" />
-    <meta name="description" content="Systems, Autonomous Robotics, and Computational Engineering Portfolio." />
-    <meta name="author" content="Jaijitesh Suryaprakash" />
-    <link rel="canonical" href="https://berrf35.github.io/Portfolio/" />
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link rel="stylesheet" href="style.css" />
-    <script>
-      if (sessionStorage.getItem('nav_transition_active') === '1') {
-        document.documentElement.classList.add('nav-transitioning');
-      }
-    </script>
-  </head>
-  <body>
-    <div id="pageTransition" class="page-transition-bars" aria-hidden="true">
-      <div class="pt-bar"></div>
-      <div class="pt-bar"></div>
-      <div class="pt-bar"></div>
-      <div class="pt-bar"></div>
-      <div class="pt-bar"></div>
-      <div class="pt-bar"></div>
-      <div class="pt-bar"></div>
-    </div>
+  <!-- Design System Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=2.0">
+</head>
+<body>
 
-    <div id="tubesContainer" class="tubes-container" aria-hidden="true">
-      <canvas id="tubesCanvas" class="tubes-canvas"></canvas>
-    </div>
+  <!-- Top Navigation Bar -->
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-link" aria-label="Jaijitesh Suryaprakash Home">
+        <span class="brand-name">JAIJITESH SURYAPRAKASH</span>
+        <span class="status-badge">
+          <span class="status-dot"></span>
+          <span>VIT Vellore &middot; Available</span>
+        </span>
+      </a>
 
-    <canvas id="webglBackgroundCanvas" class="webgl-background-canvas" aria-hidden="true"></canvas>
+      <button class="mobile-menu-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
 
-    <div class="architectural-grid" aria-hidden="true"></div>
-    <div class="glassy-blur-layer" aria-hidden="true"></div>
-    <div class="grain" aria-hidden="true"></div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#work" class="active">Work</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#timeline">Milestones</a></li>
+          <li><a href="personal.html">Archive</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
 
-    <div class="hero-track" id="heroTrack">
-      <section class="hero-pin" id="heroPin" aria-label="Jaijitesh Suryaprakash Hero Entrance">
-        <header class="hero-header">
-          <div class="hero-brand">JAIJITESH SURYAPRAKASH</div>
-          <div class="hero-discipline">SYSTEMS ARCHITECTURE &bull; AUTONOMOUS SYSTEMS</div>
-        </header>
-
-        <div class="hero-typography-container">
-          <h1 class="hero-title" id="heroTitle">
-            <span class="title-word" id="titleJaijitesh">JAIJITESH</span>
-            <span class="title-word" id="titleSuryaprakash">SURYAPRAKASH</span>
-          </h1>
-          <p class="hero-subtitle" id="entrySubtitle">SYSTEMS &bull; ROBOTICS &bull; COMPUTATIONAL ENGINEERING</p>
-        </div>
-
-        <footer class="hero-bottom-bar" id="scrollHint">
-          <div class="scroll-cue">
-            <span>[ SCROLL TO EXPLORE ]</span>
-            <span class="cue-arrow">&darr;</span>
-          </div>
-          <nav class="hero-socials" aria-label="Social links">
-            <a href="https://github.com/BerrF35" class="hero-social-link" target="_blank" rel="noopener noreferrer">[GITHUB] &rarr;</a>
-            <a href="https://www.linkedin.com/in/jaijitesh/" class="hero-social-link" target="_blank" rel="noopener noreferrer">[LINKEDIN] &rarr;</a>
-            <a href="contact.html" class="hero-social-link">[CONTACT] &rarr;</a>
-          </nav>
-        </footer>
-      </section>
-    </div>
-
-    <nav class="top-nav" id="topNav" aria-label="Primary Navigation">
-      <a href="index.html" class="nav-brand">JITESH<span class="dot">.</span></a>
-      <div class="nav-tabs">
-        <a href="index.html" class="nav-tab-link active">[ PROFESSIONAL ]</a>
-        <a href="personal.html" class="nav-tab-link">[ ARCHIVE ]</a>
-        <a href="contact.html" class="nav-tab-link">[ CONTACT ]</a>
-      </div>
-      <div class="nav-actions">
-        <button class="audio-toggle-btn" id="audioToggle" data-action="toggle-audio" title="Toggle Ambient Chords">
-          <span class="audio-eq-icon">
-            <span></span>
-            <span></span>
-            <span></span>
-          </span>
-          <span>[ SOUND &bull; NUJABES ]</span>
-        </button>
-      </div>
-    </nav>
-
-    <main class="content-wrapper" id="mainContent">
-
-      <div class="intro-card-container" id="introContainer">
-        <article class="intro-card reg-corners" id="introCard">
-                    
-          <div class="micro-header-bar" style="grid-column: 1 / -1; margin-bottom: 8px;">
-            <span class="tag-id">PROFILE SPECIFICATION</span>
-            <span class="telemetry-val">SYSTEMS &bull; AUTONOMOUS ENGINEERING</span>
-          </div>
-
-          <div class="intro-content">
-            <div class="intro-tag">CORE PROFILE &bull; SYSTEMS ARCHITECTURE</div>
-            <h2 class="intro-heading">
-              Hello, I'm <br />
-              Jaijitesh Suryaprakash
-            </h2>
-            <div class="micro-ruler"></div>
-            <p class="intro-bio">
-              Software engineer and systems builder focused on AI agent runtimes, aerodynamics simulation, embedded robotics, and desktop telemetry systems.
-            </p>
-
-            <div class="micro-spec-grid" style="max-width: 480px; margin-bottom: 24px;">
-              <div class="micro-spec-cell">
-                <span class="micro-spec-label">DOMAIN</span>
-                <span class="micro-spec-value">AI SYSTEMS &bull; EMBEDDED ROBOTICS</span>
-              </div>
-              <div class="micro-spec-cell">
-                <span class="micro-spec-label">CORE STACK</span>
-                <span class="micro-spec-value">PYTHON, C++, ESP32, FASTAPI</span>
-              </div>
-              <div class="micro-spec-cell">
-                <span class="micro-spec-label">SIMULATION</span>
-                <span class="micro-spec-value">LBM CFD, THREE.JS, WEBGPU</span>
-              </div>
-              <div class="micro-spec-cell">
-                <span class="micro-spec-label">AVAILABILITY</span>
-                <span class="micro-spec-value" style="color: var(--accent);">OPEN FOR ENGINEERING ROLES</span>
-              </div>
-            </div>
-
-            <div class="intro-actions">
-              <a href="contact.html" class="btn-sharp solid">
-                <span>[ GET IN TOUCH ]</span>
-                <span>&rarr;</span>
-              </a>
-              <a href="#projectsSection" class="btn-sharp">
-                <span>[ EXPLORE PROJECTS ]</span>
-                <span>&darr;</span>
-              </a>
-            </div>
-          </div>
-          <div class="intro-visual">
-            <div class="avatar-simple-box reg-corners">
-              <img src="assets/images/profile/portrait_full_body.jpg" alt="Jaijitesh Suryaprakash" />
-            </div>
-            <div class="micro-header-bar" style="margin-top: 8px; font-size: 9px;">
-              <span>PORTRAIT FRAME</span>
-              <span>AUTHENTIC</span>
-            </div>
-          </div>
-        </article>
-      </div>
-
-      <section class="stats-screen-section" id="statsScreen" aria-label="Impact and Metrics">
-        <span class="section-label">KEY METRICS &bull; QUANTITATIVE OVERVIEW</span>
-        <div class="stats-screen-grid" id="statsGrid">
-          <div class="stat-box reg-corners" data-index="0">
-                        <div class="micro-header-bar" style="padding: 2px 0 6px 0; margin-bottom: 12px; background: transparent; border: none;">
-              <span class="tag-id">EXPERIENCE</span>
-              <span>ENGINEERING</span>
-            </div>
-            <div class="stat-digits" data-target="04" data-original="04">04</div>
-            <div class="micro-ruler"></div>
-            <div class="stat-caption">Years Engineering Experience</div>
-          </div>
-          <div class="stat-box reg-corners" data-index="1">
-                        <div class="micro-header-bar" style="padding: 2px 0 6px 0; margin-bottom: 12px; background: transparent; border: none;">
-              <span class="tag-id">PORTFOLIO</span>
-              <span>SYSTEMS</span>
-            </div>
-            <div class="stat-digits" data-target="24+" data-original="24+">24+</div>
-            <div class="micro-ruler"></div>
-            <div class="stat-caption">Projects Constructed</div>
-          </div>
-          <div class="stat-box reg-corners" data-index="2">
-                        <div class="micro-header-bar" style="padding: 2px 0 6px 0; margin-bottom: 12px; background: transparent; border: none;">
-              <span class="tag-id">DEPLOYMENTS</span>
-              <span>NODES</span>
-            </div>
-            <div class="stat-digits" data-target="12+" data-original="12+">12+</div>
-            <div class="micro-ruler"></div>
-            <div class="stat-caption">Deployed Systems &amp; Nodes</div>
-          </div>
-          <div class="stat-box reg-corners" data-index="3">
-                        <div class="micro-header-bar" style="padding: 2px 0 6px 0; margin-bottom: 12px; background: transparent; border: none;">
-              <span class="tag-id">CAPABILITIES</span>
-              <span>SKILLS</span>
-            </div>
-            <div class="stat-digits" data-target="30+" data-original="30+">30+</div>
-            <div class="micro-ruler"></div>
-            <div class="stat-caption">Core Engineering Skills</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="education-section" id="educationSection" aria-label="Academic Trajectory">
-        <span class="section-label">ACADEMIC FOUNDATIONS &bull; TRAJECTORY</span>
-        <h3 class="section-title">Institutional Trajectory</h3>
-        
-        <div class="education-stage" style="position: relative;">
-          <canvas id="starCanvas" class="star-trajectory-canvas"></canvas>
-
-          <div class="edu-card reg-corners" id="eduSchool">
-                        <div class="micro-header-bar">
-              <span class="tag-id">SECONDARY CERTIFICATION</span>
-              <span>ACCREDITED</span>
-            </div>
-            <div style="padding: 20px 0 0 0;">
-              <div class="edu-card-tag">FOUNDATIONS &bull; STEM</div>
-              <h4 class="edu-card-title">Higher Secondary Education</h4>
-              <div class="edu-card-inst">Advanced Mathematics &bull; Classical Physics &bull; Computing</div>
-              <div class="micro-ruler"></div>
-              <p class="edu-card-body">
-                Rigorous analytical foundation in differential calculus, vector kinematics, electromagnetism, and algorithmic problem solving.
-              </p>
-            </div>
-          </div>
-
-          <div class="edu-card reg-corners" id="eduCollege">
-                        <div class="micro-header-bar">
-              <span class="tag-id">UNDERGRADUATE DEGREE</span>
-              <span>VIT VELLORE</span>
-            </div>
-            <div style="padding: 20px 0 0 0;">
-              <div class="edu-card-tag">UNDERGRADUATE &bull; B.TECH</div>
-              <h4 class="edu-card-title">Bachelor of Technology</h4>
-              <div class="edu-card-inst">Vellore Institute of Technology (VIT Vellore)</div>
-              <div class="micro-ruler"></div>
-              <p class="edu-card-body">
-                Information Technology specializing in Autonomous Systems, Distributed Edge Microservices, ROS 2 Kinematics, and Computational Fluid Dynamics.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section-container" id="projectsSection" aria-label="Featured Works">
-        <span class="section-label">FEATURED WORKS &bull; ENGINEERING PROJECTS</span>
-        <h3 class="section-title">Production Systems &amp; Kernels</h3>
-
-        <div class="projects-list">
-          <article class="project-item evaporate-card reg-corners">
-            <div class="micro-header-bar">
-              <span class="tag-id">AERODYNAMICS &bull; SIMULATION</span>
-              <span class="telemetry-val">YEAR 2024 &bull; 2026</span>
-            </div>
-            <div style="padding: 18px 0 0 0;">
-              <h4 class="project-name">WindSim — Aerodynamics Sandbox &amp; CFD Laboratory</h4>
-              <div class="micro-ruler"></div>
-              <p class="project-overview">
-                Browser-native aerodynamics platform combining reduced-order flight physics (Reynolds drag, dynamic projected area, barometric atmospheric density) with a D3Q19 Lattice Boltzmann Method (LBM)<sup class="citation-tag" data-citation="1">[1]<span class="citation-tooltip"><strong>D3Q19 LBM Simulation Framework</strong><br/>Mesoscopic Navier-Stokes Solver &bull; Pressure &amp; Velocity Fields</span></sup> reference solver, Three.js 3D flow visualization, and WebGPU detection.
-              </p>
-              
-              <div class="micro-spec-grid">
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">CFD SOLVER</span>
-                  <span class="micro-spec-value">D3Q19 LBM SOLVER</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">VISUALIZATION</span>
-                  <span class="micro-spec-value">THREE.JS 3D FLOW</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">PHYSICS MODEL</span>
-                  <span class="micro-spec-value">REYNOLDS DRAG &bull; DHO</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">RUNTIME</span>
-                  <span class="micro-spec-value">JAVASCRIPT, WEBGPU</span>
-                </div>
-              </div>
-
-              <div class="project-tech">
-                <span class="micro-badge">JavaScript</span>
-                <span class="micro-badge">Three.js</span>
-                <span class="micro-badge">WebGPU</span>
-                <span class="micro-badge">LBM D3Q19</span>
-                <span class="micro-badge">IndexedDB</span>
-                <span class="micro-badge">Aerodynamics</span>
-              </div>
-            </div>
-            <a href="https://github.com/BerrF35/Windsim" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
-              <span>[ VIEW SOURCE CODE ]</span>
-              <span>&rarr;</span>
-            </a>
-          </article>
-
-          <article class="project-item evaporate-card reg-corners">
-            <div class="micro-header-bar">
-              <span class="tag-id">EMBEDDED ROBOTICS</span>
-              <span class="telemetry-val">YEAR 2025 &bull; 2026</span>
-            </div>
-            <div style="padding: 18px 0 0 0;">
-              <h4 class="project-name">AutoBot — Autonomous Tracked Robotics Architecture</h4>
-              <div class="micro-ruler"></div>
-              <p class="project-overview">
-                12-layer embedded robotics architecture on tracked chassis driven by ESP32-WROOM-32<sup class="citation-tag" data-citation="2">[2]<span class="citation-tooltip"><strong>12-Layer Embedded Control Stack</strong><br/>Closed-Loop PID with Anti-Windup &bull; Multi-Rate Scheduler 200Hz-1Hz</span></sup>, featuring quadrature encoders, QMI8658 6-DOF IMU, closed-loop PID velocity regulation with anti-windup, deterministic multi-rate scheduler (200Hz to 1Hz), and live WebSocket telemetry HUD.
-              </p>
-
-              <div class="micro-spec-grid">
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">CONTROLLER</span>
-                  <span class="micro-spec-value">ESP32-WROOM-32</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">CONTROL LOOP</span>
-                  <span class="micro-spec-value">PID ANTI-WINDUP &bull; S-CURVE</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">SENSORS</span>
-                  <span class="micro-spec-value">6-DOF IMU &bull; ENCODERS</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">TELEMETRY</span>
-                  <span class="micro-spec-value">WEBSOCKET HUD &bull; INA219</span>
-                </div>
-              </div>
-
-              <div class="project-tech">
-                <span class="micro-badge">C++</span>
-                <span class="micro-badge">ESP32</span>
-                <span class="micro-badge">PlatformIO</span>
-                <span class="micro-badge">PID Control</span>
-                <span class="micro-badge">WebSockets</span>
-                <span class="micro-badge">Robotics HAL</span>
-              </div>
-            </div>
-            <a href="https://github.com/BerrF35/AutoBot" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
-              <span>[ VIEW SOURCE CODE ]</span>
-              <span>&rarr;</span>
-            </a>
-          </article>
-
-          <article class="project-item evaporate-card reg-corners">
-            <div class="micro-header-bar">
-              <span class="tag-id">AI AGENT RUNTIME</span>
-              <span class="telemetry-val">YEAR 2025 &bull; 2026</span>
-            </div>
-            <div style="padding: 18px 0 0 0;">
-              <h4 class="project-name">Berry — Local-First AI Desktop Agent Runtime</h4>
-              <div class="micro-ruler"></div>
-              <p class="project-overview">
-                Local-first desktop agent connecting LLM reasoning directly to operating system execution<sup class="citation-tag" data-citation="3">[3]<span class="citation-tooltip"><strong>Computer-Use Agent Runtime</strong><br/>Chromium Relay Architecture &bull; OS Execution Sandbox</span></sup>, featuring OS file and terminal automation, Chromium browser relay architecture, vector skill codices, and multi-provider LLM orchestration.
-              </p>
-
-              <div class="micro-spec-grid">
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">ORCHESTRATION</span>
-                  <span class="micro-spec-value">FASTAPI &bull; PYWEBVIEW</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">AUTOMATION</span>
-                  <span class="micro-spec-value">OS COMPUTER-USE &bull; CUA</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">BROWSER</span>
-                  <span class="micro-spec-value">CHROMIUM RELAY</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">INFERENCE</span>
-                  <span class="micro-spec-value">LITELLM &bull; MULTI-PROVIDER</span>
-                </div>
-              </div>
-
-              <div class="project-tech">
-                <span class="micro-badge">Python</span>
-                <span class="micro-badge">FastAPI</span>
-                <span class="micro-badge">PyAutoGUI</span>
-                <span class="micro-badge">LiteLLM</span>
-                <span class="micro-badge">Docker</span>
-                <span class="micro-badge">Chromium Relay</span>
-              </div>
-            </div>
-            <a href="https://github.com/BerrF35/Berry" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
-              <span>[ VIEW SOURCE CODE ]</span>
-              <span>&rarr;</span>
-            </a>
-          </article>
-
-          <article class="project-item evaporate-card reg-corners">
-            <div class="micro-header-bar">
-              <span class="tag-id">REMOTE SENSING &bull; ML</span>
-              <span class="telemetry-val">YEAR 2025 &bull; 2026</span>
-            </div>
-            <div style="padding: 18px 0 0 0;">
-              <h4 class="project-name">SATQuery-AI — Multimodal Satellite Remote Sensing</h4>
-              <div class="micro-ruler"></div>
-              <p class="project-overview">
-                Multimodal Earth observation assistant routing satellite queries through a LangGraph orchestrator to Qwen2.5-VL-3B adapted via 4-bit QLoRA, GroundingDINO visual grounding, ChangeFormer V6 bi-temporal change detection, and optical plus SAR fusion.
-              </p>
-
-              <div class="micro-spec-grid">
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">VLM BACKBONE</span>
-                  <span class="micro-spec-value">QWEN2.5-VL 4-BIT QLORA</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">GROUNDING</span>
-                  <span class="micro-spec-value">GROUNDINGDINO-TINY</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">CHANGE DETECT</span>
-                  <span class="micro-spec-value">CHANGEFORMER V6</span>
-                </div>
-                <div class="micro-spec-cell">
-                  <span class="micro-spec-label">PIPELINE</span>
-                  <span class="micro-spec-value">LANGGRAPH &bull; GEOTIFF CRS</span>
-                </div>
-              </div>
-
-              <div class="project-tech">
-                <span class="micro-badge">PyTorch</span>
-                <span class="micro-badge">LangGraph</span>
-                <span class="micro-badge">FastAPI</span>
-                <span class="micro-badge">QLoRA</span>
-                <span class="micro-badge">ChangeFormer</span>
-                <span class="micro-badge">Sentinel-1 &bull; 2</span>
-              </div>
-            </div>
-            <a href="https://github.com/BerrF35/SATQuery-AI" class="project-link" target="_blank" rel="noopener" style="margin-top: 18px;">
-              <span>[ VIEW SOURCE CODE ]</span>
-              <span>&rarr;</span>
-            </a>
-          </article>
-        </div>
-
-        <div class="micro-header-bar" style="margin-top: 32px; background: transparent; border: none; font-size: 10px;">
-          <span>TECHNICAL REFERENCES &bull; FOOTNOTES</span>
-          <span>CITATIONS [1-3]</span>
-        </div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 8px; font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);" class="contact-subgrid">
-          <div style="padding: 12px 0; background: transparent; border: none; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-            <span style="color: var(--accent-secondary); font-weight: 700;">[1]</span> Discrete Velocity Boltzmann Kinetics (D3Q19 LBM) &bull; Navier-Stokes Incompressible Flow Approximations.
-          </div>
-          <div style="padding: 12px 0; background: transparent; border: none; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-            <span style="color: var(--accent-secondary); font-weight: 700;">[2]</span> Deterministic Embedded Robotics &bull; 12-Layer Stack &bull; Multi-Rate Task Scheduling (200Hz to 1Hz) &bull; Closed-Loop PID Anti-Windup.
-          </div>
-          <div style="padding: 12px 0; background: transparent; border: none; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-            <span style="color: var(--accent-secondary); font-weight: 700;">[3]</span> Local-First Agentic Architecture &bull; OS Process Lifecycle Sandbox &bull; Chromium Automation Relay.
-          </div>
-        </div>
-      </section>
-
-      <section class="section-container timeline-section" id="timelineContainer" aria-label="Experience and Roles">
-        <span class="section-label">DEPLOYMENT TRAJECTORY &bull; MILESTONES</span>
-        <h3 class="section-title">Practical Engineering Journey</h3>
-        <p class="timeline-intro-desc">
-          Changelog and engineering milestones across autonomous robotics, numerical physics, distributed systems, and edge intelligence.
-        </p>
-
-        <nav class="timeline-tree-nav" id="timelineTreeNav" aria-label="Timeline Quick Navigation">
-          <div class="tree-header">TIMELINE NAV</div>
-          <div class="tree-track-rail">
-            <div class="tree-line" aria-hidden="true"></div>
-            <div class="tree-spring-marker" id="treeSpringMarker" aria-hidden="true"></div>
-            <a href="#timeline-2026" class="tree-item-link active" data-target="timeline-2026">
-              <span class="tree-node-dot"></span>
-              <span>2026</span>
-            </a>
-            <a href="#timeline-2025" class="tree-item-link" data-target="timeline-2025">
-              <span class="tree-node-dot"></span>
-              <span>2025</span>
-            </a>
-            <a href="#timeline-2024" class="tree-item-link" data-target="timeline-2024">
-              <span class="tree-node-dot"></span>
-              <span>2024</span>
-            </a>
-            <a href="#timeline-foundations" class="tree-item-link" data-target="timeline-foundations">
-              <span class="tree-node-dot"></span>
-              <span>Foundations</span>
-            </a>
-          </div>
-        </nav>
-
-        <div class="timeline-track-wrapper" id="timelineTrackWrapper">
-          <div class="timeline-line-track" id="timelineLineTrack" aria-hidden="true">
-            <div class="timeline-line-beam" id="timelineLineBeam"></div>
-          </div>
-
-          <div class="timeline-item" id="timeline-2026" data-index="0">
-            <div class="timeline-sticky-rail">
-              <div class="timeline-dot-outer">
-                <div class="timeline-dot-inner"></div>
-              </div>
-              <h3 class="timeline-year-label">2026</h3>
-            </div>
-
-            <div class="timeline-content-rail">
-              <h3 class="timeline-mobile-year">2026</h3>
-
-              <div class="timeline-entry-header">
-                <span class="tag-id">HACKATHON WIN</span>
-                <span class="telemetry-val">3RD PLACE OVERALL</span>
-              </div>
-
-              <h4 class="timeline-entry-title">ImpactX 3.0 Hackathon &amp; FarmAssist AI</h4>
-              <p class="timeline-entry-desc">
-                Led the software architecture of a high-concurrency geospatial dispatch and routing engine operating over WebSockets, and constructed an offline edge computer vision agricultural diagnostics pipeline running quantized neural models on a Raspberry Pi embedded controller.
-              </p>
-
-              <div class="timeline-tags">
-                <span class="micro-badge">Go</span>
-                <span class="micro-badge">WebSockets</span>
-                <span class="micro-badge">Edge Vision</span>
-                <span class="micro-badge">Raspberry Pi</span>
-              </div>
-
-              <div class="timeline-media-grid">
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ SCHEMATIC FRAME 01 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ TELEMETRY LOG 02 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ DISPATCH UI 03 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ RUNTIME BENCHMARK 04 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="timeline-item" id="timeline-2025" data-index="1">
-            <div class="timeline-sticky-rail">
-              <div class="timeline-dot-outer">
-                <div class="timeline-dot-inner"></div>
-              </div>
-              <h3 class="timeline-year-label">2025</h3>
-            </div>
-
-            <div class="timeline-content-rail">
-              <h3 class="timeline-mobile-year">2025</h3>
-
-              <div class="timeline-entry-header">
-                <span class="tag-id">EMBEDDED ROBOTICS</span>
-                <span class="telemetry-val">12-LAYER ARCHITECTURE</span>
-              </div>
-
-              <h4 class="timeline-entry-title">Autonomous Robotics Systems Developer &amp; AutoBot</h4>
-              <p class="timeline-entry-desc">
-                Engineered a 12-layer embedded robotics architecture on tracked chassis powered by ESP32-WROOM-32, featuring closed-loop PID velocity control with anti-windup, quadrature encoder feedback, QMI8658 6-DOF IMU filtering, multi-rate task scheduling (200Hz to 1Hz), and live WebSocket telemetry streaming.
-              </p>
-
-              <div class="timeline-tags">
-                <span class="micro-badge">C++</span>
-                <span class="micro-badge">ESP32</span>
-                <span class="micro-badge">PlatformIO</span>
-                <span class="micro-badge">PID Control</span>
-                <span class="micro-badge">WebSockets</span>
-                <span class="micro-badge">Robotics HAL</span>
-              </div>
-
-              <div class="timeline-media-grid">
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ CHASSIS TELEMETRY 01 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ PID VELOCITY CONTROL 02 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ MULTI-RATE SCHEDULER 03 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ SENSOR BUS IMU 04 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="timeline-item" id="timeline-2024" data-index="2">
-            <div class="timeline-sticky-rail">
-              <div class="timeline-dot-outer">
-                <div class="timeline-dot-inner"></div>
-              </div>
-              <h3 class="timeline-year-label">2024</h3>
-            </div>
-
-            <div class="timeline-content-rail">
-              <h3 class="timeline-mobile-year">2024</h3>
-
-              <div class="timeline-entry-header">
-                <span class="tag-id">AERODYNAMICS</span>
-                <span class="telemetry-val">CFD SIMULATION</span>
-              </div>
-
-              <h4 class="timeline-entry-title">WindSim &amp; Computational Aerodynamics Developer</h4>
-              <p class="timeline-entry-desc">
-                Architected browser-native aerodynamics platform featuring reduced-order rigid-body flight dynamics (Reynolds drag, dynamic projected area, barometric atmospheric density model) and a D3Q19 CPU Lattice Boltzmann Method CFD solver paired with interactive Three.js 3D flow visualization and WebGPU detection.
-              </p>
-
-              <div class="timeline-tags">
-                <span class="micro-badge">JavaScript</span>
-                <span class="micro-badge">Three.js</span>
-                <span class="micro-badge">WebGPU</span>
-                <span class="micro-badge">LBM D3Q19</span>
-                <span class="micro-badge">IndexedDB</span>
-                <span class="micro-badge">Aerodynamics</span>
-              </div>
-
-              <div class="timeline-media-grid">
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ D3Q19 LBM SOLVER 01 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ REYNOLDS DRAG MODEL 02 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ THREE.JS FLOW FIELD 03 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ WEBGPU CAPABILITY 04 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="timeline-item" id="timeline-foundations" data-index="3">
-            <div class="timeline-sticky-rail">
-              <div class="timeline-dot-outer">
-                <div class="timeline-dot-inner"></div>
-              </div>
-              <h3 class="timeline-year-label">Foundations</h3>
-            </div>
-
-            <div class="timeline-content-rail">
-              <h3 class="timeline-mobile-year">Foundations</h3>
-
-              <div class="timeline-entry-header">
-                <span class="tag-id">SYSTEMS &bull; AGENTS</span>
-                <span class="telemetry-val">CORE ARCHITECTURES</span>
-              </div>
-
-              <h4 class="timeline-entry-title">Systems Software, Agent Infrastructure &amp; Applied ML</h4>
-              <p class="timeline-entry-desc">
-                Developed desktop hardware telemetry suite Performance Monitor (Electron, TypeScript, WMI, Windows performance counters), built from-scratch ReAct agentic RAG engines without external frameworks, tabular synthesis with CTGAN and TVAE, and local desktop agent orchestration in Berry.
-              </p>
-
-              <div class="timeline-tags">
-                <span class="micro-badge">Python</span>
-                <span class="micro-badge">Electron</span>
-                <span class="micro-badge">TypeScript</span>
-                <span class="micro-badge">LiteLLM</span>
-                <span class="micro-badge">CTGAN</span>
-                <span class="micro-badge">Agentic RAG</span>
-              </div>
-
-              <div class="timeline-media-grid">
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ DESKTOP TELEMETRY 01 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ REACTION LOOP AGENT 02 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ SYNTHETIC DATA CTGAN 03 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-                <div class="timeline-placeholder reg-corners">
-                  <div class="timeline-placeholder-icon">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  </div>
-                  <div class="timeline-placeholder-label">[ LOCAL AGENT RUNTIME 04 ]</div>
-                  <div class="timeline-placeholder-sub">INSERT MEDIA</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <div class="personal-suggestion-card evaporate-card reg-corners" id="suggestionCard">
-                <div class="micro-header-bar" style="margin-bottom: 16px;">
-          <span class="tag-id">EXPLORATION</span>
-          <span>RESEARCH PERSPECTIVES</span>
-        </div>
-        <span class="suggestion-tag">ARCHIVE &bull; RESEARCH &bull; SYSTEMS</span>
-        <h3 class="suggestion-title">Do you want to explore the technical research archive?</h3>
-        <p class="suggestion-desc">
-          Inspect technical research notes, reading indices in cybernetics and distributed systems, synthesized lo-fi audio soundscapes, and personal engineering philosophies.
-        </p>
-        <a href="personal.html" class="btn-learn-more" style="margin-top: 18px;">
-          <span class="circle" aria-hidden="true">
-            <span class="icon arrow"></span>
-          </span>
-          <span class="button-text">Explore Archive</span>
+      <div class="nav-external">
+        <a href="https://github.com/BerrF35" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="GitHub Profile">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+          </svg>
+        </a>
+        <a href="https://www.linkedin.com/in/jaijitesh/" target="_blank" rel="noopener noreferrer" class="icon-link" aria-label="LinkedIn Profile">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
         </a>
       </div>
+    </div>
+  </header>
 
-      <div class="title-block-container reg-corners">
-        <div class="title-block-row">
-          <div class="title-block-cell">
-            <span class="title-block-label">PORTFOLIO</span>
-            <span class="title-block-val">JAIJITESH SURYAPRAKASH</span>
+  <main>
+    <!-- Editorial Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <h1 class="hero-statement">
+          Systems &amp; robotics engineer crafting <span class="serif-italic">autonomous machines</span>, <span class="serif-italic">fluid simulations</span>, and <span class="serif-italic">local intelligence</span> from first principles.
+        </h1>
+
+        <p class="hero-bio">
+          Undergraduate in Information Technology at Vellore Institute of Technology (VIT). Focused on deterministic control, embedded robotics, computational aerodynamics, and reliable system architecture.
+        </p>
+
+        <div class="hero-meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">Core Focus</span>
+            <span class="meta-val">Autonomous Robotics &amp; CFD</span>
           </div>
-          <div class="title-block-cell">
-            <span class="title-block-label">DISCIPLINE</span>
-            <span class="title-block-val">SYSTEMS &bull; ROBOTICS</span>
+          <div class="meta-item">
+            <span class="meta-label">Education</span>
+            <span class="meta-val">B.Tech IT &middot; VIT Vellore</span>
           </div>
-          <div class="title-block-cell">
-            <span class="title-block-label">LOCATION</span>
-            <span class="title-block-val">VELLORE, INDIA</span>
+          <div class="meta-item">
+            <span class="meta-label">Location</span>
+            <span class="meta-val">Vellore / Bangalore, India</span>
           </div>
-          <div class="title-block-cell">
-            <span class="title-block-label">AVAILABILITY</span>
-            <span class="title-block-val" style="color: var(--accent);">OPEN FOR ROLES</span>
+          <div class="meta-item">
+            <span class="meta-label">Availability</span>
+            <span class="meta-val" style="color: var(--accent);">Open for Engineering Roles</span>
           </div>
         </div>
-      </div>
 
-      <footer class="site-footer">
-        <div>&copy; 2026 JAIJITESH SURYAPRAKASH. ALL RIGHTS RESERVED.</div>
-        <div style="display: flex; gap: 20px;">
-          <a href="https://github.com/BerrF35" class="hero-social-link" target="_blank" rel="noopener">[GITHUB]</a>
-          <a href="https://www.linkedin.com/in/jaijitesh/" class="hero-social-link" target="_blank" rel="noopener">[LINKEDIN]</a>
-          <a href="contact.html" class="hero-social-link">[CONTACT]</a>
-        </div>
-      </footer>
-
-      <aside class="compact-action-dock" id="actionDock" aria-label="Quick Actions">
-        <div class="share-fanout-container" id="shareFanoutContainer">
-          <button type="button" class="compact-action-btn" id="shareTriggerBtn" aria-label="Share Portfolio" title="Share Portfolio">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="18" cy="5" r="3"></circle>
-              <circle cx="6" cy="12" r="3"></circle>
-              <circle cx="18" cy="19" r="3"></circle>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+        <div class="hero-actions">
+          <a href="#work" class="btn btn-primary">
+            <span>Explore Selected Work</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <polyline points="19 12 12 19 5 12"></polyline>
             </svg>
-            <span class="compact-action-label">[ SHARE ]</span>
+          </a>
+          <a href="contact.html" class="btn btn-secondary">
+            <span>Get in Touch</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <button class="btn btn-ghost" data-action="copy-email" data-email="jaijiteshsp@gmail.com" title="Copy email address to clipboard">
+            <span>Request CV &middot; Email</span>
           </button>
-          <div class="share-options-fan" id="shareOptionsFan">
-            <button type="button" class="share-option-btn" id="copyShareLink">
-              <span>&bull;</span>
-              <span>COPY LINK</span>
-            </button>
-            <a href="https://twitter.com/intent/tweet?text=Explore%20Jaijitesh%20Suryaprakash%20Systems%20%26%20Robotics%20Portfolio&url=https%3A%2F%2Fberrf35.github.io%2FPortfolio%2F" target="_blank" rel="noopener noreferrer" class="share-option-btn">
-              <span>&bull;</span>
-              <span>SHARE ON X</span>
-            </a>
-            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fberrf35.github.io%2FPortfolio%2F" target="_blank" rel="noopener noreferrer" class="share-option-btn">
-              <span>&bull;</span>
-              <span>LINKEDIN</span>
-            </a>
-            <a href="mailto:?subject=Jaijitesh%20Suryaprakash%20Portfolio&body=Check%20out%20Jaijitesh's%20Systems%20and%20Autonomous%20Engineering%20portfolio:%20https://berrf35.github.io/Portfolio/" class="share-option-btn">
-              <span>&bull;</span>
-              <span>EMAIL</span>
-            </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Selected Work Section -->
+    <section id="work" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <div class="section-label">01 / SELECTED WORK</div>
+            <h2 class="section-title">Engineered Systems &amp; Software</h2>
           </div>
+          <p class="section-desc">
+            Deterministic physics simulators, autonomous tracked robotics, and telemetry architectures built with first-principles rigor.
+          </p>
         </div>
 
-        <a href="#heroTrack" class="compact-action-btn" id="dockScrollTop" aria-label="Scroll To Top" title="Back to Top">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="12" y1="19" x2="12" y2="5"></line>
-            <polyline points="5 12 12 5 19 12"></polyline>
-          </svg>
-          <span class="compact-action-label">[ TOP ]</span>
-        </a>
+        <div class="projects-grid">
+          <!-- Project 1: WindSim -->
+          <article class="project-card">
+            <div class="project-card-header">
+              <span class="project-category">Aerodynamics &middot; Simulation</span>
+              <span class="project-period">2024 &mdash; 2026</span>
+            </div>
+            <h3 class="project-title">WindSim &mdash; Aerodynamics &amp; CFD Sandbox</h3>
+            <p class="project-desc">
+              Browser-native computational aerodynamics platform combining reduced-order flight physics with an interactive Lattice Boltzmann Method (LBM D3Q19/D2Q9) reference solver, 3D flow streamlines, and airfoil aerodynamic lift and drag estimation.
+            </p>
+            <div class="project-specs">
+              <div class="spec-item">
+                <span class="spec-k">CFD Solver</span>
+                <span class="spec-v">LBM D3Q19 / D2Q9</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-k">Visualization</span>
+                <span class="spec-v">Three.js 3D &amp; Vector Fields</span>
+              </div>
+            </div>
+            <div class="tech-tags">
+              <span class="tech-tag">JavaScript</span>
+              <span class="tech-tag">Three.js</span>
+              <span class="tech-tag">LBM CFD</span>
+              <span class="tech-tag">Fluid Dynamics</span>
+              <span class="tech-tag">Aerodynamics</span>
+            </div>
+            <div class="project-actions">
+              <a href="https://github.com/BerrF35/Windsim" target="_blank" rel="noopener noreferrer" class="action-link">
+                <span>View Source Repository</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </article>
 
-        <a href="contact.html" class="compact-action-btn" aria-label="Contact Uplink" title="Contact Uplink">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-          </svg>
-          <span class="compact-action-label">[ UPLINK ]</span>
-        </a>
-      </aside>
-    </main>
+          <!-- Project 2: AutoBot -->
+          <article class="project-card">
+            <div class="project-card-header">
+              <span class="project-category">Embedded Robotics</span>
+              <span class="project-period">2025 &mdash; 2026</span>
+            </div>
+            <h3 class="project-title">AutoBot &mdash; Tracked Autonomous Robotics</h3>
+            <p class="project-desc">
+              Autonomous tracked robotics platform built around a Waveshare ESP32 controller. Features optical quadrature encoders, closed-loop PID velocity control with anti-windup, deterministic S-curve motion profiling, 6-DOF IMU telemetry, and return-to-home path tracking.
+            </p>
+            <div class="project-specs">
+              <div class="spec-item">
+                <span class="spec-k">Hardware</span>
+                <span class="spec-v">ESP32-WROOM-32 &middot; 6-DOF IMU</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-k">Motion Control</span>
+                <span class="spec-v">Closed-Loop PID &middot; S-Curve</span>
+              </div>
+            </div>
+            <div class="tech-tags">
+              <span class="tech-tag">C++</span>
+              <span class="tech-tag">ESP32</span>
+              <span class="tech-tag">FreeRTOS</span>
+              <span class="tech-tag">Optical Encoders</span>
+              <span class="tech-tag">PID Telemetry</span>
+            </div>
+            <div class="project-actions">
+              <a href="https://github.com/BerrF35/AutoBot" target="_blank" rel="noopener noreferrer" class="action-link">
+                <span>View Source Repository</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </article>
 
-    <div id="toast" class="toast-msg" role="status" aria-live="polite"></div>
+          <!-- Project 3: Berry -->
+          <article class="project-card">
+            <div class="project-card-header">
+              <span class="project-category">AI Agent Runtime</span>
+              <span class="project-period">2025 &mdash; 2026</span>
+            </div>
+            <h3 class="project-title">Berry &mdash; Local-First AI Desktop Agent</h3>
+            <p class="project-desc">
+              Local-first desktop AI assistant connecting LLM reasoning directly to local operating system execution. Implements terminal and file automation, voice interaction, local memory persistence, and multi-provider model orchestration.
+            </p>
+            <div class="project-specs">
+              <div class="spec-item">
+                <span class="spec-k">Runtime</span>
+                <span class="spec-v">Python &middot; OS Automation</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-k">Capabilities</span>
+                <span class="spec-v">Voice I/O &middot; Local Memory</span>
+              </div>
+            </div>
+            <div class="tech-tags">
+              <span class="tech-tag">Python</span>
+              <span class="tech-tag">FastAPI</span>
+              <span class="tech-tag">Local Memory</span>
+              <span class="tech-tag">Voice Synthesis</span>
+              <span class="tech-tag">Orchestration</span>
+            </div>
+            <div class="project-actions">
+              <a href="https://github.com/BerrF35/Berry" target="_blank" rel="noopener noreferrer" class="action-link">
+                <span>View Source Repository</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </article>
 
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+          <!-- Project 4: Performance Monitor -->
+          <article class="project-card">
+            <div class="project-card-header">
+              <span class="project-category">Systems Software</span>
+              <span class="project-period">2025 &mdash; 2026</span>
+            </div>
+            <h3 class="project-title">Performance-Monitor &mdash; Windows Telemetry</h3>
+            <p class="project-desc">
+              Real-time Windows system telemetry dashboard. Streams hardware metrics for CPU, GPU, RAM, Disk, Network, Thermals, and active processes with interactive visual charts inspired by modern industrial telemetry tools.
+            </p>
+            <div class="project-specs">
+              <div class="spec-item">
+                <span class="spec-k">Architecture</span>
+                <span class="spec-v">Electron &middot; TypeScript</span>
+              </div>
+              <div class="spec-item">
+                <span class="spec-k">Telemetry</span>
+                <span class="spec-v">Live Charts &middot; Hardware WMI</span>
+              </div>
+            </div>
+            <div class="tech-tags">
+              <span class="tech-tag">TypeScript</span>
+              <span class="tech-tag">Electron</span>
+              <span class="tech-tag">React</span>
+              <span class="tech-tag">Tailwind CSS</span>
+              <span class="tech-tag">Hardware APIs</span>
+            </div>
+            <div class="project-actions">
+              <a href="https://github.com/BerrF35/Performance-Monitor" target="_blank" rel="noopener noreferrer" class="action-link">
+                <span>View Source Repository</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
 
-    <script type="module" src="js/tubesCursor.js"></script>
-    <script type="module">
-      import { WebGLBackgroundEngine } from './js/webglBackground.js';
-      import { ScrollParallaxEngine } from './js/scrollParallax.js';
-      import { PortfolioEngine } from './js/portfolioEngine.js';
+    <!-- Engineering Philosophy & About Section -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <div class="section-label">02 / FOUNDATIONS</div>
+            <h2 class="section-title">Background &amp; Philosophy</h2>
+          </div>
+          <p class="section-desc">
+            Bridging the physical and computational realms through structured engineering discipline.
+          </p>
+        </div>
 
-      window.__webglBackgroundInstance = new WebGLBackgroundEngine('webglBackgroundCanvas');
-      window.__scrollParallaxInstance = new ScrollParallaxEngine();
-      const engine = new PortfolioEngine();
+        <div class="about-grid">
+          <div class="about-copy">
+            <p>
+              I am an undergraduate software and robotics engineer studying <strong>Information Technology at Vellore Institute of Technology (VIT Vellore)</strong>.
+            </p>
+            <p>
+              My engineering philosophy is rooted in <strong>first-principles thinking</strong>: understanding hardware kinematics, mathematical solvers, and operating system mechanics from the ground up, rather than relying on black-box abstractions.
+            </p>
+            <p>
+              Whether configuring 200Hz PID velocity loops on microcontrollers, computing fluid approximations via Lattice Boltzmann equations, or architecting local-first agent runtimes, I prioritize clean interfaces, deterministic execution, and verifiable results.
+            </p>
+            
+            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+              <h4 style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--ink);">Academic Foundations</h4>
+              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.9rem; color: var(--ink-secondary);">
+                <li style="display: flex; gap: 0.75rem;">
+                  <span style="font-family: var(--font-mono); color: var(--accent);">&bull;</span>
+                  <span><strong>Bachelor of Technology (B.Tech) in Information Technology</strong> &mdash; Vellore Institute of Technology (VIT Vellore)</span>
+                </li>
+                <li style="display: flex; gap: 0.75rem;">
+                  <span style="font-family: var(--font-mono); color: var(--accent);">&bull;</span>
+                  <span><strong>Higher Secondary Education</strong> &mdash; Advanced Differential Mathematics, Classical Physics, and Computer Science</span>
+                </li>
+              </ul>
+            </div>
+          </div>
 
-      const shareTrigger = document.getElementById('shareTriggerBtn');
-      const shareFanout = document.getElementById('shareFanoutContainer');
-      const copyShareBtn = document.getElementById('copyShareLink');
+          <div class="portrait-wrapper">
+            <img src="assets/images/profile/portrait_full_body.jpg" alt="Jaijitesh Suryaprakash portrait" class="portrait-img" width="380" height="475" loading="lazy">
+            <div class="portrait-caption">
+              Jaijitesh Suryaprakash &middot; VIT Vellore
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      if (shareTrigger && shareFanout) {
-        shareTrigger.addEventListener('click', (e) => {
-          e.stopPropagation();
-          shareFanout.classList.toggle('active');
-        });
-        document.addEventListener('click', (e) => {
-          if (!shareFanout.contains(e.target)) {
-            shareFanout.classList.remove('active');
-          }
-        });
-      }
+    <!-- Engineering Milestones / Chronology -->
+    <section id="timeline" class="section section-alt">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <div class="section-label">03 / CHRONOLOGY</div>
+            <h2 class="section-title">Verified Engineering Milestones</h2>
+          </div>
+          <p class="section-desc">
+            A chronological changelog of hardware deployments, software releases, and competitive hackathon achievements.
+          </p>
+        </div>
 
-      if (copyShareBtn) {
-        copyShareBtn.addEventListener('click', () => {
-          navigator.clipboard.writeText('https://berrf35.github.io/Portfolio/');
-          window.showToast('Portfolio link copied to clipboard!');
-          if (shareFanout) shareFanout.classList.remove('active');
-        });
-      }
-    </script>
-  </body>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-marker">2026</div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">ImpactX 3.0 Hackathon &mdash; 3rd Place Overall (FarmAssist AI)</h3>
+              <p class="timeline-desc">
+                Engineered the backend communication and edge inference architecture for FarmAssist AI, coordinating low-latency WebSocket dispatch and edge image diagnostics on Raspberry Pi hardware.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-marker">2025</div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">AutoBot Tracked Robotics Architecture Deployment</h3>
+              <p class="timeline-desc">
+                Constructed tracked robotic chassis powered by ESP32. Implemented optical quadrature encoder feedback, closed-loop PID velocity regulation, S-curve trajectory profiling, and web telemetry HUD.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-marker">2025</div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">Berry Local-First Desktop Agent Runtime</h3>
+              <p class="timeline-desc">
+                Architected Python-based desktop assistant with OS-level terminal automation, persistent local memory codices, and voice synthesis pipelines.
+              </p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-marker">2024</div>
+            <div class="timeline-content">
+              <h3 class="timeline-title">WindSim Browser Aerodynamics Sandbox</h3>
+              <p class="timeline-desc">
+                Authored deterministic fluid dynamics simulator with Lattice Boltzmann Method (LBM) solver, real-time vector field streamlines, and airfoil aerodynamic lift and drag estimation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action Banner -->
+    <section class="section">
+      <div class="container" style="text-align: center; max-width: 720px;">
+        <h2 style="font-size: var(--font-h1); font-weight: 800; letter-spacing: -0.025em; margin-bottom: 1rem;">
+          Interested in building together?
+        </h2>
+        <p style="color: var(--ink-secondary); font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem;">
+          Open for engineering roles, technical internships, and collaborative projects in autonomous systems, robotics, and applied AI.
+        </p>
+        <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+          <a href="contact.html" class="btn btn-primary">
+            <span>Direct Transmission &middot; Contact</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+          <button class="btn btn-secondary" data-action="copy-email" data-email="jaijiteshsp@gmail.com">
+            <span>Copy Email &middot; jaijiteshsp@gmail.com</span>
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Minimal Footer -->
+  <footer class="site-footer">
+    <div class="container footer-content">
+      <div>
+        <strong>Jaijitesh Suryaprakash</strong> &middot; Systems &amp; Robotics Engineer &middot; VIT Vellore
+      </div>
+      <ul class="footer-links">
+        <li><a href="#work">Work</a></li>
+        <li><a href="personal.html">Archive</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="https://github.com/BerrF35" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+        <li><a href="https://www.linkedin.com/in/jaijitesh/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+      </ul>
+      <div style="font-family: var(--font-mono); font-size: 0.78rem;">
+        &copy; 2026 Jaijitesh Suryaprakash
+      </div>
+    </div>
+  </footer>
+
+  <!-- Portfolio Engine Module -->
+  <script type="module" src="js/portfolioEngine.js"></script>
+</body>
 </html>
