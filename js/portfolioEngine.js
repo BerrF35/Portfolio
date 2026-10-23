@@ -35,7 +35,7 @@ export class PortfolioEngine {
           border: 1px solid #e5a93c;
           padding: 12px 20px;
           border-radius: 6px;
-          font-family: 'JetBrains Mono', monospace;
+          font-family: 'IBM Plex Mono', monospace;
           font-size: 0.85rem;
           box-shadow: 0 10px 25px rgba(0,0,0,0.5);
           z-index: 9999;
@@ -219,7 +219,7 @@ export class PortfolioEngine {
           ctx.fill();
 
           ctx.fillStyle = '#e5a93c';
-          ctx.font = '10px "JetBrains Mono", monospace';
+          ctx.font = '10px "IBM Plex Mono", monospace';
           ctx.fillText('VIT Vellore', cx + pPin.x + 6, cy + pPin.y + 3);
         }
       }
