@@ -16,7 +16,7 @@
 The redesign replaces the previous dark-crimson, sci-fi military aesthetic with a **refined, minimal editorial direction** inspired by contemporary creative developer portfolios (Stefan Vitasović 2025, Tarik Karahodžić, Unai Laguarta / Nadres, City of Angels).
 
 Rather than attempting to impress visitors with five simultaneous WebGL effects, heavy 60fps canvas animation, and dense jargon, the portfolio achieves visual authority through:
-1. **Typographic Contrast**: Pairing a bold, humanistic grotesque (**Epilogue**) with an elegant, expressive editorial serif italic (**Newsreader**) for key focus words in headlines, creating a handcrafted, art-directed editorial feel.
+1. **Typographic Contrast**: Pairing sculptural, bold brutalist grotesque headings (**Syne**) and human text grotesque (**Epilogue**) with an elegant, expressive editorial serif italic (**Newsreader**) and engineered monospace (**Space Mono**), creating a handcrafted, art-directed editorial feel.
 2. **Deep Obsidian & Technical Ochre Palette**: A pitch-black/obsidian ground (`#090a0c`) with crisp white text (`#f4f4f6`), warm muted slate labels (`#8c96a5`), and a sharp, disciplined technical amber/gold accent (`#e5a93c`).
 3. **Generous Negative Space & Alignment**: Strict Swiss-style grid alignment with clear section cadences. Content breathes with deliberate whitespace rather than crammed cards.
 4. **Lightweight, Honest Interactivity**: Paused-on-scroll 3D badge, buttery micro-interactions, hardware-accelerated CSS reveals, and zero main-thread jank.
@@ -86,9 +86,10 @@ Rather than attempting to impress visitors with five simultaneous WebGL effects,
   --accent-dim: rgba(229, 169, 60, 0.12);
 
   /* Typography */
+  --font-display-face: 'Syne', sans-serif;
   --font-sans: 'Epilogue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-serif: 'Newsreader', Georgia, serif;
-  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+  --font-mono: 'Space Mono', 'IBM Plex Mono', monospace;
 
   /* Fluid Type Scale */
   --font-display: clamp(2.4rem, 5.5vw, 4.25rem);

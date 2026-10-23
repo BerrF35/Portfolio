@@ -7,7 +7,7 @@
 
 ## 🏛️ Design & Engineering Architecture
 
-- **Editorial Typography**: Bold, humanist grotesque headings (`Epilogue`), curated editorial serif accents (`Newsreader`), and engineered mechanical monospace labels (`IBM Plex Mono`).
+- **Editorial Typography**: Sculptural, bold brutalist headings (`Syne`), human text grotesque (`Epilogue`), curated editorial serif accents (`Newsreader`), and engineered mechanical monospace labels (`Space Mono`).
 - **Deep Obsidian Palette**: Harmonious dark theme (`#090a0c`) accented with warm amber/gold (`#e5a93c`), rejecting generic neon AI tropes.
 - **Featured Systems & Verified Work**:
   - **WindSim**: Deterministic Lattice Boltzmann Method (LBM D2Q9 / D3Q19) fluid dynamics simulator with real-time vector field streamlines and aerodynamic lift/drag estimation.

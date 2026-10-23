@@ -124,9 +124,10 @@ def test_design_system_and_a11y():
     assert '--accent: #e5a93c;' in css, "Missing accent token"
     assert 'prefers-reduced-motion' in css, "Missing prefers-reduced-motion media query"
     assert ':focus-visible' in css, "Missing :focus-visible accessibility rule"
+    assert 'Syne' in css, "Missing Syne font specification"
     assert 'Epilogue' in css, "Missing Epilogue font specification"
     assert 'Newsreader' in css, "Missing Newsreader font specification"
-    assert 'IBM Plex Mono' in css, "Missing IBM Plex Mono font specification"
+    assert 'Space Mono' in css, "Missing Space Mono font specification"
 
     print("  [OK] Design system tokens, editorial fonts, and accessibility rules verified.")
 
