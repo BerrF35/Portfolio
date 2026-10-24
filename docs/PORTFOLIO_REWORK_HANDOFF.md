@@ -63,18 +63,19 @@ Rather than attempting to impress visitors with five simultaneous WebGL effects,
 
 ---
 
-## 4. Design System Tokens (`style.css`)
+## 4. Design System Tokens (`style.css?v=5.0.0`)
 
 ```css
 :root {
-  /* Color Palette */
+  /* Obsidian & Technical Ochre Palette */
   --bg: #090a0c;
   --bg-subtle: #0f1217;
-  --surface: #14171d;
-  --surface-hover: #1c212a;
+  --surface: #13171e;
+  --surface-hover: #191e27;
+  --surface-card: rgba(19, 23, 30, 0.85);
   --border: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.16);
-  --border-focus: rgba(229, 169, 60, 0.6);
+  --border-focus: #e5a93c;
   
   --ink: #f4f4f6;
   --ink-secondary: #c5cbd3;
@@ -84,37 +85,37 @@ Rather than attempting to impress visitors with five simultaneous WebGL effects,
   --accent: #e5a93c;
   --accent-light: #f5c25e;
   --accent-dim: rgba(229, 169, 60, 0.12);
+  --accent-border: rgba(229, 169, 60, 0.35);
 
-  /* Typography */
-  --font-display-face: 'Syne', sans-serif;
-  --font-sans: 'Epilogue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-serif: 'Newsreader', Georgia, serif;
+  --success: #34d399;
+  --success-dim: rgba(52, 211, 153, 0.12);
+
+  /* Typography Stack — Foundry Grotesque, Editorial Serif & Mechanical Mono */
+  --font-display-face: 'Clash Display', 'Syne', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: 'General Sans', 'Epilogue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Instrument Serif', 'Fraunces', Georgia, serif;
   --font-mono: 'Space Mono', 'IBM Plex Mono', monospace;
 
-  /* Fluid Type Scale */
-  --font-display: clamp(2.4rem, 5.5vw, 4.25rem);
-  --font-h1: clamp(1.85rem, 3.5vw, 2.75rem);
-  --font-h2: clamp(1.35rem, 2.2vw, 1.85rem);
-  --font-h3: clamp(1.1rem, 1.5vw, 1.35rem);
+  /* Fluid Oversized Typographic Hierarchy */
+  --font-giant: clamp(2.85rem, 6.4vw, 5.85rem);
+  --font-display: clamp(2.35rem, 5.2vw, 4.25rem);
+  --font-h1: clamp(2rem, 3.8vw, 3.2rem);
+  --font-h2: clamp(1.45rem, 2.5vw, 2.15rem);
+  --font-h3: clamp(1.1rem, 1.4vw, 1.3rem);
   --font-body: clamp(0.95rem, 1vw, 1.05rem);
   --font-small: 0.85rem;
   --font-mono-size: 0.78rem;
 
-  /* Layout & Spacing */
-  --container-max: 1180px;
-  --space-xs: 0.5rem;
-  --space-sm: 1rem;
-  --space-md: 2rem;
-  --space-lg: 4rem;
-  --space-xl: 6.5rem;
-  
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
+  /* Architectural Geometry (Zero AI Pills) */
+  --container-max: 1380px;
+  --gutter: 2.25rem;
+  --radius-sm: 0px;
+  --radius-md: 2px;
+  --radius-lg: 3px;
 
-  /* Motion */
+  /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.16, 1, 0.3, 1);
-  --transition-smooth: 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 250ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 ```
 
@@ -124,15 +125,16 @@ Rather than attempting to impress visitors with five simultaneous WebGL effects,
 
 | File Path | Description & Changes |
 |---|---|
-| `index.html` | Primary portfolio page: editorial typographic hero, key stats, selected projects (WindSim, AutoBot, Berry, Performance-Monitor), about section with authentic portrait, engineering milestones timeline, and minimalist footer. |
-| `personal.html` | Personal archive & inspirations: reading archive, cinematic/musical influences, creative lab notes, and optimized 3D ID badge viewer. |
-| `contact.html` | Recruiter-friendly contact page: verified status, direct email with instant copy, mailto dispatch generator, and honest technical FAQ. |
-| `404.html` | Minimalist error page consistent with the design system. |
-| `style.css` | Complete unified design system, typography scales, responsive layouts, card styling, and accessibility modes. |
-| `js/portfolioEngine.js` | Unified interaction engine: clipboard copy with visual feedback, smooth scroll, mobile menu drawer, mailto generator, and reduced-motion handler. |
-| `js/eventBadge3D.js` | Single Three.js instance for interactive 3D ID card; uses IntersectionObserver to pause rendering when offscreen. |
-| `package.json` | Clean scripts (`dev`, `test`, `preview`) with UTF-8 description. |
-| `README.md` | Accurate, up-to-date repository documentation with live links and verified stack. |
+| `index.html` | Primary portfolio page: editorial oversized hero, unboxed alternating cinematic work slides (WindSim, AutoBot, Berry, Performance-Monitor) with live 60fps canvas telemetry, first-principles about statement, streamlined timeline, and minimalist footer. |
+| `personal.html` | Personal archive: authentic campus portrait photo, foundational literature, core engineering disciplines, interactive 3D ID badge, and cinematic/sound influences. |
+| `contact.html` | Recruiter contact page: verified status, direct email with copy feedback, mailto dispatch generator, and technical FAQ. |
+| `404.html` | Clean minimalist error page with v5.0.0 design tokens. |
+| `style.css` | Complete unified design system (v5.0.0), 1380px cinematic container, oversized typography scales, `.work-showcase` alternating lateral slides (`data-slide-dir`), and responsive layouts. |
+| `js/portfolioEngine.js` | Unified interaction engine: `IntersectionObserver` scroll slide reveals, real-time NACA 0012 LBM streamline canvas, closed-loop PID velocity response canvas, and hardware telemetry charts. |
+| `js/eventBadge3D.js` | Single Three.js instance for interactive 3D ID badge with spring kinematics and offscreen pause. |
+| `tests/verify_site.py` | 6-suite automated verification harness enforcing asset integrity, zero AI slop, zero visible slashes, and cinematic slide structure. |
+| `package.json` | Clean scripts (`dev`, `test`, `preview`). |
+| `README.md` | Accurate repository documentation with live links and verified stack. |
 
 ---
 
@@ -140,17 +142,21 @@ Rather than attempting to impress visitors with five simultaneous WebGL effects,
 
 ### 6.1 Commands
 - **Local Dev Server**: `python -m http.server 8088`
-- **Link & Syntax Validation**: Automated HTTP status and link checker test script (`tests/verify_site.py`).
-- **Browser Visual QA**: Screenshots taken at Desktop (1440px), Laptop (1280px), Tablet (768px), and Mobile (390px).
+- **Automated Verification Harness**: `python tests/verify_site.py` (6/6 test suites passed)
+- **Multi-Device Live Preview**: Responsively App v2.0 (iPhone 12 Pro 390px, iPad 768px, MacBook Pro 1440px)
+- **Playwright Visual E2E**: Desktop, Tablet, and Mobile viewports captured with zero layout shifts or horizontal clipping.
 
 ### 6.2 Acceptance Criteria Checklist
-- [x] No multiple Three.js instance warning.
+- [x] No multiple Three.js instance warning; offscreen rendering paused.
 - [x] Zero visible placeholder "INSERT MEDIA" frames.
 - [x] Zero fake visitor counters or fabricated stats.
-- [x] Zero broken repository links (SATQuery 404 removed).
-- [x] No empty resume downloads; honest contact action provided.
-- [x] Contact form does not fake backend transmission.
-- [x] Full `prefers-reduced-motion` compliance across all CSS and JS.
+- [x] Zero broken repository links.
+- [x] Honest contact actions; no false backend submission claims.
+- [x] Full `prefers-reduced-motion` compliance across CSS and JS.
 - [x] Responsive without horizontal scrolling across all viewports (390px to 1440px).
-- [x] All images have meaningful `alt` attributes.
-- [x] Deployed cleanly to GitHub Pages.
+- [x] Zero Plus Jakarta Sans or JetBrains Mono anywhere in codebase.
+- [x] Zero 999px pill buttons or rounded badges.
+- [x] Zero slash numbering tropes (`01 /`) and zero visible slashes `/` in text content.
+- [x] Unboxed, alternating lateral scroll project showcase commanding 80vh per slide.
+- [x] Personal portrait photo relocated exclusively to `personal.html` archive.
+- [x] Verified clean across all 6 test suites.

@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Instrument+Serif:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&display=swap">
 
   <!-- Design System Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=4.1.0">
+  <link rel="stylesheet" href="style.css?v=5.0.0">
 </head>
 <body>
 
@@ -50,7 +50,7 @@
         <ul class="nav-links">
           <li><a href="#work" class="active">Work</a></li>
           <li><a href="#about">About</a></li>
-          <li><a href="#timeline">Milestones</a></li>
+          <li><a href="#timeline">Timeline</a></li>
           <li><a href="personal.html">Archive</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
@@ -126,171 +126,262 @@
       </div>
     </section>
 
-    <!-- Selected Work Section -->
+    <!-- Selected Works — Seamless Alternating Showcase -->
     <section id="work" class="section section-alt">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header-clean">
           <div>
-            <div class="section-label">SELECTED WORKS</div>
-            <h2 class="section-title">Engineered Systems &amp; Software</h2>
+            <h2 class="section-title-oversized">Selected Works</h2>
           </div>
-          <p class="section-desc">
-            Deterministic physics simulators, autonomous tracked robotics, and telemetry architectures built with first-principles rigor.
+          <p class="section-subtitle-clean">
+            Deterministic fluid simulations, autonomous tracked robotics, and local AI agent runtimes engineered from first principles.
           </p>
         </div>
 
-        <div class="projects-grid">
-          <!-- Project 1: WindSim -->
-          <article class="project-card">
-            <div class="project-card-header">
-              <span class="project-category">Aerodynamics &middot; Simulation</span>
-              <span class="project-period">2024 &mdash; 2026</span>
-            </div>
-            <h3 class="project-title">WindSim &mdash; Aerodynamics &amp; CFD Sandbox</h3>
-            <p class="project-desc">
-              Browser-native computational aerodynamics platform combining reduced-order flight physics with an interactive Lattice Boltzmann Method (LBM D3Q19 &amp; D2Q9) reference solver, 3D flow streamlines, and airfoil aerodynamic lift and drag estimation.
-            </p>
-            <div class="project-specs">
-              <div class="spec-item">
-                <span class="spec-k">CFD Solver</span>
-                <span class="spec-v">LBM D3Q19 &amp; D2Q9</span>
+        <div class="work-showcase">
+          <!-- Slide 1: WindSim (Slide from Left) -->
+          <article class="work-slide" data-slide-dir="left" id="proj-windsim">
+            <div class="work-copy">
+              <div class="work-kicker">
+                <span>Aerodynamics &bull; Simulation</span>
+                <span>2024 &mdash; 2026</span>
               </div>
-              <div class="spec-item">
-                <span class="spec-k">Visualization</span>
-                <span class="spec-v">Three.js 3D &amp; Vector Fields</span>
+              <h3 class="work-title">WindSim</h3>
+              <p class="work-tagline">Browser-Native CFD &amp; Aerodynamics Sandbox</p>
+              <p class="work-desc">
+                Browser-native computational aerodynamics platform combining reduced-order flight physics with an interactive Lattice Boltzmann Method (LBM D3Q19 &amp; D2Q9) reference solver, 3D flow streamlines, and airfoil aerodynamic lift and drag estimation.
+              </p>
+              <div class="work-specs-row">
+                <div class="work-spec-item">
+                  <span class="work-spec-label">CFD Solver</span>
+                  <span class="work-spec-val">LBM D3Q19 &amp; D2Q9</span>
+                </div>
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Streamlines</span>
+                  <span class="work-spec-val">Three.js WebGL &amp; Vector Fields</span>
+                </div>
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Physics Model</span>
+                  <span class="work-spec-val">Reduced-Order Aerodynamics</span>
+                </div>
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Architecture</span>
+                  <span class="work-spec-val">Client-Side Deterministic Solver</span>
+                </div>
               </div>
-            </div>
-            <div class="tech-tags">
-              <span class="tech-tag">JavaScript</span>
-              <span class="tech-tag">Three.js</span>
-              <span class="tech-tag">LBM CFD</span>
-              <span class="tech-tag">Fluid Dynamics</span>
-              <span class="tech-tag">Aerodynamics</span>
-            </div>
-            <div class="project-actions">
-              <a href="https://github.com/BerrF35/Windsim" target="_blank" rel="noopener noreferrer" class="action-link">
+              <div class="work-tech-strip">
+                <span class="work-tech-item">&bull; JavaScript</span>
+                <span class="work-tech-item">&bull; Three.js</span>
+                <span class="work-tech-item">&bull; LBM CFD</span>
+                <span class="work-tech-item">&bull; Fluid Dynamics</span>
+                <span class="work-tech-item">&bull; Aerodynamics</span>
+              </div>
+              <a href="https://github.com/BerrF35/Windsim" target="_blank" rel="noopener noreferrer" class="work-action">
                 <span>View Source Repository</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                  <polyline points="15 3 21 3 21 9"></polyline>
-                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+              </a>
+            </div>
+
+            <div class="work-telemetry-panel">
+              <div class="telemetry-header">
+                <span>WindSim Streamline Simulator</span>
+                <span style="color: var(--accent);">LBM SOLVER &bull; 60 FPS</span>
+              </div>
+              <div class="telemetry-body">
+                <canvas id="windsimCanvas" style="width: 100%; height: 200px; display: block; border-radius: 2px;"></canvas>
+              </div>
+              <div class="telemetry-footer">
+                <span>AIRFOIL &bull; NACA 0012</span>
+                <span>RE = 1.25e5 &bull; MACH 0.18</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Slide 2: AutoBot (Slide from Right, Reverse Layout) -->
+          <article class="work-slide work-slide-reverse" data-slide-dir="right" id="proj-autobot">
+            <div class="work-telemetry-panel">
+              <div class="telemetry-header">
+                <span>AutoBot Motion Profiler</span>
+                <span style="color: var(--success);">CLOSED-LOOP PID &bull; 200Hz</span>
+              </div>
+              <div class="telemetry-body">
+                <canvas id="autobotCanvas" style="width: 100%; height: 200px; display: block; border-radius: 2px;"></canvas>
+              </div>
+              <div class="telemetry-footer">
+                <span>ENCODER &bull; 1024 CPR</span>
+                <span>ATTITUDE &bull; 6-DOF IMU FUSION</span>
+              </div>
+            </div>
+
+            <div class="work-copy">
+              <div class="work-kicker">
+                <span>Embedded Robotics</span>
+                <span>2025 &mdash; 2026</span>
+              </div>
+              <h3 class="work-title">AutoBot</h3>
+              <p class="work-tagline">Tracked Autonomous Robotics Platform</p>
+              <p class="work-desc">
+                Autonomous tracked robotics platform built around a Waveshare ESP32 controller. Features optical quadrature encoders, closed-loop PID velocity control with anti-windup, deterministic S-curve motion profiling, 6-DOF IMU telemetry, and return-to-home path tracking.
+              </p>
+              <div class="work-specs-row">
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Controller</span>
+                  <span class="work-spec-val">ESP32-WROOM-32 &bull; FreeRTOS</span>
+                </div>
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Control Loop</span>
+                  <span class="work-spec-val">200Hz Closed-Loop PID</span>
+                </div>
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Sensors</span>
+                  <span class="work-spec-val">Optical Encoders &bull; 6-DOF IMU</span>
+                </div>
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Profiling</span>
+                  <span class="work-spec-val">S-Curve Trajectory Regulated</span>
+                </div>
+              </div>
+              <div class="work-tech-strip">
+                <span class="work-tech-item">&bull; C++</span>
+                <span class="work-tech-item">&bull; ESP32</span>
+                <span class="work-tech-item">&bull; FreeRTOS</span>
+                <span class="work-tech-item">&bull; Optical Encoders</span>
+                <span class="work-tech-item">&bull; PID Control</span>
+              </div>
+              <a href="https://github.com/BerrF35/AutoBot" target="_blank" rel="noopener noreferrer" class="work-action">
+                <span>View Source Repository</span>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
               </a>
             </div>
           </article>
 
-          <!-- Project 2: AutoBot -->
-          <article class="project-card">
-            <div class="project-card-header">
-              <span class="project-category">Embedded Robotics</span>
-              <span class="project-period">2025 &mdash; 2026</span>
-            </div>
-            <h3 class="project-title">AutoBot &mdash; Tracked Autonomous Robotics</h3>
-            <p class="project-desc">
-              Autonomous tracked robotics platform built around a Waveshare ESP32 controller. Features optical quadrature encoders, closed-loop PID velocity control with anti-windup, deterministic S-curve motion profiling, 6-DOF IMU telemetry, and return-to-home path tracking.
-            </p>
-            <div class="project-specs">
-              <div class="spec-item">
-                <span class="spec-k">Hardware</span>
-                <span class="spec-v">ESP32-WROOM-32 &middot; 6-DOF IMU</span>
+          <!-- Slide 3: Berry (Slide from Left) -->
+          <article class="work-slide" data-slide-dir="left" id="proj-berry">
+            <div class="work-copy">
+              <div class="work-kicker">
+                <span>Systems &bull; Local Intelligence</span>
+                <span>2025 &mdash; 2026</span>
               </div>
-              <div class="spec-item">
-                <span class="spec-k">Motion Control</span>
-                <span class="spec-v">Closed-Loop PID &middot; S-Curve</span>
+              <h3 class="work-title">Berry</h3>
+              <p class="work-tagline">Local-First Desktop AI Agent Runtime</p>
+              <p class="work-desc">
+                Local-first desktop AI assistant connecting LLM reasoning directly to local operating system execution. Implements terminal and file automation, voice interaction, local memory persistence, and multi-provider model orchestration.
+              </p>
+              <div class="work-specs-row">
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Architecture</span>
+                  <span class="work-spec-val">Python &bull; FastAPI Runtime</span>
+                </div>
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Memory Engine</span>
+                  <span class="work-spec-val">Persistent Local Vector Codex</span>
+                </div>
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Automation</span>
+                  <span class="work-spec-val">OS Shell &amp; File Tree Manipulation</span>
+                </div>
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Voice Channel</span>
+                  <span class="work-spec-val">Low-Latency Neural Synthesis</span>
+                </div>
               </div>
-            </div>
-            <div class="tech-tags">
-              <span class="tech-tag">C++</span>
-              <span class="tech-tag">ESP32</span>
-              <span class="tech-tag">FreeRTOS</span>
-              <span class="tech-tag">Optical Encoders</span>
-              <span class="tech-tag">PID Telemetry</span>
-            </div>
-            <div class="project-actions">
-              <a href="https://github.com/BerrF35/AutoBot" target="_blank" rel="noopener noreferrer" class="action-link">
+              <div class="work-tech-strip">
+                <span class="work-tech-item">&bull; Python</span>
+                <span class="work-tech-item">&bull; FastAPI</span>
+                <span class="work-tech-item">&bull; Local Memory</span>
+                <span class="work-tech-item">&bull; Voice Synthesis</span>
+                <span class="work-tech-item">&bull; Tool Calling</span>
+              </div>
+              <a href="https://github.com/BerrF35/Berry" target="_blank" rel="noopener noreferrer" class="work-action">
                 <span>View Source Repository</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                  <polyline points="15 3 21 3 21 9"></polyline>
-                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
               </a>
             </div>
-          </article>
 
-          <!-- Project 3: Berry -->
-          <article class="project-card">
-            <div class="project-card-header">
-              <span class="project-category">AI Agent Runtime</span>
-              <span class="project-period">2025 &mdash; 2026</span>
-            </div>
-            <h3 class="project-title">Berry &mdash; Local-First AI Desktop Agent</h3>
-            <p class="project-desc">
-              Local-first desktop AI assistant connecting LLM reasoning directly to local operating system execution. Implements terminal and file automation, voice interaction, local memory persistence, and multi-provider model orchestration.
-            </p>
-            <div class="project-specs">
-              <div class="spec-item">
-                <span class="spec-k">Runtime</span>
-                <span class="spec-v">Python &middot; OS Automation</span>
+            <div class="work-telemetry-panel">
+              <div class="telemetry-header">
+                <span>Berry Agent Session Log</span>
+                <span style="color: var(--accent);">LOCAL COGNITION ACTIVE</span>
               </div>
-              <div class="spec-item">
-                <span class="spec-k">Capabilities</span>
-                <span class="spec-v">Voice I/O &middot; Local Memory</span>
+              <div class="telemetry-body" style="background: rgba(9, 10, 12, 0.7); border: 1px solid rgba(255, 255, 255, 0.05); padding: 1.25rem; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.6; color: var(--ink-secondary);">
+                <div style="color: var(--accent);">&gt; berry init --local-only</div>
+                <div style="color: var(--ink-muted); margin-top: 0.35rem;">[OK] Local memory codex mounted (vector dimension 768)</div>
+                <div style="color: var(--ink-muted);">[OK] Terminal execution sandbox established</div>
+                <div style="color: var(--success); margin-top: 0.5rem;">[EXEC] Dispatching system telemetry query... latency: 14ms</div>
+                <div style="color: var(--ink-faint); margin-top: 0.5rem;">State: Autonomous &bull; Zero external cloud leaks</div>
               </div>
-            </div>
-            <div class="tech-tags">
-              <span class="tech-tag">Python</span>
-              <span class="tech-tag">FastAPI</span>
-              <span class="tech-tag">Local Memory</span>
-              <span class="tech-tag">Voice Synthesis</span>
-              <span class="tech-tag">Orchestration</span>
-            </div>
-            <div class="project-actions">
-              <a href="https://github.com/BerrF35/Berry" target="_blank" rel="noopener noreferrer" class="action-link">
-                <span>View Source Repository</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                  <polyline points="15 3 21 3 21 9"></polyline>
-                  <line x1="10" y1="14" x2="21" y2="3"></line>
-                </svg>
-              </a>
+              <div class="telemetry-footer">
+                <span>TOOL ENGINE &bull; NATIVE OS HOOKS</span>
+                <span>STATUS &bull; READY</span>
+              </div>
             </div>
           </article>
 
-          <!-- Project 4: Performance Monitor -->
-          <article class="project-card">
-            <div class="project-card-header">
-              <span class="project-category">Systems Software</span>
-              <span class="project-period">2025 &mdash; 2026</span>
-            </div>
-            <h3 class="project-title">Performance-Monitor &mdash; Windows Telemetry</h3>
-            <p class="project-desc">
-              Real-time Windows system telemetry dashboard. Streams hardware metrics for CPU, GPU, RAM, Disk, Network, Thermals, and active processes with interactive visual charts inspired by modern industrial telemetry tools.
-            </p>
-            <div class="project-specs">
-              <div class="spec-item">
-                <span class="spec-k">Architecture</span>
-                <span class="spec-v">Electron &middot; TypeScript</span>
+          <!-- Slide 4: Performance-Monitor (Slide from Right, Reverse Layout) -->
+          <article class="work-slide work-slide-reverse" data-slide-dir="right" id="proj-perfmon">
+            <div class="work-telemetry-panel">
+              <div class="telemetry-header">
+                <span>Hardware Telemetry Stream</span>
+                <span style="color: var(--success);">1000ms SAMPLING &bull; LIVE</span>
               </div>
-              <div class="spec-item">
-                <span class="spec-k">Telemetry</span>
-                <span class="spec-v">Live Charts &middot; Hardware WMI</span>
+              <div class="telemetry-body">
+                <canvas id="perfmonCanvas" style="width: 100%; height: 200px; display: block; border-radius: 2px;"></canvas>
+              </div>
+              <div class="telemetry-footer">
+                <span>CPU &bull; GPU &bull; RAM &bull; THERMALS</span>
+                <span>WINDOWS WMI API HOOK</span>
               </div>
             </div>
-            <div class="tech-tags">
-              <span class="tech-tag">TypeScript</span>
-              <span class="tech-tag">Electron</span>
-              <span class="tech-tag">React</span>
-              <span class="tech-tag">Tailwind CSS</span>
-              <span class="tech-tag">Hardware APIs</span>
-            </div>
-            <div class="project-actions">
-              <a href="https://github.com/BerrF35/Performance-Monitor" target="_blank" rel="noopener noreferrer" class="action-link">
+
+            <div class="work-copy">
+              <div class="work-kicker">
+                <span>Systems Software</span>
+                <span>2025 &mdash; 2026</span>
+              </div>
+              <h3 class="work-title">Performance-Monitor</h3>
+              <p class="work-tagline">Real-Time Windows System Telemetry</p>
+              <p class="work-desc">
+                Real-time Windows system telemetry dashboard. Streams hardware metrics for CPU, GPU, RAM, Disk, Network, Thermals, and active processes with interactive visual charts inspired by modern industrial telemetry tools.
+              </p>
+              <div class="work-specs-row">
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Desktop Engine</span>
+                  <span class="work-spec-val">Electron &bull; TypeScript</span>
+                </div>
+                <div class="work-spec-item">
+                  <span class="work-spec-label">UI Interface</span>
+                  <span class="work-spec-val">React &bull; Tailwind CSS</span>
+                </div>
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Telemetry Source</span>
+                  <span class="work-spec-val">Windows WMI &amp; System Calls</span>
+                </div>
+                <div class="work-spec-item">
+                  <span class="work-spec-label">Telemetry Stream</span>
+                  <span class="work-spec-val">1000ms Real-Time Sampling</span>
+                </div>
+              </div>
+              <div class="work-tech-strip">
+                <span class="work-tech-item">&bull; TypeScript</span>
+                <span class="work-tech-item">&bull; Electron</span>
+                <span class="work-tech-item">&bull; React</span>
+                <span class="work-tech-item">&bull; Tailwind CSS</span>
+                <span class="work-tech-item">&bull; Hardware APIs</span>
+              </div>
+              <a href="https://github.com/BerrF35/Performance-Monitor" target="_blank" rel="noopener noreferrer" class="work-action">
                 <span>View Source Repository</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                  <polyline points="15 3 21 3 21 9"></polyline>
-                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                  <polyline points="12 5 19 12 12 19"></polyline>
                 </svg>
               </a>
             </div>
@@ -299,105 +390,125 @@
       </div>
     </section>
 
-    <!-- Engineering Philosophy & About Section -->
+    <!-- Engineering Philosophy & Background Section -->
     <section id="about" class="section">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header-clean">
           <div>
-            <div class="section-label">ENGINEERING FOUNDATIONS</div>
-            <h2 class="section-title">Background &amp; Philosophy</h2>
+            <h2 class="section-title-oversized">Background &amp; Philosophy</h2>
           </div>
-          <p class="section-desc">
-            Bridging the physical and computational realms through structured engineering discipline.
+          <p class="section-subtitle-clean">
+            Bridging mathematical solvers, embedded kinematics, and operating systems from first principles.
           </p>
         </div>
 
-        <div class="about-grid">
-          <div class="about-copy">
-            <p>
-              I am an undergraduate software and robotics engineer studying <strong>Information Technology at Vellore Institute of Technology (VIT Vellore)</strong>.
+        <div class="about-editorial-grid">
+          <div class="about-main">
+            <p class="about-statement">
+              My engineering philosophy is rooted in <strong>first-principles thinking</strong>: understanding hardware kinematics, fluid dynamics, and operating system mechanics from the ground up, rather than relying on black-box abstractions.
             </p>
-            <p>
-              My engineering philosophy is rooted in <strong>first-principles thinking</strong>: understanding hardware kinematics, mathematical solvers, and operating system mechanics from the ground up, rather than relying on black-box abstractions.
-            </p>
-            <p>
-              Whether configuring 200Hz PID velocity loops on microcontrollers, computing fluid approximations via Lattice Boltzmann equations, or architecting local-first agent runtimes, I prioritize clean interfaces, deterministic execution, and verifiable results.
-            </p>
-            
-            <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid var(--border);">
-              <h4 style="font-size: 0.95rem; margin-bottom: 0.75rem; color: var(--ink);">Academic Foundations</h4>
-              <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.9rem; color: var(--ink-secondary);">
-                <li style="display: flex; gap: 0.75rem;">
-                  <span style="font-family: var(--font-mono); color: var(--accent);">&bull;</span>
-                  <span><strong>Bachelor of Technology (B.Tech) in Information Technology</strong> &mdash; Vellore Institute of Technology (VIT Vellore)</span>
+            <div class="about-details">
+              <p>
+                I am an undergraduate software and robotics engineer studying <strong>Information Technology at Vellore Institute of Technology (VIT Vellore)</strong>.
+              </p>
+              <p>
+                Whether configuring 200Hz closed-loop PID velocity regulation on ESP32 microcontrollers, computing fluid approximations via Lattice Boltzmann equations in WebGL, or architecting local-first agent execution engines, I prioritize clean interfaces, deterministic execution, and verifiable results.
+              </p>
+              <p>
+                Beyond standard web stacks, my focus centers on the intersection of physical machines and computational intelligence: high-performance systems programming, real-time telemetry, and hardware-interfaced software.
+              </p>
+            </div>
+          </div>
+
+          <aside class="about-sidebar">
+            <div class="sidebar-block">
+              <h4>Academic Trajectory</h4>
+              <ul class="sidebar-list">
+                <li>
+                  <strong>B.Tech in Information Technology</strong>
+                  <div>Vellore Institute of Technology (VIT Vellore)</div>
                 </li>
-                <li style="display: flex; gap: 0.75rem;">
-                  <span style="font-family: var(--font-mono); color: var(--accent);">&bull;</span>
-                  <span><strong>Higher Secondary Education</strong> &mdash; Advanced Differential Mathematics, Classical Physics, and Computer Science</span>
+                <li>
+                  <strong>Mathematics &amp; Physics Foundations</strong>
+                  <div>Differential calculus, kinematics, and classical computing</div>
                 </li>
               </ul>
             </div>
-          </div>
 
-          <div class="portrait-wrapper">
-            <img src="assets/images/profile/portrait_full_body.jpg" alt="Jaijitesh Suryaprakash portrait" class="portrait-img" width="380" height="475" loading="lazy">
-            <div class="portrait-caption">
-              Jaijitesh Suryaprakash &middot; VIT Vellore
+            <div class="sidebar-block">
+              <h4>Primary Competencies</h4>
+              <ul class="sidebar-list">
+                <li>
+                  <strong>Autonomous Robotics</strong>
+                  <div>ESP32, FreeRTOS, PID control, IMU sensor fusion</div>
+                </li>
+                <li>
+                  <strong>Computational Aerodynamics</strong>
+                  <div>LBM D2Q9 &amp; D3Q19 solvers, Three.js 3D vector fields</div>
+                </li>
+                <li>
+                  <strong>Local Intelligence Runtimes</strong>
+                  <div>Python, FastAPI, tool calling, local persistence</div>
+                </li>
+                <li>
+                  <strong>Systems Telemetry</strong>
+                  <div>TypeScript, Electron, hardware APIs, real-time feeds</div>
+                </li>
+              </ul>
             </div>
-          </div>
+          </aside>
         </div>
       </div>
     </section>
 
-    <!-- Engineering Milestones and Chronology -->
+    <!-- Timeline Section -->
     <section id="timeline" class="section section-alt">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header-clean">
           <div>
-            <div class="section-label">VERIFIED TRAJECTORY</div>
-            <h2 class="section-title">Verified Engineering Milestones</h2>
+            <h2 class="section-title-oversized">Timeline</h2>
           </div>
-          <p class="section-desc">
+          <p class="section-subtitle-clean">
             A chronological changelog of hardware deployments, software releases, and competitive hackathon achievements.
           </p>
         </div>
 
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-marker">2026</div>
-            <div class="timeline-content">
-              <h3 class="timeline-title">ImpactX 3.0 Hackathon &mdash; 3rd Place Overall (FarmAssist AI)</h3>
-              <p class="timeline-desc">
+        <div class="timeline-stream">
+          <div class="timeline-entry">
+            <div class="timeline-time">2026</div>
+            <div class="timeline-narrative">
+              <h3>ImpactX 3.0 Hackathon &mdash; 3rd Place Overall (FarmAssist AI)</h3>
+              <p>
                 Engineered the backend communication and edge inference architecture for FarmAssist AI, coordinating low-latency WebSocket dispatch and edge image diagnostics on Raspberry Pi hardware.
               </p>
             </div>
           </div>
 
-          <div class="timeline-item">
-            <div class="timeline-marker">2025</div>
-            <div class="timeline-content">
-              <h3 class="timeline-title">AutoBot Tracked Robotics Architecture Deployment</h3>
-              <p class="timeline-desc">
+          <div class="timeline-entry">
+            <div class="timeline-time">2025</div>
+            <div class="timeline-narrative">
+              <h3>AutoBot Tracked Robotics Platform Deployment</h3>
+              <p>
                 Constructed tracked robotic chassis powered by ESP32. Implemented optical quadrature encoder feedback, closed-loop PID velocity regulation, S-curve trajectory profiling, and web telemetry HUD.
               </p>
             </div>
           </div>
 
-          <div class="timeline-item">
-            <div class="timeline-marker">2025</div>
-            <div class="timeline-content">
-              <h3 class="timeline-title">Berry Local-First Desktop Agent Runtime</h3>
-              <p class="timeline-desc">
+          <div class="timeline-entry">
+            <div class="timeline-time">2025</div>
+            <div class="timeline-narrative">
+              <h3>Berry Local-First Desktop Agent Runtime</h3>
+              <p>
                 Architected Python-based desktop assistant with OS-level terminal automation, persistent local memory codices, and voice synthesis pipelines.
               </p>
             </div>
           </div>
 
-          <div class="timeline-item">
-            <div class="timeline-marker">2024</div>
-            <div class="timeline-content">
-              <h3 class="timeline-title">WindSim Browser Aerodynamics Sandbox</h3>
-              <p class="timeline-desc">
+          <div class="timeline-entry">
+            <div class="timeline-time">2024</div>
+            <div class="timeline-narrative">
+              <h3>WindSim Browser Aerodynamics Sandbox</h3>
+              <p>
                 Authored deterministic fluid dynamics simulator with Lattice Boltzmann Method (LBM) solver, real-time vector field streamlines, and airfoil aerodynamic lift and drag estimation.
               </p>
             </div>
@@ -408,16 +519,16 @@
 
     <!-- Call to Action Banner -->
     <section class="section">
-      <div class="container" style="text-align: center; max-width: 720px;">
-        <h2 style="font-size: var(--font-h1); font-weight: 800; letter-spacing: -0.025em; margin-bottom: 1rem;">
+      <div class="container" style="text-align: center; max-width: 760px;">
+        <h2 style="font-size: var(--font-h1); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 1.25rem;">
           Interested in building together?
         </h2>
-        <p style="color: var(--ink-secondary); font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem;">
+        <p style="color: var(--ink-secondary); font-size: 1.12rem; line-height: 1.65; margin-bottom: 2.25rem;">
           Open for engineering roles, technical internships, and collaborative projects in autonomous systems, robotics, and applied AI.
         </p>
-        <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <div style="display: flex; justify-content: center; gap: 1.25rem; flex-wrap: wrap;">
           <a href="contact.html" class="btn btn-primary">
-            <span>Direct Transmission &middot; Contact</span>
+            <span>Get in Touch</span>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
@@ -451,6 +562,6 @@
   </footer>
 
   <!-- Portfolio Engine Module -->
-  <script type="module" src="js/portfolioEngine.js"></script>
+  <script type="module" src="js/portfolioEngine.js?v=5.0.0"></script>
 </body>
 </html>

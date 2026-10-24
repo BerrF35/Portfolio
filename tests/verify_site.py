@@ -106,7 +106,10 @@ def test_no_placeholders_or_fake_features():
         'status-badge',
         'status-dot',
         'Plus Jakarta Sans',
-        'JetBrains Mono'
+        'JetBrains Mono',
+        'VERIFIED TRAJECTORY',
+        'TRANSMISSION CHANNEL',
+        'CURATED ARTIFACTS'
     ]
 
     for page in PAGES:
@@ -118,6 +121,50 @@ def test_no_placeholders_or_fake_features():
             assert term not in content, f"Forbidden term '{term}' found in {page}!"
 
     print("  [OK] Zero placeholder frames, fabricated metrics, pills, or numbering tropes in all production pages.")
+
+
+def test_zero_visible_slashes_and_photo_placement():
+    print("\n--> Checking zero visible slashes in text nodes and strict archive photo placement...")
+    # 1. Zero visible slashes in user-facing text
+    for page in PAGES:
+        path = os.path.join(ROOT_DIR, page)
+        with open(path, 'r', encoding='utf-8') as f:
+            raw = f.read()
+        no_scripts = re.sub(r'<(script|style)[^>]*>.*?</\1>', '', raw, flags=re.DOTALL)
+        clean_text = re.sub(r'<[^>]+>', ' ', no_scripts)
+        for line_num, line in enumerate(clean_text.splitlines(), 1):
+            line_str = line.strip()
+            if '/' in line_str and not any(k in line_str for k in ['http:', 'https:', '//']):
+                assert False, f"In {page}:{line_num}: visible slash '/' found in text: {line_str}"
+
+    # 2. Portrait placement: excluded from index.html, present in personal.html
+    with open(os.path.join(ROOT_DIR, 'index.html'), 'r', encoding='utf-8') as f:
+        index_content = f.read()
+    assert 'portrait_full_body.jpg' not in index_content, "Personal portrait still found in index.html (must be in archive only)!"
+
+    with open(os.path.join(ROOT_DIR, 'personal.html'), 'r', encoding='utf-8') as f:
+        personal_content = f.read()
+    assert 'portrait_full_body.jpg' in personal_content, "Personal portrait missing from personal.html archive!"
+
+    print("  [OK] Zero visible slashes in content and archive portrait placement verified.")
+
+
+def test_cinematic_work_slides():
+    print("\n--> Verifying cinematic work slides, alternating directions, and telemetry canvases...")
+    with open(os.path.join(ROOT_DIR, 'index.html'), 'r', encoding='utf-8') as f:
+        html = f.read()
+
+    slides = ['proj-windsim', 'proj-autobot', 'proj-berry', 'proj-perfmon']
+    for slide_id in slides:
+        assert f'id="{slide_id}"' in html, f"Missing cinematic slide: {slide_id}"
+
+    assert 'data-slide-dir="left"' in html, "Missing left-slide animation direction"
+    assert 'data-slide-dir="right"' in html, "Missing right-slide animation direction"
+    assert 'id="windsimCanvas"' in html, "Missing WindSim canvas"
+    assert 'id="autobotCanvas"' in html, "Missing AutoBot canvas"
+    assert 'id="perfmonCanvas"' in html, "Missing Performance-Monitor canvas"
+
+    print("  [OK] All 4 cinematic work slides, alternating lateral directions, and interactive canvases verified.")
 
 
 def test_design_system_and_a11y():
@@ -153,9 +200,11 @@ if __name__ == '__main__':
         test_html_files_exist()
         test_local_assets_and_links()
         test_no_placeholders_or_fake_features()
+        test_zero_visible_slashes_and_photo_placement()
+        test_cinematic_work_slides()
         test_design_system_and_a11y()
         print("\n==================================================")
-        print(" ALL VERIFICATION CHECKS PASSED (4/4 TEST SUITES) ")
+        print(" ALL VERIFICATION CHECKS PASSED (6/6 TEST SUITES) ")
         print("==================================================")
         sys.exit(0)
     except AssertionError as e:

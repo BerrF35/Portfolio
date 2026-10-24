@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Instrument+Serif:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@700;800&display=swap">
 
   <!-- Design System Stylesheet -->
-  <link rel="stylesheet" href="style.css?v=4.1.0">
+  <link rel="stylesheet" href="style.css?v=5.0.0">
 </head>
 <body>
 
@@ -43,7 +43,7 @@
         <ul class="nav-links">
           <li><a href="index.html#work">Work</a></li>
           <li><a href="index.html#about">About</a></li>
-          <li><a href="index.html#timeline">Milestones</a></li>
+          <li><a href="index.html#timeline">Timeline</a></li>
           <li><a href="personal.html" class="active">Archive</a></li>
           <li><a href="contact.html">Contact</a></li>
         </ul>
@@ -70,25 +70,46 @@
     <!-- Editorial Page Header -->
     <section class="section" style="padding-bottom: 2rem;">
       <div class="container">
-        <div class="section-label">CURATED ARTIFACTS</div>
         <h1 class="hero-statement" style="margin-bottom: 1.25rem;">
           Foundations, <span class="serif-italic">influences</span> &amp; physical explorations.
         </h1>
-        <p class="section-desc" style="max-width: 760px; font-size: 1.15rem; line-height: 1.7;">
+        <p class="section-desc" style="max-width: 820px; font-size: 1.15rem; line-height: 1.7;">
           Outside of production codebases and firmware commits, these are the conceptual foundations, physical hardware prototypes, and artistic works that inform my engineering philosophy.
         </p>
+      </div>
+    </section>
+
+    <!-- Personal Portrait & Identity Section -->
+    <section class="section" style="padding-top: 0; padding-bottom: 3rem;">
+      <div class="container">
+        <div class="archive-portrait-grid">
+          <div class="portrait-wrapper">
+            <img src="assets/images/profile/portrait_full_body.jpg" alt="Jaijitesh Suryaprakash portrait" class="portrait-img" width="340" height="425" loading="lazy">
+            <div class="portrait-caption">
+              Jaijitesh Suryaprakash &middot; VIT Vellore
+            </div>
+          </div>
+          <div class="archive-portrait-copy">
+            <h3>Systems Engineer &middot; First-Principles Builder</h3>
+            <p>
+              Photograph captured on campus at Vellore Institute of Technology (VIT). In addition to writing autonomous robotics software and numerical physics simulators, I maintain a steady discipline of physical hardware prototyping, reading foundational computing texts, and synthesizing electronic music.
+            </p>
+            <p style="color: var(--ink-muted); font-size: 0.95rem;">
+              Based in Vellore &amp; Bangalore, India &middot; Available for software &amp; robotics engineering opportunities.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- Interactive 3D Credential Section -->
     <section class="section section-alt" id="eventBadgeSection">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header-clean">
           <div>
-            <div class="section-label">INTERACTIVE HARDWARE BADGE</div>
-            <h2 class="section-title">3D Event Credential</h2>
+            <h2 class="section-title-oversized">3D Event Credential</h2>
           </div>
-          <p class="section-desc">
+          <p class="section-subtitle-clean">
             A real-time Three.js badge simulation featuring spring kinematics, Verlet lanyard curve deformation, and responsive pointer physics.
           </p>
         </div>
@@ -103,12 +124,11 @@
     <!-- Personal Facets & Explorations Grid -->
     <section class="section">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header-clean">
           <div>
-            <div class="section-label">CURATED FACETS</div>
-            <h2 class="section-title">Influences &amp; Literature</h2>
+            <h2 class="section-title-oversized">Influences &amp; Literature</h2>
           </div>
-          <p class="section-desc">
+          <p class="section-subtitle-clean">
             The intellectual and aesthetic influences behind autonomous control, simulation, and determinism.
           </p>
         </div>
@@ -201,12 +221,11 @@
     <!-- Visual Influences & Prototyping Section -->
     <section class="section section-alt">
       <div class="container">
-        <div class="section-header">
+        <div class="section-header-clean">
           <div>
-            <div class="section-label">VISUAL INFLUENCES &amp; HARDWARE</div>
-            <h2 class="section-title">Cinematics, Sound &amp; Mechanics</h2>
+            <h2 class="section-title-oversized">Cinematics, Sound &amp; Mechanics</h2>
           </div>
-          <p class="section-desc">
+          <p class="section-subtitle-clean">
             Authentic photographs and media pieces that inspire mechanical design and software determinism.
           </p>
         </div>
@@ -245,16 +264,16 @@
 
     <!-- Call to Action Banner -->
     <section class="section">
-      <div class="container" style="text-align: center; max-width: 720px;">
-        <h2 style="font-size: var(--font-h1); font-weight: 800; letter-spacing: -0.025em; margin-bottom: 1rem;">
+      <div class="container" style="text-align: center; max-width: 760px;">
+        <h2 style="font-size: var(--font-h1); font-weight: 700; letter-spacing: -0.03em; margin-bottom: 1.25rem;">
           Looking to connect?
         </h2>
-        <p style="color: var(--ink-secondary); font-size: 1.1rem; line-height: 1.6; margin-bottom: 2rem;">
+        <p style="color: var(--ink-secondary); font-size: 1.12rem; line-height: 1.65; margin-bottom: 2.25rem;">
           Whether you want to discuss autonomous robotics, computational physics, or potential engineering opportunities, feel free to reach out.
         </p>
-        <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+        <div style="display: flex; justify-content: center; gap: 1.25rem; flex-wrap: wrap;">
           <a href="contact.html" class="btn btn-primary">
-            <span>Direct Transmission &middot; Contact</span>
+            <span>Get in Touch</span>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
@@ -292,7 +311,7 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <!-- Portfolio Engine Module -->
-  <script type="module" src="js/portfolioEngine.js"></script>
+  <script type="module" src="js/portfolioEngine.js?v=5.0.0"></script>
 
   <!-- EventBadge3D Initialization -->
   <script type="module">

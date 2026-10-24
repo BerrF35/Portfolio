@@ -15,6 +15,8 @@ export class PortfolioEngine {
     this.initFaqAccordion();
     this.initContactForm();
     this.initDotGlobe();
+    this.initWorkSlidesScroll();
+    this.initProjectVisuals();
   }
 
   /* --- Toast Notifications --- */
@@ -227,6 +229,245 @@ export class PortfolioEngine {
     };
 
     requestAnimationFrame(render);
+  }
+
+  /* --- Cinematic Work Slides Intersection Observer --- */
+  initWorkSlidesScroll() {
+    const slides = document.querySelectorAll('.work-slide');
+    if (!slides.length) return;
+
+    // Reduced motion check
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) {
+      slides.forEach(slide => slide.classList.add('is-inview'));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-inview');
+        }
+      });
+    }, {
+      rootMargin: '-5% 0px -10% 0px',
+      threshold: 0.15
+    });
+
+    slides.forEach(slide => observer.observe(slide));
+  }
+
+  /* --- Interactive Visual Telemetry Panels --- */
+  initProjectVisuals() {
+    this.initWindSimCanvas();
+    this.initAutoBotCanvas();
+    this.initPerfmonCanvas();
+  }
+
+  /* 1. WindSim Streamline Flow Canvas */
+  initWindSimCanvas() {
+    const canvas = document.getElementById('windsimCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let isVisible = false;
+    const obs = new IntersectionObserver(([e]) => { isVisible = e.isIntersecting; }, { threshold: 0.1 });
+    obs.observe(canvas);
+
+    const resize = () => {
+      canvas.width = canvas.parentElement.clientWidth || 400;
+      canvas.height = 200;
+    };
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    // Streamline particles
+    const particles = Array.from({ length: 42 }, () => ({
+      x: Math.random() * 400,
+      y: 20 + Math.random() * 160,
+      speed: 1.8 + Math.random() * 2.2,
+      length: 12 + Math.random() * 24
+    }));
+
+    const drawAirfoil = () => {
+      const cx = canvas.width * 0.45;
+      const cy = canvas.height * 0.52;
+      ctx.beginPath();
+      ctx.moveTo(cx - 70, cy);
+      ctx.bezierCurveTo(cx - 30, cy - 28, cx + 40, cy - 14, cx + 70, cy);
+      ctx.bezierCurveTo(cx + 35, cy + 12, cx - 30, cy + 16, cx - 70, cy);
+      ctx.strokeStyle = '#e5a93c';
+      ctx.lineWidth = 1.5;
+      ctx.fillStyle = 'rgba(229, 169, 60, 0.15)';
+      ctx.fill();
+      ctx.stroke();
+    };
+
+    const animate = () => {
+      if (isVisible) {
+        ctx.fillStyle = 'rgba(11, 14, 18, 0.25)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        drawAirfoil();
+
+        particles.forEach(p => {
+          p.x += p.speed;
+          if (p.x > canvas.width) {
+            p.x = 0;
+            p.y = 20 + Math.random() * 160;
+          }
+
+          // Airfoil deflection
+          const cx = canvas.width * 0.45;
+          const cy = canvas.height * 0.52;
+          const dx = p.x - cx;
+          const dy = p.y - cy;
+          let defY = p.y;
+          if (Math.abs(dx) < 80 && Math.abs(dy) < 40) {
+            defY += dy > 0 ? 12 : -16;
+          }
+
+          ctx.beginPath();
+          ctx.moveTo(p.x, defY);
+          ctx.lineTo(p.x - p.length, defY);
+          ctx.strokeStyle = 'rgba(244, 244, 246, 0.45)';
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+        });
+      }
+      requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  }
+
+  /* 2. AutoBot PID Response & Kinematics Canvas */
+  initAutoBotCanvas() {
+    const canvas = document.getElementById('autobotCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let isVisible = false;
+    const obs = new IntersectionObserver(([e]) => { isVisible = e.isIntersecting; }, { threshold: 0.1 });
+    obs.observe(canvas);
+
+    const resize = () => {
+      canvas.width = canvas.parentElement.clientWidth || 400;
+      canvas.height = 200;
+    };
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    let t = 0;
+    const dataPoints = [];
+    const maxPoints = 80;
+
+    const animate = () => {
+      if (isVisible) {
+        t += 0.04;
+        ctx.fillStyle = 'rgba(11, 14, 18, 0.25)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Target setpoint line
+        const setpointY = canvas.height * 0.4;
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(229, 169, 60, 0.4)';
+        ctx.setLineDash([4, 4]);
+        ctx.moveTo(0, setpointY);
+        ctx.lineTo(canvas.width, setpointY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Closed-loop PID curve with damped oscillation
+        const targetVal = setpointY;
+        const currentVal = targetVal + Math.sin(t * 1.5) * 28 * Math.exp(-((t % 6) * 0.4));
+        dataPoints.push(currentVal);
+        if (dataPoints.length > maxPoints) dataPoints.shift();
+
+        ctx.beginPath();
+        const stepX = canvas.width / maxPoints;
+        dataPoints.forEach((val, i) => {
+          const x = i * stepX;
+          if (i === 0) ctx.moveTo(x, val);
+          else ctx.lineTo(x, val);
+        });
+        ctx.strokeStyle = '#34d399';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Latest point marker
+        if (dataPoints.length > 0) {
+          const lastX = (dataPoints.length - 1) * stepX;
+          const lastY = dataPoints[dataPoints.length - 1];
+          ctx.beginPath();
+          ctx.arc(lastX, lastY, 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = '#f4f4f6';
+          ctx.fill();
+        }
+      }
+      requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  }
+
+  /* 3. Performance Monitor Telemetry Sparkline Canvas */
+  initPerfmonCanvas() {
+    const canvas = document.getElementById('perfmonCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let isVisible = false;
+    const obs = new IntersectionObserver(([e]) => { isVisible = e.isIntersecting; }, { threshold: 0.1 });
+    obs.observe(canvas);
+
+    const resize = () => {
+      canvas.width = canvas.parentElement.clientWidth || 400;
+      canvas.height = 200;
+    };
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+
+    const cores = Array.from({ length: 4 }, () => ({
+      data: Array.from({ length: 40 }, () => 30 + Math.random() * 40)
+    }));
+
+    let tick = 0;
+    const animate = () => {
+      if (isVisible) {
+        tick++;
+        if (tick % 6 === 0) {
+          cores.forEach(core => {
+            const last = core.data[core.data.length - 1];
+            const next = Math.max(15, Math.min(95, last + (Math.random() - 0.48) * 14));
+            core.data.push(next);
+            core.data.shift();
+          });
+        }
+
+        ctx.fillStyle = 'rgba(11, 14, 18, 0.3)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const colors = ['#e5a93c', '#34d399', '#60a5fa', '#f472b6'];
+        const stepX = canvas.width / 40;
+
+        cores.forEach((core, idx) => {
+          ctx.beginPath();
+          core.data.forEach((val, i) => {
+            const x = i * stepX;
+            const y = canvas.height - (val / 100) * (canvas.height - 30) - 15;
+            if (i === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          });
+          ctx.strokeStyle = colors[idx % colors.length];
+          ctx.lineWidth = 1.4;
+          ctx.stroke();
+        });
+      }
+      requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
   }
 }
 
