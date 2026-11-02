@@ -74,24 +74,6 @@ This repository hosts the source code for my personal portfolio: **[berrf35.gith
 
 ---
 
-## 💻 Local Development
-
-To run the portfolio locally on your machine:
-
-```bash
-# Clone the repository
-git clone https://github.com/BerrF35/Portfolio.git
-cd Portfolio
-
-# Start a local static file server
-python -m http.server 8088
-
-# Open in your browser:
-# http://localhost:8088/
-```
-
----
-
 ## 📬 Connect & Collaborate
 
 I'm always open to discussing autonomous systems, robotics, simulation, and software engineering opportunities.
